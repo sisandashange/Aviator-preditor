@@ -1,221 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ZYRE Aviator Predictor</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background: #101218;
-    color: white;
-}
-
-.container {
-    max-width: 450px;
-    margin: auto;
-}
-
-h1 {
-    text-align: center;
-    color: #ff4545;
-}
-
-.subtitle {
-    text-align: center;
-    color: #bbb;
-}
-
-.card {
-    background: #1c202b;
-    padding: 18px;
-    margin-top: 18px;
-    border-radius: 12px;
-}
-
-input, button {
-    width: 100%;
-    padding: 13px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 7px;
-    font-size: 16px;
-}
-
-input {
-    background: #303644;
-    color: white;
-}
-
-button {
-    background: #ff4545;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.secondary {
-    background: #343b4a;
-}
-
-.result {
-    font-size: 34px;
-    color: #39e58c;
-    text-align: center;
-    font-weight: bold;
-    margin: 20px 0;
-}
-
-.note {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #bbb;
-}
-
-li {
-    margin: 8px 0;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d18">
+  <title>ZYRE AVIATOR PRO</title>
+  <style>
+    :root { --bg:#080d18; --panel:#111a2b; --panel2:#0d1422; --line:#25344b; --text:#f3f6ff; --muted:#9aa9c2; --cyan:#43e0d0; --blue:#6c8cff; --red:#ff6b7b; --green:#65e6a6; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--text); background:radial-gradient(circle at top,#172747 0,#080d18 45%); min-height:100vh; }
+    .wrap { max-width:760px; margin:auto; padding:20px 14px 40px; }
+    header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:4px 0 20px; }
+    .brand { font-weight:900; letter-spacing:1.5px; font-size:20px; }
+    .brand span { color:var(--cyan); }
+    .badge { border:1px solid #2c695f; color:var(--cyan); background:#0d282b; padding:7px 10px; border-radius:99px; font-size:11px; font-weight:800; letter-spacing:.7px; }
+    .hero { border:1px solid var(--line); background:linear-gradient(140deg,rgba(24,39,65,.98),rgba(13,20,34,.98)); border-radius:22px; padding:22px 18px; box-shadow:0 16px 45px #0004; }
+    .eyebrow { color:var(--muted); font-size:11px; font-weight:800; letter-spacing:1.6px; text-transform:uppercase; }
+    h1 { font-size:clamp(25px,6vw,36px); margin:9px 0 6px; }
+    .sub { color:var(--muted); font-size:13px; line-height:1.55; margin:0; }
+    .estimate-box { margin-top:20px; padding:19px; border-radius:17px; background:#080f1d; border:1px solid #30415e; text-align:center; }
+    .estimate-label { font-size:11px; letter-spacing:1.4px; color:var(--muted); font-weight:800; }
+    .estimate { font-size:clamp(42px,12vw,62px); font-weight:900; letter-spacing:-2px; color:var(--cyan); margin:7px 0; }
+    .estimate-note { color:var(--muted); font-size:12px; line-height:1.5; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:11px; margin:14px 0; }
+    .stat { padding:15px; border:1px solid var(--line); background:var(--panel); border-radius:15px; min-width:0; }
+    .stat .label { font-size:11px; color:var(--muted); margin-bottom:9px; }
+    .stat .value { font-size:23px; font-weight:800; overflow-wrap:anywhere; }
+    .stat .small { font-size:11px; color:var(--muted); margin-top:5px; }
+    .card { border:1px solid var(--line); background:var(--panel); border-radius:18px; padding:18px; margin-top:14px; }
+    .card h2 { font-size:17px; margin:0 0 7px; }
+    .card p.desc { color:var(--muted); font-size:12px; line-height:1.5; margin:0 0 14px; }
+    label { display:block; font-size:12px; color:#d6e0f4; margin-bottom:8px; font-weight:700; }
+    .input-row { display:flex; gap:9px; }
+    input { min-width:0; width:100%; padding:14px 12px; color:var(--text); background:#080f1d; border:1px solid #354660; border-radius:11px; font-size:16px; outline:none; }
+    input:focus { border-color:var(--cyan); }
+    button { cursor:pointer; border:0; border-radius:11px; padding:13px 15px; font-size:13px; font-weight:800; }
+    .primary { background:var(--cyan); color:#06201f; white-space:nowrap; }
+    .secondary { background:#263650; color:var(--text); border:1px solid #3a4c69; }
+    .danger { background:#321e2a; color:#ffb6c0; border:1px solid #663344; }
+    .message { min-height:18px; font-size:12px; margin-top:9px; color:var(--muted); }
+    .history-head { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px; }
+    .history-list { display:flex; flex-wrap:wrap; gap:8px; }
+    .chip { padding:9px 11px; border-radius:10px; font-size:13px; font-weight:800; border:1px solid var(--line); background:#0b1321; }
+    .chip.low { color:var(--red); border-color:#60303d; }
+    .chip.mid { color:#ffd27a; border-color:#5d4a2b; }
+    .chip.high { color:var(--green); border-color:#275945; }
+    .empty { font-size:12px; color:var(--muted); padding:10px 0; }
+    .notice { border:1px solid #69532a; background:#241e12; color:#f2dba4; border-radius:14px; padding:13px 14px; font-size:12px; line-height:1.55; margin-top:14px; }
+    .bar-wrap { background:#080f1d; border:1px solid var(--line); height:9px; border-radius:99px; overflow:hidden; margin:10px 0 7px; }
+    .bar { height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--cyan)); transition:width .25s; }
+    .footer { text-align:center; font-size:11px; color:#72819a; line-height:1.6; padding:20px 8px 0; }
+    @media (min-width:600px) { .wrap { padding-top:30px; } .hero { padding:28px; } .grid { grid-template-columns:repeat(4,minmax(0,1fr)); } .stat .value { font-size:21px; } }
+  </style>
 </head>
-
 <body>
-<div class="container">
+  <main class="wrap">
+    <header>
+      <div class="brand">ZYRE <span>AVIATOR</span></div>
+      <div class="badge">PRO • BETA</div>
+    </header>
 
-<h1>✈️ ZYRE AVIATOR</h1>
-<p class="subtitle">Multiplier Analysis System</p>
+    <section class="hero">
+      <div class="eyebrow">Round analysis dashboard</div>
+      <h1>Study the rounds.<br>Test the estimates.</h1>
+      <p class="sub">Record completed multipliers and measure how a simple baseline performs. This tool is not connected to the Aviator game.</p>
+      <div class="estimate-box">
+        <div class="estimate-label">EXPERIMENTAL NEXT-ROUND BASELINE</div>
+        <div class="estimate" id="estimate">—</div>
+        <div class="estimate-note" id="estimateNote">Enter at least one completed round to begin.</div>
+      </div>
+    </section>
 
-<div class="card">
-    <h3>Enter a completed round</h3>
+    <section class="grid">
+      <div class="stat"><div class="label">ROUNDS RECORDED</div><div class="value" id="roundCount">0</div><div class="small">Saved in this browser</div></div>
+      <div class="stat"><div class="label">HISTORICAL AVERAGE</div><div class="value" id="average">—</div><div class="small">Past results only</div></div>
+      <div class="stat"><div class="label">ESTIMATES TESTED</div><div class="value" id="tested">0</div><div class="small">Estimate vs next entry</div></div>
+      <div class="stat"><div class="label">WITHIN 0.50x</div><div class="value" id="accuracy">—</div><div class="small">Experimental score</div></div>
+    </section>
 
-    <label for="multiplier">Actual multiplier</label>
+    <section class="card">
+      <h2>Record a completed round</h2>
+      <p class="desc">Enter the multiplier shown by the game after a round has finished. Example: 2.45</p>
+      <label for="multiplier">Actual multiplier (x)</label>
+      <div class="input-row">
+        <input id="multiplier" type="number" inputmode="decimal" min="1" max="1000000" step="0.01" placeholder="e.g. 2.45">
+        <button class="primary" id="addBtn">Add result</button>
+      </div>
+      <div class="message" id="message" aria-live="polite"></div>
+    </section>
 
-    <input
-        id="multiplier"
-        type="number"
-        min="1"
-        step="0.01"
-        placeholder="Example: 2.45"
-    >
+    <section class="card">
+      <h2>Estimate testing</h2>
+      <p class="desc">Before you enter each new result, the app saves its current baseline. After you enter the result, it compares the saved estimate with that result. This tests a simple average-based baseline; it does not establish a way to predict random rounds.</p>
+      <div class="stat" style="background:#0b1321">
+        <div class="label">LATEST TEST</div>
+        <div class="value" id="latestTest" style="font-size:18px">No test yet</div>
+        <div class="small" id="latestDetail">Record another round to begin testing.</div>
+        <div class="bar-wrap"><div class="bar" id="scoreBar"></div></div>
+        <div class="small">Score counts estimates within 0.50x of the actual multiplier.</div>
+      </div>
+    </section>
 
-    <button onclick="addResult()">Add Result</button>
+    <section class="card">
+      <div class="history-head">
+        <div><h2 style="margin:0">Round history</h2><p class="desc" style="margin:5px 0 0">Newest results appear first.</p></div>
+        <button class="danger" id="clearBtn">Clear history</button>
+      </div>
+      <div class="history-list" id="history"><div class="empty">No rounds recorded yet.</div></div>
+    </section>
 
-    <button class="secondary" onclick="clearHistory()">
-        Clear History
-    </button>
-</div>
+    <div class="notice"><strong>Important:</strong> Aviator outcomes are not reliably predictable from previous multipliers. The estimate is a statistical baseline for learning and testing, not the actual next result, a guarantee, or betting advice. Do not risk money based on it.</div>
+    <div class="footer">ZYRE AVIATOR PRO • Your results are saved locally in this browser. They do not sync to another phone or browser.</div>
+  </main>
 
-<div class="card">
-    <h3>Analysis</h3>
+  <script>
+    const STORAGE_KEY = "zyre_aviator_pro_v1";
+    let results = [];
+    let tests = [];
 
-    <p>Rounds recorded: <strong id="count">0</strong></p>
-
-    <p>Historical average:</p>
-    <div class="result" id="average">--</div>
-
-    <p>Experimental estimate:</p>
-    <div class="result" id="estimate">--</div>
-
-    <p class="note" id="message">
-        Enter completed round results to begin analysis.
-    </p>
-</div>
-
-<div class="card">
-    <h3>Recent Results</h3>
-    <ol id="history"></ol>
-</div>
-
-<div class="card">
-    <p class="note">
-        IMPORTANT: This tool analyses historical multipliers.
-        Its experimental estimate is not a reliable prediction of
-        the next crash. Previous results do not establish what the
-        next multiplier will be. Never treat an estimate as a
-        guaranteed win.
-    </p>
-</div>
-
-</div>
-
-<script>
-let results = [];
-
-function addResult() {
-    const input = document.getElementById("multiplier");
-    const value = Number(input.value);
-
-    if (!input.value || !Number.isFinite(value) || value < 1) {
-        alert("Enter a valid completed multiplier of at least 1.00.");
-        return;
+    function loadData() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        results = Array.isArray(saved.results) ? saved.results.filter(n => Number.isFinite(n) && n >= 1) : [];
+        tests = Array.isArray(saved.tests) ? saved.tests.filter(t => t && Number.isFinite(t.estimate) && Number.isFinite(t.actual)) : [];
+      } catch (e) {
+        results = [];
+        tests = [];
+      }
     }
 
-    results.push(value);
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ results, tests }));
+      } catch (e) {
+        showMessage("Could not save data in this browser. Check browser storage settings.");
+      }
+    }
 
-    input.value = "";
+    function getEstimate() {
+      if (!results.length) return null;
+      // A simple descriptive baseline, not a predictive model.
+      const recent = results.slice(-5);
+      const mean = recent.reduce((sum, n) => sum + n, 0) / recent.length;
+      return Math.max(1, Math.min(mean, 1000000));
+    }
 
-    updateAnalysis();
-}
+    function formatX(n) {
+      return Number(n).toFixed(2) + "x";
+    }
 
-function updateAnalysis() {
-    const count = results.length;
+    function showMessage(text, good = false) {
+      const el = document.getElementById("message");
+      el.textContent = text;
+      el.style.color = good ? "var(--green)" : "var(--muted)";
+    }
 
-    document.getElementById("count").textContent = count;
+    function addResult() {
+      const input = document.getElementById("multiplier");
+      const value = Number(input.value);
+      if (!input.value.trim() || !Number.isFinite(value) || value < 1 || value > 1000000) {
+        showMessage("Enter a valid completed multiplier of 1.00x or higher.");
+        return;
+      }
 
-    const history = document.getElementById("history");
-    history.innerHTML = "";
+      // The saved estimate was generated from earlier results, before this actual result was entered.
+      const priorEstimate = getEstimate();
+      if (priorEstimate !== null) {
+        tests.push({ estimate: priorEstimate, actual: value, time: Date.now() });
+      }
 
-    results.slice().reverse().slice(0, 10).forEach(value => {
-        const item = document.createElement("li");
-        item.textContent = value.toFixed(2) + "x";
-        history.appendChild(item);
+      results.push(Math.round(value * 100) / 100);
+      saveData();
+      input.value = "";
+      showMessage("Result saved. Your history and test statistics are updated.", true);
+      render();
+    }
+
+    function clearHistory() {
+      if (!confirm("Clear all saved round history and estimate tests from this browser?")) return;
+      results = [];
+      tests = [];
+      saveData();
+      showMessage("History cleared.", true);
+      render();
+    }
+
+    function render() {
+      const estimate = getEstimate();
+      document.getElementById("estimate").textContent = estimate === null ? "—" : formatX(estimate);
+      document.getElementById("estimateNote").textContent = estimate === null
+        ? "Enter at least one completed round to begin."
+        : "Average of the last " + Math.min(results.length, 5) + " entered result(s). Not a known future multiplier.";
+      document.getElementById("roundCount").textContent = results.length;
+      const average = results.length ? results.reduce((sum, n) => sum + n, 0) / results.length : null;
+      document.getElementById("average").textContent = average === null ? "—" : formatX(average);
+      document.getElementById("tested").textContent = tests.length;
+
+      const within = tests.filter(t => Math.abs(t.estimate - t.actual) <= 0.5).length;
+      const pct = tests.length ? Math.round(within / tests.length * 100) : null;
+      document.getElementById("accuracy").textContent = pct === null ? "—" : pct + "%";
+      document.getElementById("scoreBar").style.width = (pct === null ? 0 : pct) + "%";
+
+      if (tests.length) {
+        const t = tests[tests.length - 1];
+        const diff = Math.abs(t.estimate - t.actual);
+        document.getElementById("latestTest").textContent = "Estimate " + formatX(t.estimate) + " · Actual " + formatX(t.actual);
+        document.getElementById("latestDetail").textContent = "Absolute difference: " + formatX(diff) + (diff <= 0.5 ? " — within 0.50x." : " — outside 0.50x.");
+      } else {
+        document.getElementById("latestTest").textContent = "No test yet";
+        document.getElementById("latestDetail").textContent = "Enter a second round to compare a prior estimate with an actual result.";
+      }
+
+      const history = document.getElementById("history");
+      if (!results.length) {
+        history.innerHTML = '<div class="empty">No rounds recorded yet.</div>';
+      } else {
+        history.innerHTML = results.slice().reverse().map((n, i) => {
+          const cls = n < 2 ? "low" : n < 10 ? "mid" : "high";
+          const number = results.length - i;
+          return '<div class="chip ' + cls + '">#' + number + ' · ' + formatX(n) + '</div>';
+        }).join("");
+      }
+    }
+
+    document.getElementById("addBtn").addEventListener("click", addResult);
+    document.getElementById("clearBtn").addEventListener("click", clearHistory);
+    document.getElementById("multiplier").addEventListener("keydown", e => {
+      if (e.key === "Enter") addResult();
     });
 
-    if (count === 0) {
-        document.getElementById("average").textContent = "--";
-        document.getElementById("estimate").textContent = "--";
-        document.getElementById("message").textContent =
-            "Enter completed round results to begin analysis.";
-        return;
-    }
-
-    const average =
-        results.reduce((sum, value) => sum + value, 0) / count;
-
-    document.getElementById("average").textContent =
-        average.toFixed(2) + "x";
-
-    const recent = results.slice(-5);
-
-    const recentAverage =
-        recent.reduce((sum, value) => sum + value, 0) /
-        recent.length;
-
-    document.getElementById("estimate").textContent =
-        recentAverage.toFixed(2) + "x";
-
-    document.getElementById("message").textContent =
-        "The estimate is the average of the last " +
-        recent.length +
-        " recorded rounds. It is a historical statistic, not a prediction.";
-}
-
-function clearHistory() {
-    if (!confirm("Clear all recorded results?")) {
-        return;
-    }
-
-    results = [];
-    updateAnalysis();
-}
-</script>
-
+    loadData();
+    render();
+  </script>
 </body>
 </html>
