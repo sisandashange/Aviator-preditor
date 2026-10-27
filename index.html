@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ZYRE Aviator Predictor</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #101218;
+    color: white;
+}
+
+.container {
+    max-width: 450px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #ff4545;
+}
+
+.subtitle {
+    text-align: center;
+    color: #bbb;
+}
+
+.card {
+    background: #1c202b;
+    padding: 18px;
+    margin-top: 18px;
+    border-radius: 12px;
+}
+
+input, button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+input {
+    background: #303644;
+    color: white;
+}
+
+button {
+    background: #ff4545;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.secondary {
+    background: #343b4a;
+}
+
+.result {
+    font-size: 34px;
+    color: #39e58c;
+    text-align: center;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.note {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #bbb;
+}
+
+li {
+    margin: 8px 0;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>✈️ ZYRE AVIATOR</h1>
+<p class="subtitle">Multiplier Analysis System</p>
+
+<div class="card">
+    <h3>Enter a completed round</h3>
+
+    <label for="multiplier">Actual multiplier</label>
+
+    <input
+        id="multiplier"
+        type="number"
+        min="1"
+        step="0.01"
+        placeholder="Example: 2.45"
+    >
+
+    <button onclick="addResult()">Add Result</button>
+
+    <button class="secondary" onclick="clearHistory()">
+        Clear History
+    </button>
+</div>
+
+<div class="card">
+    <h3>Analysis</h3>
+
+    <p>Rounds recorded: <strong id="count">0</strong></p>
+
+    <p>Historical average:</p>
+    <div class="result" id="average">--</div>
+
+    <p>Experimental estimate:</p>
+    <div class="result" id="estimate">--</div>
+
+    <p class="note" id="message">
+        Enter completed round results to begin analysis.
+    </p>
+</div>
+
+<div class="card">
+    <h3>Recent Results</h3>
+    <ol id="history"></ol>
+</div>
+
+<div class="card">
+    <p class="note">
+        IMPORTANT: This tool analyses historical multipliers.
+        Its experimental estimate is not a reliable prediction of
+        the next crash. Previous results do not establish what the
+        next multiplier will be. Never treat an estimate as a
+        guaranteed win.
+    </p>
+</div>
+
+</div>
+
+<script>
+let results = [];
+
+function addResult() {
+    const input = document.getElementById("multiplier");
+    const value = Number(input.value);
+
+    if (!input.value || !Number.isFinite(value) || value < 1) {
+        alert("Enter a valid completed multiplier of at least 1.00.");
+        return;
+    }
+
+    results.push(value);
+
+    input.value = "";
+
+    updateAnalysis();
+}
+
+function updateAnalysis() {
+    const count = results.length;
+
+    document.getElementById("count").textContent = count;
+
+    const history = document.getElementById("history");
+    history.innerHTML = "";
+
+    results.slice().reverse().slice(0, 10).forEach(value => {
+        const item = document.createElement("li");
+        item.textContent = value.toFixed(2) + "x";
+        history.appendChild(item);
+    });
+
+    if (count === 0) {
+        document.getElementById("average").textContent = "--";
+        document.getElementById("estimate").textContent = "--";
+        document.getElementById("message").textContent =
+            "Enter completed round results to begin analysis.";
+        return;
+    }
+
+    const average =
+        results.reduce((sum, value) => sum + value, 0) / count;
+
+    document.getElementById("average").textContent =
+        average.toFixed(2) + "x";
+
+    const recent = results.slice(-5);
+
+    const recentAverage =
+        recent.reduce((sum, value) => sum + value, 0) /
+        recent.length;
+
+    document.getElementById("estimate").textContent =
+        recentAverage.toFixed(2) + "x";
+
+    document.getElementById("message").textContent =
+        "The estimate is the average of the last " +
+        recent.length +
+        " recorded rounds. It is a historical statistic, not a prediction.";
+}
+
+function clearHistory() {
+    if (!confirm("Clear all recorded results?")) {
+        return;
+    }
+
+    results = [];
+    updateAnalysis();
+}
+</script>
+
+</body>
+</html>
