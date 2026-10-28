@@ -1,587 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masakhane Family Stokvel</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        gold: {
-                            400: '#E5C158',
-                            500: '#D4AF37',
-                            600: '#B59226',
-                        },
-                        emerald: {
-                            800: '#064e3b',
-                            900: '#022c22',
-                            950: '#011c15',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #011c15;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #064e3b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #D4AF37;
-        }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-12">
-
-    <!-- TOP NAV / HEADER -->
-    <header class="bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-950 border-b border-gold-500/30 sticky top-0 z-30 shadow-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                
-                <!-- Brand Title -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg ring-2 ring-gold-400/50 shrink-0">
-                        🇿🇦
-                    </div>
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <h1 class="text-xl sm:text-2xl font-black text-gold-400 tracking-tight">Masakhane Family Stokvel</h1>
-                            <span class="bg-emerald-800/80 text-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-600">Est. 2021</span>
-                        </div>
-                        <p class="text-xs text-emerald-300/80">Ubuntu Wealth & Rotational Savings Ledger</p>
-                    </div>
-                </div>
-
-                <!-- Balance Stats & Quick Action -->
-                <div class="flex items-center space-x-6">
-                    <div class="text-right">
-                        <p class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Total Fund Balance</p>
-                        <p className="font-mono" id="headerBalance" class="text-2xl font-black text-gold-400">R 184,500.00</p>
-                    </div>
-                    <button onclick="openModal('depositModal')" class="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl shadow-lg transition duration-200 flex items-center space-x-2 text-xs sm:text-sm active:scale-95">
-                        <i class="fa-solid fa-plus-circle"></i>
-                        <span>Record Deposit</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </header>
-
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
-
-        <!-- BANNER: NEXT ROTATIONAL PAYOUT -->
-        <div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-slate-900 rounded-2xl p-5 border border-gold-500/40 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-gold-500/20 text-gold-400 rounded-2xl flex items-center justify-center text-xl shrink-0 border border-gold-500/30">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <div>
-                    <div class="flex items-center space-x-2">
-                        <span class="bg-gold-500 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">Next Recipient</span>
-                        <span class="text-xs text-emerald-200">Target Date: <strong class="text-gold-300">Dec 15, 2026</strong></span>
-                    </div>
-                    <h2 class="text-xl font-bold text-white mt-1">
-                        Sipho Dlamini <span class="text-emerald-400 text-sm font-normal">(R 20,000.00 Payout)</span>
-                    </h2>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
-                <span class="text-xs text-slate-300">Monthly Progress:</span>
-                <div class="w-32 bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-700">
-                    <div id="payoutProgressBar" class="bg-gold-400 h-full rounded-full transition-all duration-500" style="width: 70%;"></div>
-                </div>
-                <span id="payoutProgressText" class="text-xs font-bold text-gold-400">70%</span>
-            </div>
-        </div>
-
-        <!-- SUMMARY STATS CARDS GRID -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            
-            <!-- Card 1 -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg relative overflow-hidden">
-                <div class="flex justify-between items-center text-slate-400 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Total Savings Pool</span>
-                    <i class="fa-solid fa-piggy-bank text-gold-500 text-lg"></i>
-                </div>
-                <p id="totalPoolText" class="text-2xl font-black text-white">R 184,500</p>
-                <p class="text-[11px] text-emerald-400 mt-2 font-medium">
-                    <i class="fa-solid fa-arrow-up-right text-xs"></i> +R 17,500 collected this month
-                </p>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg">
-                <div class="flex justify-between items-center text-slate-400 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Emergency & Loan Fund</span>
-                    <i class="fa-solid fa-shield-halved text-gold-500 text-lg"></i>
-                </div>
-                <p class="text-2xl font-black text-white">R 32,000</p>
-                <p class="text-[11px] text-slate-400 mt-2 font-medium">
-                    5% internal interest yield active
-                </p>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg">
-                <div class="flex justify-between items-center text-slate-400 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Monthly Target</span>
-                    <i class="fa-solid fa-bullseye text-gold-500 text-lg"></i>
-                </div>
-                <p class="text-2xl font-black text-white">R 17,500 <span class="text-xs font-normal text-slate-400">/ R 20,000</span></p>
-                <p class="text-[11px] text-gold-400 mt-2 font-bold">
-                    7 of 8 members paid
-                </p>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg">
-                <div class="flex justify-between items-center text-slate-400 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Active Members</span>
-                    <i class="fa-solid fa-users text-gold-500 text-lg"></i>
-                </div>
-                <p class="text-2xl font-black text-white">8 Family Members</p>
-                <p class="text-[11px] text-emerald-400 mt-2 font-medium">
-                    100% attendance rate
-                </p>
-            </div>
-
-        </div>
-
-        <!-- MAIN TWO-COLUMN SECTION -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- LEFT COLUMN: MEMBER LEDGER (2 COLS) -->
-            <div class="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-user-check text-gold-500"></i>
-                            Member Contribution Tracker
-                        </h3>
-                        <p class="text-xs text-slate-400">Monthly Contribution Target: R 2,500 per member</p>
-                    </div>
-                    <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full w-fit">
-                        Current Month: October 2026
-                    </span>
-                </div>
-
-                <!-- TABLE OF MEMBERS -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs sm:text-sm">
-                        <thead>
-                            <tr class="text-slate-400 border-b border-slate-800 uppercase text-[11px] font-bold tracking-wider">
-                                <th class="pb-3">Member</th>
-                                <th class="pb-3">Slot Month</th>
-                                <th class="pb-3">Amount</th>
-                                <th class="pb-3">Status</th>
-                                <th class="pb-3 text-right">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="memberTableBody" class="divide-y divide-slate-800/60 font-medium">
-                            <!-- Injected by JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- RIGHT COLUMN: SAVINGS BUCKETS -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
-                <div>
-                    <div class="border-b border-slate-800 pb-4 mb-4">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-vault text-gold-500"></i>
-                            Savings Buckets
-                        </h3>
-                        <p class="text-xs text-slate-400">Target allocation goals for the family</p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <!-- Bucket 1 -->
-                        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm text-white flex items-center gap-2">
-                                    <span>🛒</span> December Groceries
-                                </span>
-                                <span class="text-xs font-bold text-gold-400">80%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full rounded-full" style="width: 80%;"></div>
-                            </div>
-                            <div class="flex justify-between text-[11px] text-slate-400">
-                                <span>R 48,500 saved</span>
-                                <span>Target: R 60,000</span>
-                            </div>
-                        </div>
-
-                        <!-- Bucket 2 -->
-                        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm text-white flex items-center gap-2">
-                                    <span>📚</span> School Fees 2027
-                                </span>
-                                <span class="text-xs font-bold text-gold-400">70%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full rounded-full" style="width: 70%;"></div>
-                            </div>
-                            <div class="flex justify-between text-[11px] text-slate-400">
-                                <span>R 28,000 saved</span>
-                                <span>Target: R 40,000</span>
-                            </div>
-                        </div>
-
-                        <!-- Bucket 3 -->
-                        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-sm text-white flex items-center gap-2">
-                                    <span>🏕️</span> Family Umsebenzi
-                                </span>
-                                <span class="text-xs font-bold text-gold-400">70%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                                <div class="bg-emerald-500 h-full rounded-full" style="width: 70%;"></div>
-                            </div>
-                            <div class="flex justify-between text-[11px] text-slate-400">
-                                <span>R 35,000 saved</span>
-                                <span>Target: R 50,000</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800">
-                    <button onclick="alert('Savings breakdown exported to CSV summary.')" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-bold transition">
-                        Export Savings Allocation
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- LOWER TWO-COLUMN SECTION: LOAN CALCULATOR & AUDIT TRAIL -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- LOAN CALCULATOR CARD -->
-            <div class="bg-gradient-to-br from-emerald-950 to-slate-900 border border-emerald-800/50 rounded-2xl p-6 shadow-xl space-y-4">
-                <div class="border-b border-emerald-800/40 pb-3">
-                    <h3 class="text-lg font-bold text-gold-400 flex items-center gap-2">
-                        <i class="fa-solid fa-calculator text-emerald-400"></i>
-                        Internal Loan Calculator
-                    </h3>
-                    <p class="text-xs text-emerald-200/70">5% flat interest rate returned to Stokvel reserve</p>
-                </div>
-
-                <div class="space-y-3 text-xs">
-                    <div>
-                        <label class="block text-slate-300 font-semibold mb-1">Borrow Amount (ZAR)</label>
-                        <input id="loanAmount" type="number" value="5000" oninput="calculateLoan()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5 font-bold focus:outline-none focus:border-gold-500">
-                    </div>
-
-                    <div>
-                        <label class="block text-slate-300 font-semibold mb-1">Repayment Term</label>
-                        <select id="loanTerm" onchange="calculateLoan()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5 font-bold focus:outline-none focus:border-gold-500">
-                            <option value="1">1 Month</option>
-                            <option value="3" selected>3 Months</option>
-                            <option value="6">6 Months</option>
-                        </select>
-                    </div>
-
-                    <div class="p-4 bg-slate-950/70 rounded-xl space-y-2 border border-emerald-900/60">
-                        <div class="flex justify-between text-slate-400">
-                            <span>Interest Rate:</span>
-                            <span class="font-bold text-gold-400">5% flat</span>
-                        </div>
-                        <div class="flex justify-between text-slate-300">
-                            <span>Total Repayment:</span>
-                            <span id="loanTotalText" class="font-bold text-white">R 5,250.00</span>
-                        </div>
-                        <div class="flex justify-between text-slate-200 border-t border-slate-800 pt-2 font-bold">
-                            <span>Monthly Payment:</span>
-                            <span id="loanMonthlyText" class="text-gold-400 text-sm">R 1,750.00 / mo</span>
-                        </div>
-                    </div>
-
-                    <button onclick="requestLoanSubmit()" class="w-full py-2.5 bg-gold-500 hover:bg-gold-400 text-slate-950 rounded-xl text-xs font-bold transition shadow-md">
-                        Submit Loan Request for Voting
-                    </button>
-                </div>
-            </div>
-
-            <!-- TRANSACTION HISTORY LEDGER (2 COLS) -->
-            <div class="lg:col-span-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-receipt text-gold-500"></i>
-                        Recent Audit Trail & Transactions
-                    </h3>
-                    <span class="text-xs text-slate-400">Real-time ledger</span>
-                </div>
-
-                <div class="divide-y divide-slate-800 text-xs sm:text-sm">
-                    <!-- Tx 1 -->
-                    <div class="py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-white">Kagiso Mokoena</p>
-                                <p class="text-[11px] text-slate-400">Monthly Contribution • 05 Oct 2026</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-emerald-400">+ R 2,500.00</span>
-                    </div>
-
-                    <!-- Tx 2 -->
-                    <div class="py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-white">Bongani Khumalo</p>
-                                <p class="text-[11px] text-slate-400">Monthly Contribution • 04 Oct 2026</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-emerald-400">+ R 2,500.00</span>
-                    </div>
-
-                    <!-- Tx 3 -->
-                    <div class="py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-amber-950 text-amber-400 border border-amber-800 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-white">Lindiwe Ndlovu</p>
-                                <p class="text-[11px] text-slate-400">Late Payment Fine • 30 Sep 2026</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-amber-400">+ R 150.00</span>
-                    </div>
-
-                    <!-- Tx 4 -->
-                    <div class="py-3 flex items-center justify-between">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl bg-rose-950 text-rose-400 border border-rose-800 flex items-center justify-center text-xs shrink-0">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </div>
-                            <div>
-                                <p class="font-bold text-white">Thandiwe Dlamini</p>
-                                <p class="text-[11px] text-slate-400">Rotational Payout Disbursed • 15 Sep 2026</p>
-                            </div>
-                        </div>
-                        <span class="font-black text-rose-400">- R 20,000.00</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- RECORD DEPOSIT MODAL -->
-    <div id="depositModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-base font-bold text-white">Record Member Deposit</h3>
-                <button onclick="closeModal('depositModal')" class="text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <form onsubmit="handleDepositSubmit(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-slate-300 font-semibold mb-1">Select Family Member</label>
-                    <select id="depositMemberSelect" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-2.5 font-semibold focus:outline-none focus:border-gold-500">
-                        <!-- Options filled dynamically -->
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-slate-300 font-semibold mb-1">Amount Paid (ZAR)</label>
-                    <input id="depositAmountInput" type="number" value="2500" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-2.5 font-bold focus:outline-none focus:border-gold-500">
-                </div>
-
-                <div>
-                    <label class="block text-slate-300 font-semibold mb-1">Payment Method</label>
-                    <select class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl p-2.5 focus:outline-none focus:border-gold-500">
-                        <option>EFT Bank Transfer</option>
-                        <option>Cash to Treasurer</option>
-                        <option>Direct Mobile Cash</option>
-                    </select>
-                </div>
-
-                <div class="pt-3 flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal('depositModal')" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl font-semibold">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-slate-950 font-bold rounded-xl shadow">
-                        Confirm Deposit
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // State Data for Members
-        let members = [
-            { id: 1, name: "Sipho Dlamini", slot: "Dec 2026", amount: 2500, status: "Paid" },
-            { id: 2, name: "Thandiwe Dlamini", slot: "Jan 2027", amount: 2500, status: "Paid" },
-            { id: 3, name: "Bongani Khumalo", slot: "Feb 2027", amount: 2500, status: "Paid" },
-            { id: 4, name: "Nomvula Dlamini", slot: "Mar 2027", amount: 2500, status: "Paid" },
-            { id: 5, name: "Lindiwe Ndlovu", slot: "Apr 2027", amount: 0, status: "Overdue" },
-            { id: 6, name: "Kagiso Mokoena", slot: "May 2027", amount: 2500, status: "Paid" },
-            { id: 7, name: "Zanele Dlamini", slot: "Jun 2027", amount: 2500, status: "Paid" },
-            { id: 8, name: "Tebogo Cele", slot: "Jul 2027", amount: 0, status: "Pending" }
-        ];
-
-        let totalBalance = 184500;
-
-        // Render Members Table
-        function renderMembers() {
-            const tbody = document.getElementById('memberTableBody');
-            const select = document.getElementById('depositMemberSelect');
-            
-            tbody.innerHTML = '';
-            select.innerHTML = '';
-
-            let paidCount = 0;
-
-            members.forEach(member => {
-                if(member.status === 'Paid') paidCount++;
-
-                // Status Pill styling
-                let statusBadge = '';
-                if(member.status === 'Paid') {
-                    statusBadge = `<span class="bg-emerald-950 text-emerald-400 border border-emerald-700/60 px-2.5 py-0.5 rounded-full text-[11px] font-bold">Paid</span>`;
-                } else if(member.status === 'Pending') {
-                    statusBadge = `<span class="bg-amber-950 text-amber-400 border border-amber-700/60 px-2.5 py-0.5 rounded-full text-[11px] font-bold">Pending</span>`;
-                } else {
-                    statusBadge = `<span class="bg-rose-950 text-rose-400 border border-rose-700/60 px-2.5 py-0.5 rounded-full text-[11px] font-bold">Overdue</span>`;
-                }
-
-                // Table Row
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-800/40 transition";
-                tr.innerHTML = `
-                    <td class="py-3 font-bold text-white">${member.name}</td>
-                    <td class="py-3 text-slate-400 text-xs">${member.slot}</td>
-                    <td class="py-3 font-bold text-slate-200">R ${member.amount.toLocaleString()}</td>
-                    <td class="py-3">${statusBadge}</td>
-                    <td class="py-3 text-right">
-                        <button onclick="togglePayment(${member.id})" class="px-2.5 py-1 bg-slate-800 hover:bg-gold-500 hover:text-slate-950 text-xs font-bold rounded-lg text-slate-200 transition">
-                            ${member.status === 'Paid' ? 'Mark Unpaid' : 'Mark Paid'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-
-                // Option for modal select
-                const option = document.createElement('option');
-                option.value = member.id;
-                option.textContent = `${member.name} (${member.status})`;
-                select.appendChild(option);
-            });
-
-            // Update Progress percentage
-            const pct = Math.round((paidCount / members.length) * 100);
-            document.getElementById('payoutProgressBar').style.width = pct + '%';
-            document.getElementById('payoutProgressText').innerText = pct + '%';
-        }
-
-        // Toggle Payment status dynamically
-        function togglePayment(id) {
-            members = members.map(m => {
-                if (m.id === id) {
-                    const isPaid = m.status !== 'Paid';
-                    if (isPaid) {
-                        totalBalance += 2500;
-                    } else {
-                        totalBalance -= 2500;
-                    }
-                    return {
-                        ...m,
-                        status: isPaid ? 'Paid' : 'Pending',
-                        amount: isPaid ? 2500 : 0
-                    };
-                }
-                return m;
-            });
-            updateBalanceDisplay();
-            renderMembers();
-        }
-
-        function updateBalanceDisplay() {
-            document.getElementById('headerBalance').innerText = `R ${totalBalance.toLocaleString()}.00`;
-            document.getElementById('totalPoolText').innerText = `R ${totalBalance.toLocaleString()}`;
-        }
-
-        // Loan Calculation
-        function calculateLoan() {
-            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
-            const term = parseInt(document.getElementById('loanTerm').value) || 1;
-            
-            const totalInterest = amount * 0.05;
-            const totalRepayment = amount + totalInterest;
-            const monthlyPayment = totalRepayment / term;
-
-            document.getElementById('loanTotalText').innerText = `R ${totalRepayment.toLocaleString('en-ZA', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('loanMonthlyText').innerText = `R ${monthlyPayment.toLocaleString('en-ZA', {minimumFractionDigits: 2, maximumFractionDigits: 2})} / mo`;
-        }
-
-        function requestLoanSubmit() {
-            alert('Loan request submitted successfully! A notification was sent to all family members for voting.');
-        }
-
-        // Modal Helpers
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById(id).classList.add('flex');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById(id).classList.remove('flex');
-        }
-
-        function handleDepositSubmit(e) {
-            e.preventDefault();
-            const memberId = parseInt(document.getElementById('depositMemberSelect').value);
-            togglePayment(memberId);
-            closeModal('depositModal');
-            alert('Deposit successfully recorded!');
-        }
-
-        // Initial setup
-        window.onload = function() {
-            renderMembers();
-            calculateLoan();
-        };
-    </script>
-</body>
-</html>
+<!doctype html>
+<html lang="en-ZA"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#11664b"><meta name="description" content="Sisanda'$ Stokvel — family savings together.">
+<link rel="manifest" href="manifest.webmanifest"><title>Sisanda'$ Stokvel</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Arial,sans-serif;color:#19392d;background:#f3f7f3;--green:#11664b;--deep:#0b4835;--gold:#d7b65a;--muted:#6c7d73;--line:#e3ebe4;--white:#fff}*{box-sizing:border-box}body{margin:0;min-height:100vh}button,input,select,textarea{font:inherit}button{border:0;border-radius:13px;background:var(--green);color:#fff;padding:12px 15px;font-weight:750;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.secondary{background:#e6f2e9;color:var(--green)}.danger{background:#fff0ed;color:#a53b2b}.gold{background:var(--gold);color:#2d2a1b}.tiny{padding:8px 10px;font-size:12px;border-radius:9px}.muted{color:var(--muted);font-size:13px}.hidden{display:none!important}.top{background:linear-gradient(135deg,#0b4835,#18815b);color:white;padding:24px 18px 40px;border-radius:0 0 30px 30px}.top-inner{max-width:920px;margin:auto}.brandline{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:#ffffff20;display:grid;place-items:center;font-size:27px;border:1px solid #ffffff30}.top h1{font-size:23px;margin:0}.top p{margin:5px 0 0;color:#d7eee1;font-size:13px}.topright{margin-left:auto;text-align:right;font-size:12px;color:#e6f6ec}.wrap{max-width:920px;margin:-22px auto 94px;padding:0 14px}.card{background:white;border:1px solid #edf1ed;border-radius:21px;padding:18px;margin:13px 0;box-shadow:0 7px 25px #173f2910}.auth-wrap{max-width:450px;margin:28px auto;padding:0 16px}.auth-logo{text-align:center;padding:18px}.auth-logo .big{font-size:50px}.auth-logo h1{margin:5px 0;font-size:25px}.auth-logo p{margin:0;color:var(--muted)}h2{font-size:17px;margin:0 0 13px}h3{font-size:14px;margin:0 0 9px}.field{margin:10px 0}label{display:block;font-size:12px;font-weight:750;margin-bottom:6px;color:#4c6255}input,select,textarea{width:100%;border:1px solid #d8e4da;background:#fff;border-radius:12px;padding:12px;color:#19392d;outline-color:#16815b}textarea{min-height:90px;resize:vertical}.full{width:100%}.switchline{display:flex;justify-content:center;gap:7px;align-items:center;margin-top:14px;font-size:13px}.linkbtn{background:transparent;color:var(--green);padding:4px}.notice{padding:12px;border-radius:13px;background:#fff6df;color:#6c5214;font-size:13px;margin:12px 0}.success{background:#e7f7ec;color:#14613d}.error{background:#fff0ed;color:#9b3024}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.stat{padding:17px;border-radius:18px;background:#fff;border:1px solid var(--line)}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-size:24px;font-weight:850;margin-top:6px;letter-spacing:-.5px}.balance{background:linear-gradient(130deg,#fff8e6,#fffdf6);border-color:#f1e4bc}.balance .value{font-size:32px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;background:#e7f4ea;color:#11664b}.pill.pending,.pill.submitted{background:#fff3d7;color:#805b09}.pill.rejected,.pill.suspended{background:#ffebe8;color:#a33629}.pill.unpaid{background:#eef0ee;color:#657168}.progress{height:10px;border-radius:20px;background:#e5eee7;overflow:hidden;margin:11px 0}.progress div{height:100%;background:linear-gradient(90deg,#16815b,#d7b65a);width:0}.entry{padding:12px 0;border-bottom:1px solid #edf1ed}.entry:last-child{border-bottom:0}.entry p{margin:5px 0}.entry-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.nav{position:fixed;z-index:5;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:0;background:#fffffff2;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}.nav button{flex:1;max-width:150px;border-radius:0;background:transparent;color:#60766a;padding:11px 2px 9px;font-size:11px}.nav button span{display:block;font-size:20px;margin-bottom:3px}.nav button.active{color:var(--green);background:#e9f5ed}.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.section-title h2{margin:0}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}.foot{text-align:center;color:#859288;font-size:11px;padding:20px}.statusline{font-size:13px;margin-top:8px}.small-note{font-size:11px;color:var(--muted);line-height:1.5}.file{background:#f7faf7;border:1px dashed #b8cbbc;padding:12px;border-radius:12px}.empty{text-align:center;color:var(--muted);padding:20px 5px;font-size:13px}.appbar{display:flex;align-items:center;justify-content:space-between;gap:10px}.appbar .muted{max-width:70%}@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.balance{grid-column:span 2}.top{padding-top:30px}.wrap{padding:0 20px}.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.main-grid .card{margin:0 0 13px}}@media(max-width:380px){.top h1{font-size:19px}.stat .value{font-size:20px}.balance .value{font-size:28px}.card{padding:15px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
+<section id="authScreen" class="auth-wrap">
+ <div class="auth-logo"><div class="big">🏡</div><h1>Sisanda'$ Stokvel</h1><p>Save together. Grow together. 💚</p></div>
+ <div class="card"><div id="authMessage" class="notice hidden"></div>
+  <div id="loginForm"><h2>Welcome back 👋</h2><p class="muted">Sign in to your family savings space.</p><div class="field"><label>Email address</label><input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"></div><button id="loginBtn" class="full" onclick="login()">Sign in</button><div class="switchline">New to the family stokvel? <button class="linkbtn" onclick="showRegister()">Register</button></div></div>
+  <div id="registerForm" class="hidden"><h2>Join the family 💚</h2><p class="muted">The treasurer must approve your registration.</p><div class="field"><label>Full name</label><input id="regName" maxlength="80" autocomplete="name" placeholder="Your full name"></div><div class="field"><label>Phone number (optional)</label><input id="regPhone" type="tel" autocomplete="tel" placeholder="e.g. 071 234 5678"></div><div class="field"><label>Email address</label><input id="regEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Create password (at least 8 characters)</label><input id="regPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Create a strong password"></div><button id="registerBtn" class="full" onclick="register()">Submit registration</button><div class="switchline">Already registered? <button class="linkbtn" onclick="showLogin()">Sign in</button></div></div>
+ </div><p class="small-note" style="text-align:center">Your account is private. Only approved family members can enter the stokvel. Never share your password or bank PIN.</p>
+</section>
+<section id="pendingScreen" class="auth-wrap hidden"><div class="auth-logo"><div class="big">⏳</div><h1>Registration received</h1><p>Sisanda'$ Stokvel</p></div><div class="card"><div class="notice">Your membership is waiting for treasurer approval. You can sign in again later to check.</div><button class="full" onclick="logout()">Sign out</button></div></section>
+<section id="appScreen" class="hidden">
+<header class="top"><div class="top-inner"><div class="brandline"><div class="logo">🏡</div><div><h1 id="appName">Sisanda'$ Stokvel</h1><p>Family savings · R200 monthly · Due on the 1st</p></div><div class="topright" id="roleLabel">MEMBER</div></div></div></header>
+<main class="wrap">
+<section id="homeTab"><div class="card balance"><div class="row"><div><div class="muted">Family savings balance</div><div class="value" id="balance">R0.00</div></div><div style="font-size:35px">💚</div></div><div class="muted" id="balanceCaption">Confirmed contributions minus recorded withdrawals</div></div>
+<div class="grid"><div class="stat"><div class="label">Family members</div><div class="value" id="memberCount">0</div></div><div class="stat"><div class="label">Paid this month</div><div class="value" id="paidCount">0/0</div></div><div class="stat"><div class="label">Monthly contribution</div><div class="value" id="monthlyAmount">R200</div></div><div class="stat"><div class="label">Due date</div><div class="value" id="dueDate">1st</div></div></div>
+<div class="card"><div class="section-title"><h2>🎯 Family savings goal</h2><span class="pill" id="goalPercent">0%</span></div><div class="row"><strong id="goalCurrent">R0.00 saved</strong><span class="muted" id="goalTarget">Goal R10,000</span></div><div class="progress"><div id="goalBar"></div></div><div id="goalAdmin" class="hidden"><div class="field"><label>Update savings goal (R)</label><input id="goalInput" type="number" min="1" step="1" value="10000"></div><button class="secondary" onclick="saveGoal()">Save goal</button></div></div>
+<div class="main-grid"><div class="card"><div class="section-title"><h2>📅 This month's payments</h2><span class="muted" id="monthLabel"></span></div><div id="monthStatuses"><div class="empty">Loading payment statuses…</div></div></div><div class="card"><div class="section-title"><h2>📢 Family announcements</h2></div><div id="homeAnnouncements"></div></div></div>
+<div class="card"><div class="section-title"><h2>💸 Recent withdrawals</h2><span class="muted">Shared record</span></div><div id="recentWithdrawals"></div></div></section>
+<section id="membersTab" class="hidden"><div class="card"><div class="section-title"><h2>👨‍👩‍👧‍👦 Family members</h2><span class="pill" id="memberCountTag">0 members</span></div><p class="muted">Only approved members appear in the family directory. Contact details are not shown to other members.</p><div id="membersList"></div></div><div id="pendingMembersCard" class="card hidden"><h2>🛡️ Registrations awaiting approval</h2><div id="pendingMembersList"></div></div></section>
+<section id="paymentsTab" class="hidden"><div class="card"><h2>💰 Submit your monthly contribution</h2><p class="muted">The standard contribution is <strong id="paymentAmountText">R200</strong>, due on the 1st. Your payment remains pending until the treasurer confirms it.</p><div class="field"><label>Payment method</label><select id="paymentMethod" onchange="toggleProof()"><option value="eft">Bank transfer (EFT)</option><option value="cash">Cash paid to treasurer</option></select></div><div class="field" id="proofField"><label>Proof of payment (required for EFT)</label><input class="file" id="proofFile" type="file" accept="image/*,.pdf"><div class="small-note">Your proof is private and can only be viewed by you and the treasurer.</div></div><div class="field"><label>Payment reference / note (optional)</label><input id="paymentReference" maxlength="120" placeholder="Bank reference or note"></div><button id="submitPaymentBtn" onclick="submitPayment()" class="full">Submit payment for verification</button></div>
+<div class="card"><div class="section-title"><h2>📋 My payment history</h2></div><div id="myPayments"></div></div>
+<div id="treasurerContribCard" class="card hidden"><h2>🛡️ Payments awaiting verification</h2><div id="pendingPayments"></div></div>
+<div id="withdrawalCard" class="card hidden"><h2>💸 Record a withdrawal</h2><div class="field"><label>Amount (R)</label><input id="withdrawAmount" type="number" min="0.01" step="0.01" placeholder="500"></div><div class="field"><label>Reason for withdrawal</label><textarea id="withdrawReason" maxlength="250" placeholder="Explain what the money is for"></textarea></div><button onclick="recordWithdrawal()">Record withdrawal</button><p class="small-note">Only the treasurer can record a withdrawal. Keep bank statements and family approval as supporting records.</p></div>
+</section>
+<section id="announcementsTab" class="hidden"><div id="createAnnouncement" class="card hidden"><h2>📢 Post a family announcement</h2><div class="field"><label>Title</label><input id="announcementTitle" maxlength="100" placeholder="Family meeting"></div><div class="field"><label>Message</label><textarea id="announcementMessage" maxlength="2000" placeholder="Write your announcement"></textarea></div><button onclick="postAnnouncement()">Post announcement</button></div><div class="card"><h2>All announcements</h2><div id="allAnnouncements"></div></div></section>
+<section id="accountTab" class="hidden"><div class="card"><h2>👤 My account</h2><div id="accountInfo"></div><button class="secondary" onclick="logout()">Sign out</button></div><div class="card"><h2>🔐 Financial privacy</h2><p class="muted">Members can see who has paid each month, the family savings total, and withdrawals. Individual payment histories and EFT proof are private to the member and treasurer. The treasurer can approve members and verify payments.</p></div><div class="card"><h2>📄 Export family records</h2><p class="muted">The treasurer can download the visible contribution and transaction lists for record keeping.</p><button class="secondary" onclick="exportMyHistory()">Export my payment history (CSV)</button></div></section>
+<div class="foot">Sisanda'$ Stokvel · Save together. Grow together. 💚</div>
+</main>
+<nav class="nav"><button class="active" onclick="tab('homeTab',this)"><span>🏠</span>Home</button><button onclick="tab('membersTab',this)"><span>👪</span>Members</button><button onclick="tab('paymentsTab',this)"><span>💰</span>Payments</button><button onclick="tab('announcementsTab',this)"><span>📢</span>Updates</button><button onclick="tab('accountTab',this)"><span>👤</span>Account</button></nav>
+</section>
+<script>
+const SUPABASE_URL='https://nqhclxlwdoeudeeuhnmu.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_9NZQ7ehB-WtQ61Io-neGng_kaAmRV-Y';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let currentUser=null, currentMember=null, isTreasurer=false, summary=null, members=[], myPayments=[], announcements=[];
+const $=id=>document.getElementById(id); const money=n=>'R'+Number(n||0).toLocaleString('en-ZA',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function message(msg,type='notice'){const e=$('authMessage');e.textContent=msg;e.className='notice '+(type==='error'?'error':type==='success'?'success':'');}
+function showLogin(){ $('loginForm').classList.remove('hidden');$('registerForm').classList.add('hidden');$('authMessage').classList.add('hidden'); }
+function showRegister(){ $('loginForm').classList.add('hidden');$('registerForm').classList.remove('hidden');$('authMessage').classList.add('hidden'); }
+async function register(){const full_name=$('regName').value.trim(),phone=$('regPhone').value.trim(),email=$('regEmail').value.trim(),password=$('regPassword').value;if(!full_name||!email||password.length<8){showAuthMessage('Please enter your full name, valid email and a password of at least 8 characters.','error');return;}busy('registerBtn',true);try{const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name,phone}}});if(error)throw error;if(data.session){const {error:me}=await sb.from('members').upsert({user_id:data.user.id,full_name,phone:phone||null,status:'pending',role:'member'},{onConflict:'user_id',ignoreDuplicates:true});if(me)throw me;showAuthMessage('Registration submitted. Please wait for the treasurer to approve you.','success');await routeUser(data.user);}else{showAuthMessage('Check your email to confirm your account, then return here and sign in. Your membership will be submitted after your first sign-in.','success');showLogin();}}catch(e){showAuthMessage(e.message||'Registration failed. Please try again.','error');}finally{busy('registerBtn',false)}}
+function showAuthMessage(msg,type='notice'){const e=$('authMessage');e.textContent=msg;e.className='notice '+(type==='error'?'error':type==='success'?'success':'');}
+async function login(){const email=$('loginEmail').value.trim(),password=$('loginPassword').value;if(!email||!password){showAuthMessage('Enter your email and password.','error');return;}busy('loginBtn',true);try{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;await routeUser(data.user);}catch(e){showAuthMessage(e.message||'Could not sign in.','error');}finally{busy('loginBtn',false)}}
+function busy(id,v){$(id).disabled=v;$(id).textContent=v?'Please wait…':(id==='loginBtn'?'Sign in':'Submit registration')}
+async function ensureMember(user){let {data,error}=await sb.from('members').select('user_id,full_name,phone,status,role,created_at,approved_at').eq('user_id',user.id).maybeSingle();if(error)throw error;if(!data){const full_name=user.user_metadata?.full_name||user.email?.split('@')[0]||'Family member',phone=user.user_metadata?.phone||null;const ins=await sb.from('members').insert({user_id:user.id,full_name,phone,status:'pending',role:'member'}).select('user_id,full_name,phone,status,role,created_at,approved_at').single();if(ins.error)throw ins.error;data=ins.data;}return data;}
+async function routeUser(user){currentUser=user;try{currentMember=await ensureMember(user);isTreasurer=currentMember.role==='treasurer'&&currentMember.status==='approved';$('authScreen').classList.add('hidden');if(currentMember.status!=='approved'){ $('appScreen').classList.add('hidden');$('pendingScreen').classList.remove('hidden');return;}$('pendingScreen').classList.add('hidden');$('appScreen').classList.remove('hidden');$('roleLabel').textContent=isTreasurer?'TREASURER':'MEMBER';$('goalAdmin').classList.toggle('hidden',!isTreasurer);$('pendingMembersCard').classList.toggle('hidden',!isTreasurer);$('treasurerContribCard').classList.toggle('hidden',!isTreasurer);$('withdrawalCard').classList.toggle('hidden',!isTreasurer);$('createAnnouncement').classList.toggle('hidden',!isTreasurer);await loadApp();}catch(e){$('authScreen').classList.remove('hidden');showAuthMessage('Could not load your membership: '+(e.message||'Please try again.'),'error');}}
+async function logout(){await sb.auth.signOut();currentUser=null;currentMember=null;isTreasurer=false;$('appScreen').classList.add('hidden');$('pendingScreen').classList.add('hidden');$('authScreen').classList.remove('hidden');showLogin();}
+function tab(id,btn){document.querySelectorAll('#appScreen main>section').forEach(s=>s.classList.toggle('hidden',s.id!==id));document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(id==='membersTab')loadMembers();if(id==='paymentsTab')loadPayments();if(id==='announcementsTab')loadAnnouncements();}
+async function loadApp(){await Promise.all([loadSummary(),loadMembers(),loadPayments(),loadAnnouncements(),loadWithdrawals()]);$('accountInfo').innerHTML=`<div class="entry"><span class="muted">Name</span><p><strong>${esc(currentMember.full_name)}</strong></p></div><div class="entry"><span class="muted">Email</span><p>${esc(currentUser.email)}</p></div><div class="entry"><span class="muted">Membership</span><p><span class="pill">Approved</span></p></div><div class="entry"><span class="muted">Role</span><p>${isTreasurer?'Treasurer / Administrator':'Family member'}</p></div>`;}
+async function loadSummary(){const {data,error}=await sb.rpc('get_stokvel_summary');if(error){console.error(error);return;}summary=data;$('appName').textContent=data.stokvel_name||"Sisanda'$ Stokvel";document.title=$('appName').textContent;$('balance').textContent=money(data.balance);$('memberCount').textContent=data.member_count||0;$('paidCount').textContent=(data.paid_this_month||0)+'/'+(data.member_count||0);$('monthlyAmount').textContent=money(data.monthly_contribution);$('paymentAmountText').textContent=money(data.monthly_contribution);$('dueDate').textContent=ordinal(data.due_day);$('goalCurrent').textContent=money(data.balance)+' saved';$('goalTarget').textContent='Goal '+money(data.savings_goal);const pct=Math.min(100,Math.max(0,Number(data.balance)/Number(data.savings_goal||1)*100));$('goalPercent').textContent=Math.round(pct)+'%';$('goalBar').style.width=pct+'%';$('goalInput').value=data.savings_goal;$('monthLabel').textContent=new Date().toLocaleDateString('en-ZA',{month:'long',year:'numeric'});}
+function ordinal(n){n=Number(n);return n+(n===1?'st':n===2?'nd':n===3?'rd':'th');}
+async function loadMembers(){const {data,error}=await sb.from('members').select('user_id,full_name,status,role,created_at').order('full_name');if(error){$('membersList').innerHTML='<p class="muted">Could not load family members.</p>';return;}members=data||[];const approved=members.filter(m=>m.status==='approved');$('memberCountTag').textContent=approved.length+' members';const month=new Date();const monthStart=new Date(month.getFullYear(),month.getMonth(),1).toISOString().slice(0,10);const {data:statuses}=await sb.from('member_contribution_status').select('member_id,member_name,contribution_month,payment_status').eq('contribution_month',monthStart);const statusMap=new Map((statuses||[]).map(s=>[s.member_id,s]));$('membersList').innerHTML=approved.map(m=>{const s=statusMap.get(m.user_id),st=s?.payment_status||'unpaid';return `<div class="entry"><div class="row"><div><strong>${esc(m.full_name)}</strong>${m.user_id===currentUser.id?'<small>You</small>':''}</div><span class="pill ${st}">${statusLabel(st)}</span></div></div>`}).join('')||'<div class="empty">No approved members yet.</div>';
+if(isTreasurer){const pending=members.filter(m=>m.status==='pending');$('pendingMembersList').innerHTML=pending.map(m=>`<div class="entry"><div class="row"><div><strong>${esc(m.full_name)}</strong><small>Registered ${new Date(m.created_at).toLocaleDateString('en-ZA')}</small></div><span class="pill pending">Pending</span></div><div class="entry-actions"><button class="tiny" onclick="approveMember('${m.user_id}')">Approve</button><button class="tiny danger" onclick="rejectMember('${m.user_id}')">Reject</button></div></div>`).join('')||'<div class="empty">No registrations waiting.</div>';}
+$('monthStatuses').innerHTML=approved.map(m=>{const s=statusMap.get(m.user_id),st=s?.payment_status||'unpaid';return `<div class="entry row"><span>${esc(m.full_name)}</span><span class="pill ${st}">${statusLabel(st)}</span></div>`}).join('')||'<div class="empty">No approved family members yet.</div>';
+}
+function statusLabel(s){return ({paid:'Paid ✓',submitted:'Submitted',pending:'Pending',rejected:'Needs attention',unpaid:'Unpaid',suspended:'Suspended'})[s]||s;}
+async function approveMember(id){if(!confirm('Approve this family member?'))return;const {error}=await sb.from('members').update({status:'approved',role:'member',approved_at:new Date().toISOString(),approved_by:currentUser.id}).eq('user_id',id);if(error)return alert(error.message);await loadSummary();await loadMembers();alert('Member approved.');}
+async function rejectMember(id){if(!confirm('Reject this registration?'))return;const {error}=await sb.from('members').update({status:'rejected',approved_by:currentUser.id}).eq('user_id',id);if(error)return alert(error.message);await loadMembers();}
+function toggleProof(){$('proofField').classList.toggle('hidden',$('paymentMethod').value!=='eft');}
+async function submitPayment(){if(!currentMember||currentMember.status!=='approved')return;const method=$('paymentMethod').value,file=$('proofFile').files[0],reference=$('paymentReference').value.trim();if(method==='eft'&&!file)return alert('Please upload EFT proof.');const btn=$('submitPaymentBtn');btn.disabled=true;btn.textContent='Submitting…';try{let proof_path=null;if(file){if(file.size>8*1024*1024)throw new Error('Please choose a file smaller than 8 MB.');const clean=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');proof_path=`${currentUser.id}/${Date.now()}-${clean}`;const up=await sb.storage.from('payment-proofs').upload(proof_path,file,{upsert:false,contentType:file.type||'application/octet-stream'});if(up.error)throw up.error;}const now=new Date(),monthStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);const {error}=await sb.from('contributions').insert({member_id:currentUser.id,contribution_month:monthStart,amount:Number(summary?.monthly_contribution||200),payment_method:method,payment_status:'submitted',proof_path,recorded_by:null,verified_by:null});if(error){if(proof_path)await sb.storage.from('payment-proofs').remove([proof_path]);throw error;}if(reference)alert('Payment submitted. Please tell the treasurer your reference: '+reference);else alert('Payment submitted for treasurer verification.');$('paymentReference').value='';$('proofFile').value='';await loadPayments();await loadMembers();}catch(e){alert(e.message||'Could not submit payment.');}finally{btn.disabled=false;btn.textContent='Submit payment for verification';}}
+async function loadPayments(){if(!currentUser)return;let q=sb.from('contributions').select('id,member_id,contribution_month,amount,payment_method,payment_status,proof_path,created_at,paid_at,verified_by').order('created_at',{ascending:false});if(!isTreasurer)q=q.eq('member_id',currentUser.id);const {data,error}=await q;if(error){$('myPayments').innerHTML='<p class="muted">Could not load payment history: '+esc(error.message)+'</p>';return;}myPayments=data||[];$('myPayments').innerHTML=myPayments.filter(p=>isTreasurer||p.member_id===currentUser.id).map(p=>paymentHTML(p)).join('')||'<div class="empty">No payments submitted yet.</div>';if(isTreasurer){const pending=myPayments.filter(p=>p.payment_status==='submitted'||p.payment_status==='pending');$('pendingPayments').innerHTML=pending.map(p=>{const m=members.find(x=>x.user_id===p.member_id);return `<div class="entry"><div class="row"><div><strong>${esc(m?.full_name||'Family member')}</strong><small>${esc(p.contribution_month)} · ${esc(p.payment_method.toUpperCase())} · ${money(p.amount)}</small></div><span class="pill ${p.payment_status}">${statusLabel(p.payment_status)}</span></div><div class="entry-actions">${p.proof_path?`<button class="tiny secondary" onclick="viewProof('${esc(p.proof_path)}')">View proof</button>`:''}<button class="tiny" onclick="verifyPayment('${p.id}','paid')">Confirm paid</button><button class="tiny danger" onclick="verifyPayment('${p.id}','rejected')">Reject</button></div></div>`}).join('')||'<div class="empty">No payments waiting for verification.</div>';}}
+function paymentHTML(p){return `<div class="entry"><div class="row"><div><strong>${money(p.amount)}</strong><small>${esc(p.contribution_month)} · ${esc(p.payment_method.toUpperCase())}</small></div><span class="pill ${p.payment_status}">${statusLabel(p.payment_status)}</span></div>${p.paid_at?`<small>Confirmed ${new Date(p.paid_at).toLocaleDateString('en-ZA')}</small>`:''}</div>`;}
+async function viewProof(path){const {data,error}=await sb.storage.from('payment-proofs').createSignedUrl(path,120);if(error)return alert(error.message);window.open(data.signedUrl,'_blank','noopener');}
+async function verifyPayment(id,status){if(!confirm(status==='paid'?'Confirm that the money has arrived?':'Reject this payment submission?'))return;const p=myPayments.find(x=>x.id===id);if(!p)return;const upd=await sb.from('contributions').update({payment_status:status,verified_by:currentUser.id,paid_at:status==='paid'?new Date().toISOString():null,recorded_by:currentUser.id}).eq('id',id);if(upd.error)return alert(upd.error.message);if(status==='paid'){const ins=await sb.from('stokvel_transactions').insert({transaction_type:'contribution',amount:p.amount,transaction_date:new Date().toISOString().slice(0,10),description:'Confirmed monthly contribution',member_id:p.member_id,contribution_id:p.id,recorded_by:currentUser.id});if(ins.error){alert('Payment confirmed, but ledger entry failed: '+ins.error.message);}}await loadSummary();await loadMembers();await loadPayments();await loadWithdrawals();alert(status==='paid'?'Payment confirmed.':'Payment rejected.');}
+async function recordWithdrawal(){const amount=Number($('withdrawAmount').value),description=$('withdrawReason').value.trim();if(!Number.isFinite(amount)||amount<=0||!description)return alert('Enter a valid amount and reason.');if(amount>Number(summary?.balance||0))return alert('The withdrawal is larger than the current recorded balance.');if(!confirm('Record a withdrawal of '+money(amount)+'?'))return;const {error}=await sb.from('stokvel_transactions').insert({transaction_type:'withdrawal',amount,transaction_date:new Date().toISOString().slice(0,10),description,recorded_by:currentUser.id});if(error)return alert(error.message);$('withdrawAmount').value='';$('withdrawReason').value='';await loadSummary();await loadWithdrawals();alert('Withdrawal recorded.');}
+async function loadWithdrawals(){const {data,error}=await sb.from('stokvel_transactions').select('id,transaction_type,amount,transaction_date,description,member_id,recorded_by').eq('transaction_type','withdrawal').order('transaction_date',{ascending:false}).limit(10);if(error){$('recentWithdrawals').innerHTML='<div class="empty">Withdrawal list is not available.</div>';return;}const html=(data||[]).map(t=>`<div class="entry row"><div><strong>${esc(t.description||'Withdrawal')}</strong><small>${esc(t.transaction_date)}</small></div><strong>−${money(t.amount)}</strong></div>`).join('');$('recentWithdrawals').innerHTML=html||'<div class="empty">No withdrawals recorded.</div>';}
+async function saveGoal(){const goal=Number($('goalInput').value);if(!Number.isFinite(goal)||goal<=0)return alert('Enter a valid savings goal.');const {data,error}=await sb.from('stokvel_settings').update({savings_goal:goal}).not('id','is',null).select('id');if(error)return alert(error.message);await loadSummary();alert('Savings goal updated.');}
+async function loadAnnouncements(){const {data,error}=await sb.from('announcements').select('id,title,message,created_at,created_by').order('created_at',{ascending:false}).limit(50);if(error){$('allAnnouncements').innerHTML='<div class="empty">Could not load announcements.</div>';return;}announcements=data||[];const html=announcements.map(a=>`<div class="entry"><strong>${esc(a.title)}</strong><p>${esc(a.message).replace(/\n/g,'<br>')}</p><small>${new Date(a.created_at).toLocaleString('en-ZA')}</small></div>`).join('')||'<div class="empty">No announcements yet.</div>';$('allAnnouncements').innerHTML=html;$('homeAnnouncements').innerHTML=announcements.slice(0,3).map(a=>`<div class="entry"><strong>${esc(a.title)}</strong><p>${esc(a.message).replace(/\n/g,'<br>')}</p><small>${new Date(a.created_at).toLocaleDateString('en-ZA')}</small></div>`).join('')||'<div class="empty">No announcements yet.</div>';}
+async function postAnnouncement(){const title=$('announcementTitle').value.trim(),messageText=$('announcementMessage').value.trim();if(!title||!messageText)return alert('Enter a title and message.');const {error}=await sb.from('announcements').insert({title,message:messageText,created_by:currentUser.id});if(error)return alert(error.message);$('announcementTitle').value='';$('announcementMessage').value='';await loadAnnouncements();alert('Announcement posted.');}
+function exportMyHistory(){const rows=[['Month','Amount (ZAR)','Method','Status','Submitted'],...myPayments.filter(p=>p.member_id===currentUser.id).map(p=>[p.contribution_month,p.amount,p.payment_method,p.payment_status,p.created_at])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');const a=document.createElement('a'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.href=u;a.download='sisanda-stokvel-my-payments.csv';a.click();URL.revokeObjectURL(u);}
+async function init(){if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});const {data:{session}}=await sb.auth.getSession();if(session?.user)await routeUser(session.user);sb.auth.onAuthStateChange((_event,session)=>{if(session?.user&&!currentUser)routeUser(session.user);});}
+init();
+</script></body></html>
