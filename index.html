@@ -1,77 +1,65 @@
-<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#072f23"><meta name="color-scheme" content="light dark"><title>Sisanda'$ Stokvel</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<style>
-:root{--bg:#f6f1e7;--card:#fffdf8;--ink:#1b2b22;--mut:#78867c;--line:#e9e2d2;--g:#0e4d3a;--g2:#1f7a56;--gold:#d8a23a;--soft:#e9f1e4;--field:#fff;--on:#fff;--serif:Georgia,'Times New Roman',serif}
-@media(prefers-color-scheme:dark){:root{--bg:#0d1511;--card:#15201a;--ink:#eaf2ec;--mut:#8fa397;--line:#243229;--g:#43c48f;--g2:#43c48f;--gold:#e6b450;--soft:#1d2d24;--field:#101a15;--on:#08140e}}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
-h1,h2,.stat strong,.big strong{font-family:var(--serif);font-weight:700}h1{margin:0;font-size:24px;letter-spacing:-.01em}h2{font-size:18px;margin:0 0 14px}
-small,.mut{color:var(--mut);font-size:12px}small{display:block;margin-top:3px}
-header{color:#fff;padding:22px 18px 70px;padding-top:calc(22px + env(safe-area-inset-top));background:radial-gradient(circle at 88% 12%,#ffffff12 0 70px,transparent 71px),radial-gradient(circle at 6% 110%,#d8a23a30 0 110px,transparent 111px),linear-gradient(130deg,#072f23,#14664a)}
-#role{background:#ffffff22;padding:6px 11px;border-radius:20px;font-size:10px;letter-spacing:.1em}
-.wrap{max-width:960px;margin:-48px auto 0;padding:0 14px 120px}.auth{max-width:440px;margin:36px auto;padding:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;margin:12px 0}
-label{display:block;font-size:12px;font-weight:700;margin:14px 0 6px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
-input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:13px;font:inherit;color:var(--ink);background:var(--field);outline:0}
-input:focus,select:focus,textarea:focus{border-color:var(--g2);box-shadow:0 0 0 3px #1f7a5622}textarea{min-height:80px}
-button{background:var(--g);color:var(--on);border:0;border-radius:14px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer;transition:transform .1s}button:active{transform:scale(.97)}button:disabled{opacity:.5}
-.soft{background:var(--soft);color:var(--g)}.red{background:#fde8e4;color:#9b3425}.full{width:100%;margin-top:12px}.hidden{display:none!important}
-.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.row>*{min-width:0}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px}.stat strong{display:block;font-size:23px;margin-top:2px;overflow-wrap:anywhere}
-.big{padding:24px 22px;border-top:4px solid var(--gold)}.big small{text-transform:uppercase;letter-spacing:.08em;font-weight:700}.big strong{display:block;font-size:42px;color:var(--g);margin:4px 0 6px;letter-spacing:-.02em}
-.entry{padding:13px 0;border-bottom:1px solid var(--line)}.entry:last-child{border:0}
-.pill{font-size:11px;font-weight:700;border-radius:20px;padding:5px 10px;background:#dff3e4;color:#126342;white-space:nowrap}
-.pill.submitted,.pill.pending{background:#fff0cc;color:#7a5200}.pill.unpaid,.pill.suspended{background:#ecebe6;color:#666}.pill.rejected{background:#fde8e4;color:#a22}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.actions button{font-size:12px;padding:9px 12px}
-.bar{height:14px;background:var(--soft);border-radius:20px;overflow:hidden}.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--g2),var(--gold));border-radius:20px;transition:width .8s}
-.notice{padding:13px;background:var(--soft);border-radius:14px;margin:10px 0}.notice.bad{background:#fde8e4;color:#9b3425}
-nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:560px;margin:auto;display:flex;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:6px;z-index:10;box-shadow:0 10px 30px #0a2a1e33}
-nav button{flex:1;background:transparent;color:var(--mut);font-size:10px;padding:8px 0;border-radius:20px}nav button span{display:block;font-size:19px}nav button.on{background:var(--g);color:var(--on)}
-#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#0a3a2c;color:#fff;padding:12px 18px;border-radius:14px;opacity:0;pointer-events:none;transition:.25s;z-index:20;max-width:90%;font-size:14px}
-#toast.show{opacity:1;transform:translateX(-50%)}#toast.bad{background:#a22}
+<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1f33"><title>Sisanda'$ Stokvel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><style>*{box-sizing:border-box}:root{--ink:#0b1f33;--ink2:#16385a;--em:#0a8f6a;--bg:#f3f5f8;--tx:#14263a;--mut:#64748b;--line:#e2e8f0;--soft:#eef2f6;--bad:#b42318}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tx);background:var(--bg);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+h1{margin:0;font-size:21px;font-weight:700;letter-spacing:-.01em}h2{font-size:15px;font-weight:700;margin:0 0 14px}small,.mut{color:var(--mut);font-size:12.5px}small{display:block;margin-top:2px}p{margin:8px 0}
+.hidden{display:none!important}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.row>*{min-width:0}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--em);color:#fff;display:grid;place-items:center;font-weight:800;font-size:19px;flex:none}
+.split{min-height:100vh;display:grid}.pitch{background:linear-gradient(160deg,var(--ink),var(--ink2));color:#fff;padding:32px 24px}.pitch p{color:#b8c7d9}.pitch ul{list-style:none;padding:0;margin:26px 0 0;display:grid;gap:16px}
+.pitch li{padding-left:16px;border-left:3px solid var(--em);font-size:13.5px;color:#b8c7d9}.pitch li b{display:block;color:#fff;font-size:14.5px}
+.formside{padding:24px 16px;display:flex;align-items:center;justify-content:center}.formside .card{width:100%;max-width:420px}.center{max-width:440px;margin:60px auto;padding:14px}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:11px 16px;padding-top:calc(11px + env(safe-area-inset-top))}
+.top .in{max-width:960px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}.brand{display:flex;align-items:center;gap:10px}.brand small{margin:0}
+#role{font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--ink2);background:var(--soft);padding:5px 10px;border-radius:6px}
+.wrap{max-width:960px;margin:0 auto;padding:16px 14px 100px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:12px 0}
+label{display:block;font-size:12.5px;font-weight:600;margin:14px 0 5px}
+input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:11px 12px;font:inherit;color:var(--tx);background:#fff;outline:0}input:focus,select:focus,textarea:focus{border-color:var(--em);box-shadow:0 0 0 3px #0a8f6a22}textarea{min-height:80px}
+button{background:var(--em);color:#fff;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer}button:disabled{opacity:.5}button:active{filter:brightness(.92)}
+.soft{background:var(--soft);color:var(--ink2)}.red{background:#fee4e2;color:var(--bad)}.full{width:100%;margin-top:12px}
+.big{background:linear-gradient(150deg,var(--ink),var(--ink2));color:#fff;border:0;padding:24px 22px}.big small{color:#9fb3c8;text-transform:uppercase;letter-spacing:.09em;font-weight:600;font-size:11.5px}.big strong{display:block;font-size:40px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}.big .mut{color:#9fb3c8}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:12px 0}.stat{background:#fff;padding:14px 16px}.stat small{text-transform:uppercase;letter-spacing:.06em;font-weight:600;font-size:11px}.stat strong{display:block;font-size:21px;margin-top:3px;overflow-wrap:anywhere}
+.entry{padding:12px 0;border-bottom:1px solid var(--line)}.entry:last-child{border:0}
+.pill{font-size:11.5px;font-weight:600;border-radius:6px;padding:4px 9px;background:#dcfae6;color:#067647;white-space:nowrap}.pill.submitted,.pill.pending{background:#fef0c7;color:#93370d}.pill.unpaid,.pill.suspended{background:var(--soft);color:#475569}.pill.rejected{background:#fee4e2;color:var(--bad)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.actions button{font-size:12.5px;padding:8px 12px}
+.bar{height:10px;background:var(--soft);border-radius:20px;overflow:hidden}.bar div{height:100%;width:0;background:var(--em);border-radius:20px;transition:width .8s}
+.notice{padding:12px;background:#ecfdf3;color:#067647;border-radius:10px;margin:10px 0}.notice.bad{background:#fee4e2;color:var(--bad)}
+.who{display:flex;align-items:center;gap:12px}.av{width:40px;height:40px;border-radius:50%;background:var(--ink2);color:#fff;display:grid;place-items:center;font:600 14px system-ui;font-style:normal;flex:none}
+#todo{border-left:4px solid var(--em)}#todo .entry{padding:10px 0}.foot{text-align:center;color:var(--mut);font-size:12px;margin:26px 8px}
+nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:10}.nav .brand{display:none}
+nav button{flex:1;background:none;color:var(--mut);font-size:10.5px;font-weight:600;padding:9px 0 8px;border-radius:0;display:flex;flex-direction:column;align-items:center;gap:3px}nav svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}nav button.on{color:var(--em)}
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.25s;z-index:30;max-width:90%;font-size:14px}#toast.show{opacity:1;transform:translateX(-50%)}#toast.bad{background:var(--bad)}
 @media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two .card{margin:6px 0}}
-</style></head><body>
+@media(min-width:900px){.split{grid-template-columns:1fr 1fr}.pitch{padding:64px 56px}.pitch h1{font-size:30px}
+nav{top:0;right:auto;width:236px;flex-direction:column;background:var(--ink);border:0;padding:20px 12px;gap:4px}.nav .brand{display:flex;color:#fff;padding:4px 8px 24px}.nav .brand small{color:#9fb3c8}
+nav button{flex:none;flex-direction:row;gap:12px;font-size:14px;padding:12px 14px;border-radius:10px;color:#9fb3c8;justify-content:flex-start}nav button.on{background:#ffffff18;color:#fff}.shell{margin-left:236px}#toast{bottom:30px}}</style></head><body>
 <div id="toast"></div>
-<section id="auth" class="auth"><h1 style="text-align:center">🏡 Sisanda'$ Stokvel</h1><p class="mut" style="text-align:center">Save together. Grow together. 💚</p>
-<div class="card"><div id="authMsg" class="notice hidden"></div>
-<div id="loginBox"><h2>Sign in</h2><label>Email</label><input id="email" type="email" autocomplete="email"><label>Password</label><input id="password" type="password" autocomplete="current-password">
-<button class="full" onclick="run(this,login)">Sign in</button><button class="soft full" onclick="reg(true)">Register as a member</button><button class="soft full" onclick="run(this,forgot)">Forgot password?</button></div>
-<div id="regBox" class="hidden"><h2>Join the family</h2><label>Full name</label><input id="name" autocomplete="name"><label>Phone (optional)</label><input id="phone" type="tel"><label>Email</label><input id="regEmail" type="email"><label>Password (8+ characters)</label><input id="regPass" type="password">
-<button class="full" onclick="run(this,register)">Create account</button><button class="soft full" onclick="reg(false)">Back to sign in</button></div></div></section>
-<section id="waiting" class="auth hidden"><h1 style="text-align:center">⏳ Membership review</h1><div class="card"><p id="waitText"></p><button class="full" onclick="logout()">Sign out</button></div></section>
-<section id="app" class="hidden"><header><div class="row" style="max-width:960px;margin:auto"><div><h1 id="title">🏡 Sisanda'$ Stokvel</h1><small style="color:#fff;opacity:.85">Family savings • South Africa</small></div><strong id="role"></strong></div></header>
+<section id="auth" class="split"><aside class="pitch"><div class="brand" style="display:flex;align-items:center;gap:10px"><div class="logo">S</div><h1>Sisanda'$ Stokvel</h1></div><p style="margin-top:18px;font-size:16px">A private family savings circle, run with open books.</p>
+<ul><li><b>Every payment is verified</b>The treasurer confirms each contribution before it counts toward the balance.</li><li><b>Open ledger</b>Approved members can see the balance, goal and every withdrawal.</li><li><b>Private proof of payment</b>Uploaded proofs are visible only to you and the treasurer.</li><li><b>Approved members only</b>New members join by treasurer approval. This app records savings; it never holds money.</li></ul></aside>
+<div class="formside"><div class="card"><div id="authMsg" class="notice hidden"></div>
+<div id="loginBox"><h2 style="font-size:19px">Sign in</h2><label>Email</label><input id="email" type="email" autocomplete="email"><label>Password</label><input id="password" type="password" autocomplete="current-password"><button class="full" onclick="run(this,login)">Sign in</button><button class="soft full" onclick="reg(true)">Request membership</button><button class="soft full" onclick="run(this,forgot)">Forgot password</button></div>
+<div id="regBox" class="hidden"><h2 style="font-size:19px">Request membership</h2><label>Full name</label><input id="name" autocomplete="name"><label>Phone (optional)</label><input id="phone" type="tel"><label>Email</label><input id="regEmail" type="email"><label>Password (8+ characters)</label><input id="regPass" type="password"><button class="full" onclick="run(this,register)">Create account</button><button class="soft full" onclick="reg(false)">Back to sign in</button></div></div></div></section>
+<section id="waiting" class="center hidden"><div class="card"><h2>Membership under review</h2><p id="waitText"></p><button class="full" onclick="logout()">Sign out</button></div></section>
+<section id="app" class="hidden"><nav class="nav"><div class="brand"><div class="logo">S</div><div style="margin-left:10px"><b>Sisanda'$</b><small>Stokvel</small></div></div><button class="on" onclick="go('home',this)"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>Overview</button><button class="" onclick="go('members',this)"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.3c2.2.7 3.5 2.7 3.5 5.7"/></svg>Members</button><button class="" onclick="go('pay',this)"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></svg>Payments</button><button class="" onclick="go('news',this)"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 20a2 2 0 0 0 3.4 0"/></svg>Notices</button><button class="" onclick="go('reports',this)"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Reports</button><button class="" onclick="go('account',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>Account</button></nav>
+<div class="shell"><div class="top"><div class="in"><div class="brand"><div class="logo">S</div><div><b id="title">Sisanda'$ Stokvel</b><small>Family savings · South Africa</small></div></div><span id="role"></span></div></div>
 <main class="wrap">
-<section id="home"><div class="card big"><small>Family savings balance</small><strong id="balance">R0.00</strong><span class="mut">Confirmed contributions minus withdrawals</span></div>
-<div class="grid"><div class="stat"><small>Members</small><strong id="mCount">0</strong></div><div class="stat"><small>Paid this month</small><strong id="pCount">0</strong></div><div class="stat"><small>Monthly</small><strong id="monthly">R200</strong></div><div class="stat"><small>Due day</small><strong id="due">1st</strong></div></div>
-<div class="card"><div class="row"><h2>🎯 Savings goal</h2><strong id="goalPct">0%</strong></div><div class="bar"><div id="bar"></div></div><p id="goalTxt" class="mut"></p></div>
-<div class="two"><div class="card"><h2>📅 <span id="monthName"></span></h2><div id="homeStatus"></div></div><div class="card"><h2>📢 Latest news</h2><div id="homeNews"></div></div></div>
-<div class="card"><h2>💸 Recent withdrawals</h2><div id="homeWd"></div></div></section>
-
-<section id="members" class="hidden"><div class="card"><h2>👪 Family members</h2><div id="memberList"></div></div>
-<div class="card tr hidden"><h2>🛡️ Applications</h2><div id="apps"></div></div><div class="card tr hidden"><h2>Suspended / rejected</h2><div id="inactive"></div></div></section>
-
-<section id="pay" class="hidden"><div class="card"><h2>💰 This month's contribution</h2><div id="payState"></div>
-<div id="payForm"><p id="payInfo" class="mut"></p><label>Payment method</label><select id="method" onchange="$('proofWrap').classList.toggle('hidden',this.value!=='eft')"><option value="eft">Bank transfer (EFT)</option><option value="cash">Cash given to treasurer</option></select>
-<div id="proofWrap"><label>Proof of payment</label><input id="proof" type="file" accept="image/*,.pdf"><small>Only you and the treasurer can view it.</small></div>
-<label>Payment reference (optional)</label><input id="reference" maxlength="120"><button class="full" onclick="run(this,submitPay)">Submit for verification</button></div></div>
-<div class="card"><h2>📋 My payments</h2><div id="myPay"></div></div>
-<div class="card tr hidden"><h2>🛡️ Verify payments</h2><div id="verify"></div></div>
-<div class="card tr hidden"><h2>💸 Record withdrawal</h2><label>Amount (R)</label><input id="wdAmt" type="number" min="0.01" step="0.01"><label>Reason</label><textarea id="wdWhy" maxlength="250"></textarea><button class="full" onclick="run(this,withdraw)">Record withdrawal</button><small>Only after the family has approved it.</small></div></section>
-
-<section id="news" class="hidden"><div class="card tr hidden"><h2>📢 New announcement</h2><label>Title</label><input id="nTitle" maxlength="100"><label>Message</label><textarea id="nBody" maxlength="2000"></textarea><button class="full" onclick="run(this,postNews)">Publish</button></div>
-<div class="card"><h2>Family announcements</h2><div id="allNews"></div></div></section>
-
-<section id="reports" class="hidden"><div class="card"><h2>📊 Monthly report</h2><input id="repMonth" type="month" onchange="loadReport()">
-<div class="grid" style="margin-top:12px"><div class="stat"><small>Paid</small><strong id="rPaid">0</strong></div><div class="stat"><small>Awaiting check</small><strong id="rWait">0</strong></div><div class="stat"><small>Unpaid</small><strong id="rUnpaid">0</strong></div><div class="stat tr hidden"><small>Confirmed</small><strong id="rAmt">R0</strong></div></div>
-<div id="repList"></div><button class="soft full" onclick="exportReport()">Download report CSV</button></div>
-<div class="card"><h2>🧾 Ledger</h2><div id="ledger"></div><button class="soft full" onclick="exportLedger()">Download ledger CSV</button></div></section>
-
-<section id="account" class="hidden"><div class="card"><h2>👤 My account</h2><div id="acct"></div><button class="soft full" onclick="logout()">Sign out</button></div>
-<div class="card tr hidden"><h2>⚙️ Stokvel settings</h2><label>Monthly contribution (R)</label><input id="sMonthly" type="number" min="1"><label>Due day (1–28)</label><input id="sDue" type="number" min="1" max="28"><label>Savings goal (R)</label><input id="sGoal" type="number" min="1"><button class="full" onclick="run(this,saveCfg)">Save settings</button></div>
-<div class="card"><h2>🔔 Reminder</h2><p class="mut">Share a reminder via WhatsApp or any app.</p><button onclick="shareReminder()">Share reminder</button></div>
-<div class="card"><h2>📄 My records</h2><button class="soft" onclick="exportMine()">Download my payment history</button></div>
-<div class="card"><h2>🔐 Privacy</h2><p class="mut">Records are protected by Supabase access policies. Never share banking PINs or passwords. This app records contributions; it never holds money.</p></div></section>
-</main>
-<nav><button class="on" onclick="go('home',this)"><span>🏠</span>Home</button><button onclick="go('members',this)"><span>👪</span>Members</button><button onclick="go('pay',this)"><span>💰</span>Pay</button><button onclick="go('news',this)"><span>📢</span>News</button><button onclick="go('reports',this)"><span>📊</span>Reports</button><button onclick="go('account',this)"><span>👤</span>Account</button></nav></section>
+<section id="home"><div class="card big"><small>Family savings balance</small><strong id="balance">R0.00</strong><span class="mut">Confirmed contributions minus withdrawals</span></div><div class="card" id="todo"></div>
+<div class="grid"><div class="stat"><small>Members</small><strong id="mCount">0</strong></div><div class="stat"><small>Paid this month</small><strong id="pCount">0</strong></div><div class="stat"><small>Monthly contribution</small><strong id="monthly">R200</strong></div><div class="stat"><small>Due day</small><strong id="due">1st</strong></div></div>
+<div class="card"><div class="row"><h2 style="margin:0">Savings goal</h2><strong id="goalPct">0%</strong></div><div class="bar" style="margin-top:12px"><div id="bar"></div></div><p id="goalTxt" class="mut"></p></div>
+<div class="two"><div class="card"><h2>Contributions · <span id="monthName"></span></h2><div id="homeStatus"></div></div><div class="card"><h2>Latest notices</h2><div id="homeNews"></div></div></div>
+<div class="card"><h2>Recent withdrawals</h2><div id="homeWd"></div></div><p class="foot">Records are visible to approved members only. This app records contributions; it does not hold or move money.</p></section>
+<section id="members" class="hidden"><div class="card"><h2>Members</h2><div id="memberList"></div></div><div class="card tr hidden"><h2>Membership applications</h2><div id="apps"></div></div><div class="card tr hidden"><h2>Suspended or rejected</h2><div id="inactive"></div></div></section>
+<section id="pay" class="hidden"><div class="card"><h2>This month's contribution</h2><div id="payState"></div><div id="payForm"><p id="payInfo" class="mut"></p><label>Payment method</label><select id="method" onchange="$('proofWrap').classList.toggle('hidden',this.value!=='eft')"><option value="eft">Bank transfer (EFT)</option><option value="cash">Cash given to treasurer</option></select>
+<div id="proofWrap"><label>Proof of payment</label><input id="proof" type="file" accept="image/*,.pdf"><small>Visible only to you and the treasurer.</small></div><label>Payment reference (optional)</label><input id="reference" maxlength="120"><button class="full" onclick="run(this,submitPay)">Submit for verification</button></div></div>
+<div class="card"><h2>My payment history</h2><div id="myPay"></div></div><div class="card tr hidden"><h2>Payments awaiting verification</h2><div id="verify"></div></div>
+<div class="card tr hidden"><h2>Record a withdrawal</h2><label>Amount (R)</label><input id="wdAmt" type="number" min="0.01" step="0.01"><label>Reason</label><textarea id="wdWhy" maxlength="250"></textarea><button class="full" onclick="run(this,withdraw)">Record withdrawal</button><small>Only after the family has approved it.</small></div></section>
+<section id="news" class="hidden"><div class="card tr hidden"><h2>New notice</h2><label>Title</label><input id="nTitle" maxlength="100"><label>Message</label><textarea id="nBody" maxlength="2000"></textarea><button class="full" onclick="run(this,postNews)">Publish notice</button></div><div class="card"><h2>Family notices</h2><div id="allNews"></div></div></section>
+<section id="reports" class="hidden"><div class="card"><h2>Monthly report</h2><input id="repMonth" type="month" onchange="loadReport()"><div class="grid"><div class="stat"><small>Paid</small><strong id="rPaid">0</strong></div><div class="stat"><small>Awaiting check</small><strong id="rWait">0</strong></div><div class="stat"><small>Unpaid</small><strong id="rUnpaid">0</strong></div><div class="stat tr hidden"><small>Confirmed</small><strong id="rAmt">R0</strong></div></div><div id="repList"></div><button class="soft full" onclick="exportReport()">Download report (CSV)</button></div>
+<div class="card"><h2>Ledger</h2><div id="ledger"></div><button class="soft full" onclick="exportLedger()">Download ledger (CSV)</button></div></section>
+<section id="account" class="hidden"><div class="card"><h2>My account</h2><div id="acct"></div><button class="soft full" onclick="logout()">Sign out</button></div>
+<div class="card tr hidden"><h2>Stokvel settings</h2><label>Monthly contribution (R)</label><input id="sMonthly" type="number" min="1"><label>Due day (1–28)</label><input id="sDue" type="number" min="1" max="28"><label>Savings goal (R)</label><input id="sGoal" type="number" min="1"><button class="full" onclick="run(this,saveCfg)">Save settings</button></div>
+<div class="card"><h2>Reminder</h2><p class="mut">Share a contribution reminder through WhatsApp or any app.</p><button onclick="shareReminder()">Share reminder</button></div><div class="card"><h2>My records</h2><button class="soft" onclick="exportMine()">Download my payment history</button></div>
+<div class="card"><h2>Privacy and security</h2><p class="mut">Records are protected by database access rules. Never share banking PINs or passwords. This app records contributions; it never holds money.</p></div></section>
+</main></div></section>
 <script>
 const sb=supabase.createClient('https://nqhclxlwdoeudeeuhnmu.supabase.co','sb_publishable_9NZQ7ehB-WtQ61Io-neGng_kaAmRV-Y');
 const $=i=>document.getElementById(i),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -84,6 +72,14 @@ const ST={paid:'Paid ✓',submitted:'Submitted',pending:'Pending',rejected:'Reje
 const pill=s=>`<span class="pill ${esc(s)}">${ST[s]||esc(s)}</span>`;
 const row=(a,b,c)=>`<div class="entry row"><div><strong>${a}</strong>${b?`<small>${b}</small>`:''}</div>${c||''}</div>`;
 const S={user:null,me:null,tr:false,cfg:{monthly_contribution:200,due_day:1,savings_goal:10000},sum:{},roster:[],contribs:[],tx:[],rep:[]};
+const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const goTab=id=>go(id,document.querySelectorAll('nav button')[['home','members','pay','news','reports','account'].indexOf(id)]);
+function renderTodo(){const cur=S.contribs.find(x=>x.member_id===S.user.id&&x.contribution_month===thisMonth()),st=cur?cur.payment_status:'unpaid';
+let h=(st==='unpaid'||st==='rejected')?`<div class="row"><div><strong>${st==='rejected'?'Your payment was rejected':'Your '+money(S.cfg.monthly_contribution)+' is due'}</strong><small>Due on the ${ord(S.cfg.due_day)} every month</small></div><button onclick="goTab('pay')">Pay now</button></div>`:`<div class="row"><div><strong>This month: ${ST[st]}</strong><small>${st==='paid'?'Thank you!':'Waiting for the treasurer to verify'}</small></div>${pill(st)}</div>`;
+if(S.tr){const w=S.contribs.filter(x=>['submitted','pending'].includes(x.payment_status)).length,a=S.roster.filter(m=>m.status==='pending').length;
+if(w)h+=`<div class="entry row"><span>${w} payment${w>1?'s':''} to verify</span><button class="soft" onclick="goTab('pay')">Review</button></div>`;
+if(a)h+=`<div class="entry row"><span>${a} new member${a>1?'s':''} waiting</span><button class="soft" onclick="goTab('members')">Review</button></div>`}
+$('todo').innerHTML=h}
 function toast(t,bad){const e=$('toast');e.textContent=t;e.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',3500)}
 async function run(btn,fn){if(btn)btn.disabled=true;try{await fn()}catch(e){toast(e.message||String(e),true)}finally{if(btn)btn.disabled=false}}
 function msg(t,bad){const e=$('authMsg');e.textContent=t;e.className='notice'+(bad?' bad':'')}
@@ -107,7 +103,7 @@ $('acct').innerHTML=row(esc(S.me.full_name),'Name')+row(esc(u.email),'Email')+ro
 $('monthName').textContent=new Date().toLocaleDateString('en-ZA',{month:'long',year:'numeric'});
 await refresh()}catch(e){$('auth').classList.remove('hidden');$('app').classList.add('hidden');msg('Could not load membership: '+e.message,true)}}
 function go(id,b){document.querySelectorAll('#app main>section').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');scrollTo(0,0);if(id==='reports')loadReport()}
-async function refresh(){await loadCfg();await Promise.all([loadRoster(),loadContribs(),loadNews(),loadTx()]);await loadSummary();loadReport()}
+async function refresh(){await loadCfg();await Promise.all([loadRoster(),loadContribs(),loadNews(),loadTx()]);await loadSummary();renderTodo();loadReport()}
 async function loadCfg(){const {data}=await sb.from('stokvel_settings').select('*').limit(1).maybeSingle();if(data)S.cfg=data;const c=S.cfg;
 $('monthly').textContent=money(c.monthly_contribution).replace('.00','');$('due').textContent=ord(c.due_day);
 $('payInfo').textContent=`${money(c.monthly_contribution)} due on the ${ord(c.due_day)}. A treasurer must verify every payment.`;
@@ -116,7 +112,7 @@ async function saveCfg(){if(!S.tr)return;const m=Number($('sMonthly').value),d=N
 if(!(m>0)||!(d>=1&&d<=28)||!(g>0))throw Error('Check your values: due day must be 1–28.');
 const {error}=await sb.from('stokvel_settings').update({monthly_contribution:m,due_day:d,savings_goal:g}).eq('id',S.cfg.id);if(error)throw error;toast('Settings saved');await loadCfg();await loadSummary()}
 async function loadSummary(){const {data,error}=await sb.rpc('get_stokvel_summary');if(error)return toast(error.message,true);S.sum=data||{};
-$('title').textContent='🏡 '+(S.sum.stokvel_name||"Sisanda'$ Stokvel");$('balance').textContent=money(S.sum.balance);$('mCount').textContent=S.sum.member_count??0;$('pCount').textContent=(S.sum.paid_this_month??0)+' / '+(S.sum.member_count??0);
+$('title').textContent=''+(S.sum.stokvel_name||"Sisanda'$ Stokvel");$('balance').textContent=money(S.sum.balance);$('mCount').textContent=S.sum.member_count??0;$('pCount').textContent=(S.sum.paid_this_month??0)+' / '+(S.sum.member_count??0);
 const goal=Number(S.sum.savings_goal||S.cfg.savings_goal||1),pct=Math.min(100,Math.max(0,100*Number(S.sum.balance||0)/goal));
 $('goalTxt').textContent=money(S.sum.balance)+' saved of '+money(goal);$('goalPct').textContent=Math.round(pct)+'%';$('bar').style.width=pct+'%'}
 async function loadRoster(){const {data,error}=await sb.from('members').select('user_id,full_name,status,role,created_at').order('full_name');if(error)return toast(error.message,true);S.roster=data||[];
@@ -124,7 +120,7 @@ const {data:st}=await sb.from('member_contribution_status').select('member_id,pa
 const ap=S.roster.filter(m=>m.status==='approved');
 const html=ap.map(m=>{const s=map.get(m.user_id)||'unpaid',who=m.user_id===S.user.id?'You':m.role==='treasurer'?'Treasurer':'Member';
 const act=S.tr&&m.user_id!==S.user.id?`<div class="actions"><button class="red" onclick="setMember('${m.user_id}','suspended')">Suspend</button></div>`:'';
-return `<div class="entry"><div class="row"><div><strong>${esc(m.full_name)}</strong><small>${who}</small></div>${pill(s)}</div>${act}</div>`}).join('')||'<p class="mut">No members yet.</p>';
+return `<div class="entry"><div class="row"><div class="who"><i class="av">${ini(m.full_name)}</i><div><strong>${esc(m.full_name)}</strong><small>${who}</small></div></div>${pill(s)}</div>${act}</div>`}).join('')||'<p class="mut">No members yet.</p>';
 $('memberList').innerHTML=html;$('homeStatus').innerHTML=html.replace(/<div class="actions">.*?<\/div>/g,'');
 if(S.tr){const btn=(m,s,l,c)=>`<button class="${c||''}" onclick="setMember('${m.user_id}','${s}')">${l}</button>`;
 $('apps').innerHTML=S.roster.filter(m=>m.status==='pending').map(m=>`<div class="entry"><strong>${esc(m.full_name)}</strong><small>Registered ${fdate(m.created_at)}</small><div class="actions">${btn(m,'approved','Approve')}${btn(m,'rejected','Reject','red')}</div></div>`).join('')||'<p class="mut">No pending applications.</p>';
@@ -136,7 +132,7 @@ const {data,error}=await q;if(error)return toast(error.message,true);S.contribs=
 const mine=S.contribs.filter(x=>x.member_id===S.user.id),cur=mine.find(x=>x.contribution_month===thisMonth());
 $('myPay').innerHTML=mine.map(x=>row(money(x.amount),`${esc(x.contribution_month.slice(0,7))} · ${esc(x.payment_method.toUpperCase())} · ${fdate(x.created_at)}`,pill(x.payment_status))).join('')||'<p class="mut">No payments yet.</p>';
 const lock=cur&&cur.payment_status!=='rejected';$('payForm').classList.toggle('hidden',!!lock);
-$('payState').innerHTML=lock?`<div class="notice">This month: ${pill(cur.payment_status)} ${cur.payment_status==='paid'?'Thank you! 💚':'Waiting for the treasurer to verify.'}</div>`:cur?'<div class="notice bad">Your last payment was rejected. Please submit again.</div>':'';
+$('payState').innerHTML=lock?`<div class="notice">This month: ${pill(cur.payment_status)} ${cur.payment_status==='paid'?'Thank you!':'Waiting for the treasurer to verify.'}</div>`:cur?'<div class="notice bad">Your last payment was rejected. Please submit again.</div>':'';
 if(S.tr)$('verify').innerHTML=S.contribs.filter(x=>['submitted','pending'].includes(x.payment_status)).map(x=>`<div class="entry"><strong>${esc(S.roster.find(m=>m.user_id===x.member_id)?.full_name||'Member')}</strong><small>${esc(x.contribution_month.slice(0,7))} · ${money(x.amount)} · ${esc(x.payment_method)}${x.reference?' · Ref: '+esc(x.reference):''}</small><div class="actions">${x.proof_path?`<button class="soft" onclick="viewProof('${esc(x.proof_path)}')">View proof</button>`:''}<button onclick="verify('${x.id}','paid')">Confirm received</button><button class="red" onclick="verify('${x.id}','rejected')">Reject</button></div></div>`).join('')||'<p class="mut">Nothing awaiting verification.</p>'}
 async function submitPay(){const method=$('method').value,file=$('proof').files[0];
 if(method==='eft'&&!file)throw Error('Please upload your EFT proof.');if(method==='eft'&&file.size>8*1024*1024)throw Error('Maximum file size is 8 MB.');
@@ -175,7 +171,7 @@ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{typ
 const exportReport=()=>csv('stokvel-report-'+$('repMonth').value+'.csv',[['Member','Status','Month'],...S.rep.map(x=>[x.full_name,x.status,$('repMonth').value])]);
 const exportLedger=()=>csv('stokvel-ledger.csv',[['Date','Type','Amount ZAR','Description'],...S.tx.map(x=>[x.transaction_date,x.transaction_type,x.amount,x.description])]);
 const exportMine=()=>csv('my-stokvel-payments.csv',[['Month','Amount ZAR','Method','Status','Reference','Submitted'],...S.contribs.filter(x=>x.member_id===S.user.id).map(x=>[x.contribution_month,x.amount,x.payment_method,x.payment_status,x.reference,x.created_at])]);
-async function shareReminder(){const text=`Sisanda'$ Stokvel 💚 Reminder: your ${money(S.cfg.monthly_contribution)} contribution is due on the ${ord(S.cfg.due_day)}. Please submit it in the app for verification.`;
+async function shareReminder(){const text=`Sisanda'$ Stokvel Reminder: your ${money(S.cfg.monthly_contribution)} contribution is due on the ${ord(S.cfg.due_day)}. Please submit it in the app for verification.`;
 if(navigator.share){try{await navigator.share({text})}catch{}}else if(navigator.clipboard){await navigator.clipboard.writeText(text);toast('Reminder copied — paste it into WhatsApp')}else alert(text)}
 (async()=>{sb.auth.onAuthStateChange((ev,session)=>{
 if(ev==='PASSWORD_RECOVERY'){const p=prompt('Enter your new password (8+ characters):');if(p&&p.length>=8)sb.auth.updateUser({password:p}).then(({error})=>toast(error?error.message:'Password updated ✓',!!error));return}
