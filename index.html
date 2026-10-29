@@ -1,35 +1,1017 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#fff"><title>StokvelOS · Your money, your rules</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><style>
-:root{font-family:system-ui,Arial,sans-serif;color:#151515;background:#f7f7f6}*{box-sizing:border-box}body{margin:0}h1{font-size:27px;letter-spacing:-.7px}h2{font-size:19px}h3{font-size:15px}p{line-height:1.55}small,.muted{color:#6c6c6c}button,input,select,textarea{font:inherit}button{border:1px solid #111;background:#111;color:white;padding:11px 15px;border-radius:10px;font-weight:650;cursor:pointer}button.alt{background:white;color:#111;border-color:#ddd}button.danger{background:#fff;color:#ad2323;border-color:#efc5c5}button:disabled{opacity:.55}input,select,textarea{width:100%;border:1px solid #ddd;border-radius:9px;background:white;padding:12px;color:#111}textarea{min-height:100px}label{display:block;font-size:12px;font-weight:750;margin:14px 0 6px}.hide{display:none!important}.wrap{max-width:1120px;margin:auto;padding:22px 16px 105px}.card{background:white;border:1px solid #e8e8e8;border-radius:17px;padding:20px;margin-bottom:15px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px}.row>*{min-width:0}.line{padding:13px 0;border-bottom:1px solid #eee}.line:last-child{border:0}.line strong,.line small{display:block}.line strong{overflow-wrap:anywhere}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{font-size:12px;padding:8px 10px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:15px}.metric{padding:18px;border:1px solid #e9e9e9;border-radius:14px;background:#fff}.metric b{display:block;font-size:24px;margin-top:8px;overflow-wrap:anywhere}.pill{font-size:11px;padding:5px 9px;background:#eee;border-radius:25px;font-weight:750;white-space:nowrap}.pill.active,.pill.reconciled,.pill.paid{background:#dff5e9;color:#087046}.pill.submitted,.pill.verified,.pill.pending,.pill.open{background:#fff1d8;color:#925600}.pill.rejected,.pill.declined{background:#ffe9e9;color:#a22}.alert{padding:12px;border:1px solid #e6e6e6;background:#f8f8f8;border-radius:10px;margin:12px 0}.alert.warn{background:#fff4df;border-color:#f2d8a4}.auth{max-width:460px;margin:6vh auto;padding:16px}.logo{display:inline-grid;place-items:center;background:#111;color:#fff;width:45px;height:45px;border-radius:13px;font-weight:900;font-size:22px}.brand{display:flex;align-items:center;gap:11px}.brand strong,.brand small{display:block}header{background:#fff;border-bottom:1px solid #e8e8e8;padding:13px 16px;position:sticky;top:0;z-index:5}.header-inner{max-width:1120px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}nav{position:fixed;bottom:0;left:0;right:0;display:flex;overflow:auto;background:#fff;border-top:1px solid #ddd;z-index:9;padding-bottom:env(safe-area-inset-bottom)}nav button{flex:1;background:#fff;color:#777;border:0;border-radius:0;font-size:11px;padding:12px 4px}nav button.selected{color:#111;background:#f3f3f3}.cols{display:grid;grid-template-columns:1fr;gap:14px}.hero{background:#111;color:white;padding:26px;border-radius:17px;margin-bottom:15px}.hero small{color:#c8c8c8}.hero b{display:block;font-size:37px;margin:10px 0}.copy{border:1px solid #ddd;background:white;color:#111;font-size:11px;padding:7px}.progress{background:#eee;height:9px;border-radius:12px;overflow:hidden}.progress div{background:#111;height:100%}#toast{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:white;padding:12px 18px;border-radius:10px;z-index:99;max-width:90%}.empty{padding:22px;text-align:center;color:#777}.wide{width:100%;margin-top:14px}@media(min-width:760px){.cols{grid-template-columns:1fr 1fr}.grid{grid-template-columns:repeat(4,1fr)}.wrap{padding-bottom:100px}}@media(min-width:1020px){nav{left:0;top:0;bottom:0;right:auto;width:190px;flex-direction:column;padding:85px 10px 0;border-right:1px solid #eee;border-top:0}nav button{flex:none;text-align:left;border-radius:10px;font-size:14px;padding:14px}header,.wrap{margin-left:190px}.wrap{max-width:none}}
-</style></head><body><div id="toast"></div><section id="auth" class="auth"><div style="text-align:center;margin-bottom:25px"><div class="logo">S</div><h1>StokvelOS</h1><p class="muted">Your money. Your rules. Your community.</p></div><div class="card"><h2 id="authTitle">Welcome back</h2><p id="authHint" class="muted">Sign in to your savings community.</p><label>Email</label><input id="email" type="email" autocomplete="email"><label>Password</label><input id="password" type="password" autocomplete="current-password"><button class="wide" onclick="authenticate()" id="authBtn">Sign in</button><button class="alt wide" onclick="toggleAuth()" id="switchBtn">Create account</button><button class="alt wide" onclick="resetPassword()">Reset password</button></div></section>
-<section id="app" class="hide"><header><div class="header-inner"><div class="brand"><span class="logo">S</span><div><strong>StokvelOS</strong><small id="groupSub">My groups</small></div></div><div class="row"><select id="groupSelect" onchange="chooseGroup(this.value)" style="max-width:165px"></select><button class="alt" onclick="signOut()">Exit</button></div></div></header><div class="wrap">
-<section id="groupsPage"><h1>My stokvels</h1><p class="muted">Create a private savings community or join one by invitation.</p><div id="groupCards"></div><div class="cols"><div class="card"><h2>Create a stokvel</h2><label>Group name</label><input id="newName" placeholder="e.g. Ubuntu Savings Club"><label>Stokvel type</label><select id="newKind"><option value="savings">Savings</option><option value="grocery">Grocery</option><option value="rotating">Rotating</option><option value="investment">Investment</option></select><label>Monthly contribution (R)</label><input id="newAmount" type="number" min="1" value="200"><label>Due day (1–28)</label><input id="newDay" type="number" min="1" max="28" value="1"><label>Savings target (R)</label><input id="newGoal" type="number" min="0" value="12000"><label>Your full name</label><input id="newMemberName"><label>Group constitution and rules</label><textarea id="newRules" placeholder="Membership, contributions, penalties, voting, distribution and withdrawal rules..."></textarea><button class="wide" onclick="createGroup()">Create private stokvel</button></div><div class="card"><h2>Join a stokvel</h2><p class="muted">Ask the treasurer for the invitation code. Approval is required.</p><label>Invitation code</label><input id="inviteCode" placeholder="XXXXXXXXXX"><label>Your full name</label><input id="joinName"><button class="wide" onclick="joinGroup()">Request to join</button><div class="alert">You must agree to the group's constitution before contributing. Your membership application will be reviewed.</div></div></div></section>
-<section id="overviewPage" class="hide"><h1 id="groupTitle">Overview</h1><p id="groupSubtitle" class="muted"></p><div class="hero"><small>Reconciled ledger balance · not a live bank balance</small><b id="ledgerBalance">R0.00</b><small>Only transactions matched against bank records are included.</small></div><div class="grid"><div class="metric"><small>Monthly contribution</small><b id="metricMonthly">—</b></div><div class="metric"><small>Active members</small><b id="metricMembers">—</b></div><div class="metric"><small>Due this month</small><b id="metricExpected">—</b></div><div class="metric"><small>Reconciled this month</small><b id="metricCollected">—</b></div></div><div class="cols"><div class="card"><h2>Savings target</h2><div class="progress"><div id="goalBar" style="width:0"></div></div><p id="goalText" class="muted"></p></div><div class="card"><h2>My contribution status</h2><div id="myStatus"></div></div></div><div class="card"><h2>Recent activity</h2><div id="recentActivity"></div></div></section>
-<section id="paymentsPage" class="hide"><h1>Contributions</h1><p class="muted">Transfer to the group bank account, then submit proof. Bank confirmation is separate.</p><div class="cols"><div class="card"><h2>Banking details</h2><div id="bankDisplay"></div></div><div class="card"><h2>Submit contribution</h2><label>Month</label><input id="payMonth" type="month"><label>Amount (R)</label><input id="payAmount" type="number" min="0.01" step="0.01"><label>Payment method</label><select id="payMethod" onchange="document.getElementById('proofArea').classList.toggle('hide',this.value==='cash')"><option value="eft">EFT</option><option value="cash">Cash</option></select><div id="proofArea"><label>Proof (image or PDF, max 8 MB)</label><input id="payProof" type="file" accept="image/png,image/jpeg,image/webp,application/pdf"></div><label>Payment reference</label><input id="payReference" placeholder="Your name + month"><button class="wide" onclick="submitPayment()">Submit for review</button></div></div><div class="card"><h2>Payment history</h2><div id="paymentList"></div></div><div id="reviewCard" class="card hide"><h2>Treasurer verification</h2><p class="muted">First confirm money received, then reconcile with the actual bank statement. Screenshots are not proof of receipt.</p><div id="reviewList"></div></div></section>
-<section id="membersPage" class="hide"><h1>Members & governance</h1><div class="cols"><div class="card"><h2>Members</h2><div id="memberList"></div></div><div class="card"><h2>Constitution</h2><p id="rulesText" style="white-space:pre-wrap"></p><div class="alert">Group rules are recorded at creation. Changes require a separate amendment and approval process.</div><h3>Invite code</h3><div id="inviteDisplay"></div></div></div></section>
-<section id="decisionsPage" class="hide"><h1>Withdrawals & voting</h1><div class="cols"><div class="card"><h2>Request withdrawal</h2><label>Amount (R)</label><input id="withdrawAmount" type="number" min="1"><label>Reason</label><textarea id="withdrawReason"></textarea><button class="wide" onclick="requestWithdrawal()">Submit request</button><p class="muted">More than half of active members must approve before the treasurer can record a payout.</p></div><div class="card"><h2>Group decisions</h2><div id="withdrawalList"></div></div></div></section>
-<section id="communityPage" class="hide"><h1>Community</h1><div class="cols"><div class="card"><h2>Announcements</h2><div id="postList"></div><div id="postEditor" class="hide"><label>Title</label><input id="postTitle"><label>Message</label><textarea id="postBody"></textarea><button class="wide" onclick="addPost()">Publish</button></div></div><div class="card"><h2>Meetings</h2><div id="meetingList"></div><div id="meetingEditor" class="hide"><label>Title</label><input id="meetingTitle"><label>Date and time</label><input id="meetingWhen" type="datetime-local"><label>Venue</label><input id="meetingVenue"><label>Agenda</label><textarea id="meetingAgenda"></textarea><button class="wide" onclick="addMeeting()">Schedule meeting</button></div></div></div></section>
-<section id="reportsPage" class="hide"><h1>Financial transparency</h1><div class="alert warn"><b>Important:</b> This ledger shows reconciled records entered by the treasurer. It does not connect to your bank or independently verify its balance.</div><div class="card"><div class="row"><h2>Reconciled ledger</h2><button class="alt" onclick="downloadCSV('ledger')">Export CSV</button></div><div id="ledgerList"></div></div><div class="card"><div class="row"><h2>Audit trail</h2><button class="alt" onclick="downloadCSV('audit')">Export CSV</button></div><div id="auditList"></div></div><div class="card"><h2>Distribution planning</h2><p class="muted">The app shows contributions and ledger records. Distribution amounts must be calculated and approved according to the group's constitution. Automatic distribution and transfers are not enabled.</p></div></section>
-<section id="settingsPage" class="hide"><h1>Group settings</h1><div class="card"><h2>Banking administration</h2><p class="muted">Only the treasurer can save banking details. Changes appear in the audit trail.</p><div id="bankEditor"><label>Bank</label><input id="bankName"><label>Account holder</label><input id="bankHolder"><label>Account number</label><input id="bankAccount"><label>Branch code</label><input id="bankBranch"><label>Account type</label><select id="bankType"><option>Savings</option><option>Cheque / Current</option><option>Transmission</option></select><button class="wide" onclick="saveBank()">Save banking details</button></div></div><div class="card"><h2>Group information</h2><div id="settingsInfo"></div></div></section>
-</div><nav id="nav"><button onclick="page('groupsPage')" data-id="groupsPage">Groups</button><button onclick="page('overviewPage')" data-id="overviewPage">Home</button><button onclick="page('paymentsPage')" data-id="paymentsPage">Payments</button><button onclick="page('membersPage')" data-id="membersPage">Members</button><button onclick="page('decisionsPage')" data-id="decisionsPage">Voting</button><button onclick="page('communityPage')" data-id="communityPage">Community</button><button onclick="page('reportsPage')" data-id="reportsPage">Reports</button><button onclick="page('settingsPage')" data-id="settingsPage">Settings</button></nav></section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StokvelOS | Your Stokvel, Organised</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    color: #111;
+}
+
+button, input, select, textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
+}
+
+header {
+    background: white;
+    padding: 18px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #777;
+}
+
+.container {
+    max-width: 1050px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 21px;
+}
+
+p {
+    color: #666;
+    line-height: 1.6;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0 16px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    background: white;
+}
+
+label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn {
+    border: 0;
+    padding: 13px 18px;
+    border-radius: 9px;
+    font-weight: bold;
+    background: #111;
+    color: white;
+}
+
+.btn-outline {
+    background: white;
+    color: #111;
+    border: 1px solid #111;
+}
+
+.btn-small {
+    padding: 9px 12px;
+    font-size: 13px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.stat {
+    padding: 20px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 25px;
+    margin-top: 10px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 10px;
+    background: #eee;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.nav button {
+    white-space: nowrap;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 8px;
+    background: #f1f1f1;
+    margin-bottom: 15px;
+}
+
+.group-item {
+    border: 1px solid #ddd;
+    padding: 17px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.group-item h3 {
+    margin-top: 0;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media(max-width:600px) {
+    .container {
+        padding: 13px;
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Stokvel<span>OS</span></div>
+
+    <button id="logoutBtn"
+            class="btn btn-outline btn-small hidden"
+            onclick="logout()">
+        Sign Out
+    </button>
+</header>
+
+<main class="container">
+
+<!-- AUTHENTICATION -->
+
+<section id="authPage">
+
+    <div class="card">
+
+        <h1>Welcome to StokvelOS</h1>
+
+        <p>
+            Manage your stokvel contributions,
+            members, savings and decisions
+            in one secure place.
+        </p>
+
+        <div class="actions">
+            <button class="btn" onclick="showAuth('login')">
+                Sign In
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="showAuth('register')">
+                Create Account
+            </button>
+        </div>
+
+    </div>
+
+    <div class="card" id="loginBox">
+
+        <h2>Sign In</h2>
+
+        <label>Email</label>
+        <input id="loginEmail"
+               type="email"
+               autocomplete="email"
+               placeholder="Enter your email">
+
+        <label>Password</label>
+        <input id="loginPassword"
+               type="password"
+               autocomplete="current-password"
+               placeholder="Enter password">
+
+        <button class="btn" onclick="login()">
+            Sign In
+        </button>
+
+    </div>
+
+    <div class="card hidden" id="registerBox">
+
+        <h2>Create Account</h2>
+
+        <label>Email</label>
+        <input id="registerEmail"
+               type="email"
+               autocomplete="email">
+
+        <label>Password</label>
+        <input id="registerPassword"
+               type="password"
+               autocomplete="new-password"
+               minlength="6">
+
+        <button class="btn" onclick="register()">
+            Create Account
+        </button>
+
+    </div>
+
+</section>
+
+<!-- GROUP LIST -->
+
+<section id="homePage" class="hidden">
+
+    <div class="card">
+
+        <h1>My Stokvels</h1>
+
+        <p>
+            Create a new stokvel or join an existing one.
+        </p>
+
+        <div class="actions">
+
+            <button class="btn"
+                    onclick="showPage('createPage')">
+                + Create a Stokvel
+            </button>
+
+            <button class="btn btn-outline"
+                    onclick="showPage('joinPage')">
+                Join a Stokvel
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Your Groups</h2>
+
+        <div id="groupList">
+            Loading your groups...
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CREATE GROUP -->
+
+<section id="createPage" class="hidden">
+
+    <div class="card">
+
+        <button class="btn btn-outline btn-small"
+                onclick="showPage('homePage')">
+            ← Back
+        </button>
+
+        <h1>Create a Stokvel</h1>
+
+        <label>Your full name</label>
+        <input id="creatorName"
+               placeholder="Full name">
+
+        <label>Stokvel name</label>
+        <input id="groupName"
+               placeholder="Example: Ubuntu Savings Club">
+
+        <label>Stokvel type</label>
+
+        <select id="groupKind">
+            <option value="savings">Savings Stokvel</option>
+            <option value="grocery">Grocery Stokvel</option>
+            <option value="rotating">Rotating Stokvel</option>
+            <option value="investment">Investment Stokvel</option>
+        </select>
+
+        <label>Monthly contribution (R)</label>
+        <input id="groupAmount"
+               type="number"
+               min="1"
+               value="200">
+
+        <label>Monthly payment due day</label>
+        <select id="groupDueDay"></select>
+
+        <label>Savings goal (R)</label>
+        <input id="groupGoal"
+               type="number"
+               min="0"
+               value="12000">
+
+        <button class="btn" onclick="createGroup()">
+            Create Stokvel
+        </button>
+
+    </div>
+
+</section>
+
+<!-- JOIN GROUP -->
+
+<section id="joinPage" class="hidden">
+
+    <div class="card">
+
+        <button class="btn btn-outline btn-small"
+                onclick="showPage('homePage')">
+            ← Back
+        </button>
+
+        <h1>Join a Stokvel</h1>
+
+        <p>
+            Enter the invitation code shared
+            by your stokvel administrator.
+        </p>
+
+        <label>Your full name</label>
+        <input id="joinName"
+               placeholder="Full name">
+
+        <label>Invitation code</label>
+        <input id="joinCode"
+               placeholder="Enter code">
+
+        <button class="btn" onclick="joinGroup()">
+            Request Membership
+        </button>
+
+    </div>
+
+</section>
+
+<!-- GROUP DASHBOARD -->
+
+<section id="dashboardPage" class="hidden">
+
+    <button class="btn btn-outline btn-small"
+            onclick="showPage('homePage')">
+        ← My Stokvels
+    </button>
+
+    <div class="card">
+
+        <h1 id="dashboardName">Stokvel</h1>
+
+        <p id="dashboardDescription"></p>
+
+        <span class="badge" id="dashboardRole">
+            MEMBER
+        </span>
+
+    </div>
+
+    <div class="grid">
+
+        <div class="stat">
+            Monthly Contribution
+            <strong id="statMonthly">R0</strong>
+        </div>
+
+        <div class="stat">
+            Confirmed Contributions
+            <strong id="statConfirmed">R0</strong>
+        </div>
+
+        <div class="stat">
+            Savings Goal
+            <strong id="statGoal">R0</strong>
+        </div>
+
+        <div class="stat">
+            Members
+            <strong id="statMembers">0</strong>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>Group Information</h2>
+
+        <p>
+            <strong>Invitation Code:</strong>
+            <span id="inviteCode">—</span>
+        </p>
+
+        <p>
+            <strong>Due Day:</strong>
+            <span id="dueDay">—</span>
+        </p>
+
+        <p>
+            <strong>Stokvel Type:</strong>
+            <span id="stokvelType">—</span>
+        </p>
+
+        <button class="btn btn-outline btn-small"
+                onclick="copyInvite()">
+            Copy Invitation Code
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Group Constitution</h2>
+
+        <p id="constitutionText">
+            No constitution has been added yet.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Financial Overview</h2>
+
+        <p>
+            The confirmed contribution total is calculated
+            from verified and reconciled records.
+            It is not a live bank balance.
+        </p>
+
+        <div id="financialOverview">
+            Loading...
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
 <script>
-// REPLACE BOTH VALUES WITH YOUR NEW SUPABASE PROJECT DETAILS.
-const SUPABASE_URL='YOUR_SUPABASE_URL';
-const SUPABASE_PUBLISHABLE_KEY='YOUR_SUPABASE_PUBLISHABLE_KEY';
-const $=id=>document.getElementById(id);let db=null,session=null,groups=[],G=null,M=null,D={},registerMode=false;
-const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const zar=x=>'R'+Number(x||0).toLocaleString('en-ZA',{minimumFractionDigits:2,maximumFractionDigits:2});const monthNow=()=>new Date().toISOString().slice(0,7);const badge=s=>`<span class="pill ${esc(s)}">${esc(s)}</span>`;function toast(t){$('toast').textContent=t;$('toast').style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>$('toast').style.display='none',4200)}function err(e){toast(e?.message||String(e))}function check(r){if(r.error)throw r.error;return r.data}async function rpc(name,args){return check(await db.rpc(name,args))}function textRow(a,b){return `<div class="line row"><div><small>${esc(a)}</small><strong>${esc(b)}</strong></div></div>`}function empty(x){return x||'<div class="empty">Nothing to show yet.</div>'}function page(id){if(!G&&id!=='groupsPage')id='groupsPage';document.querySelectorAll('.wrap>section').forEach(e=>e.classList.toggle('hide',e.id!==id));document.querySelectorAll('nav button').forEach(e=>e.classList.toggle('selected',e.dataset.id===id));window.scrollTo(0,0)}function toggleAuth(){registerMode=!registerMode;$('authTitle').textContent=registerMode?'Create account':'Welcome back';$('authBtn').textContent=registerMode?'Register':'Sign in';$('switchBtn').textContent=registerMode?'Already registered? Sign in':'Create account'}async function authenticate(){try{const email=$('email').value.trim(),password=$('password').value;if(!email||password.length<8)throw Error('Enter email and password (at least 8 characters).');const r=registerMode?await db.auth.signUp({email,password}):await db.auth.signInWithPassword({email,password});check(r);if(!r.data.session)toast('Check your email for the confirmation link.');else await start()}catch(e){err(e)}}async function resetPassword(){try{const email=$('email').value.trim();if(!email)throw Error('Enter your email first');check(await db.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname}));toast('Check your email for reset instructions.')}catch(e){err(e)}}async function signOut(){await db.auth.signOut();location.reload()}
-async function start(){const r=await db.auth.getUser();if(!r.data.user){$('auth').classList.remove('hide');$('app').classList.add('hide');return}session=r.data.user;$('auth').classList.add('hide');$('app').classList.remove('hide');await loadGroups();page('groupsPage')}
-async function loadGroups(){try{const mine=check(await db.from('memberships').select('*').eq('user_id',session.id).order('joined_at',{ascending:false}));const ids=mine.map(x=>x.group_id);const gg=ids.length?check(await db.from('groups').select('*').in('id',ids)):[];groups=mine.map(m=>({...m,group:gg.find(g=>g.id===m.group_id)})).filter(x=>x.group);$('groupCards').innerHTML=empty(groups.map(x=>`<div class="card row"><div><strong>${esc(x.group.name)}</strong><br><small>${esc(x.role)} · ${esc(x.status)}</small></div>${x.status==='active'?`<button onclick="chooseGroup('${x.group_id}')">Open</button>`:badge(x.status)}</div>`).join(''));$('groupSelect').innerHTML='<option value="">My groups</option>'+groups.filter(x=>x.status==='active').map(x=>`<option value="${x.group_id}">${esc(x.group.name)}</option>`).join('')}catch(e){err(e)}}
-async function createGroup(){try{const id=await rpc('create_group',{p_name:$('newName').value,p_kind:$('newKind').value,p_amount:Number($('newAmount').value),p_day:Number($('newDay').value),p_goal:Number($('newGoal').value),p_constitution:$('newRules').value,p_member_name:$('newMemberName').value});toast('Stokvel created');await loadGroups();await chooseGroup(id)}catch(e){err(e)}}async function joinGroup(){try{toast(await rpc('join_group',{p_code:$('inviteCode').value,p_name:$('joinName').value}));await loadGroups()}catch(e){err(e)}}
-async function chooseGroup(id){try{if(!id){G=null;M=null;page('groupsPage');return}const x=groups.find(x=>x.group_id===id&&x.status==='active');if(!x)throw Error('Group not available');G=x.group;M=x;$('groupSelect').value=id;$('groupSub').textContent=G.name;await reload();page('overviewPage')}catch(e){err(e)}}async function reload(){if(!G)return;try{const g=G.id;const names=['memberships','payments','ledger','withdrawals','votes','posts','meetings','audit'];const results=await Promise.all(names.map(t=>db.from(t).select('*').eq(t==='votes'?'withdrawal_id':'group_id',g).order('created_at',{ascending:false}).limit(500).then(r=>({t,r}))));D={};for(const {t,r} of results){if(t==='votes')continue;D[t]=check(r)}const wids=(D.withdrawals||[]).map(w=>w.id);D.votes=wids.length?check(await db.from('votes').select('*').in('withdrawal_id',wids)):[];render()}catch(e){err(e)}}
-function officer(){return ['chair','treasurer'].includes(M?.role)}function treasurer(){return M?.role==='treasurer'}function render(){if(!G)return;const members=D.memberships||[],payments=D.payments||[],ledger=D.ledger||[],withdrawals=D.withdrawals||[],active=members.filter(x=>x.status==='active'),balance=ledger.reduce((a,b)=>a+Number(b.amount),0),mo=monthNow();$('groupTitle').textContent=G.name;$('groupSubtitle').textContent=`${G.kind} stokvel · Due on day ${G.due_day}`;$('ledgerBalance').textContent=zar(balance);$('metricMonthly').textContent=zar(G.contribution);$('metricMembers').textContent=active.length;$('metricExpected').textContent=zar(active.length*G.contribution);const current=payments.filter(p=>p.month.slice(0,7)===mo&&p.status==='reconciled');$('metricCollected').textContent=zar(current.reduce((s,p)=>s+Number(p.amount),0));const pc=G.goal>0?Math.min(100,Math.max(0,balance/G.goal*100)):0;$('goalBar').style.width=pc+'%';$('goalText').textContent=zar(balance)+' / '+zar(G.goal)+' ('+Math.round(pc)+'%)';const mine=payments.filter(p=>p.user_id===session.id&&p.month.slice(0,7)===mo);$('myStatus').innerHTML=empty(mine.map(p=>`<div class="line row"><b>${zar(p.amount)}</b>${badge(p.status)}</div>`).join(''));$('recentActivity').innerHTML=empty(ledger.slice(0,6).map(l=>`<div class="line row"><div><strong>${esc(l.description)}</strong><small>${new Date(l.created_at).toLocaleDateString('en-ZA')}</small></div><b>${zar(l.amount)}</b></div>`).join(''));
-$('payMonth').value=mo;$('payAmount').value=G.contribution;$('bankDisplay').innerHTML=G.bank_account? [['Bank',G.bank_name],['Account holder',G.bank_holder],['Account number',G.bank_account],['Branch code',G.branch_code],['Account type',G.account_type]].map(([a,b])=>`<div class="line row"><div><small>${esc(a)}</small><strong>${esc(b||'—')}</strong></div><button class="copy" onclick="copyVal(decodeURIComponent('${encodeURIComponent(String(b||''))}'))">Copy</button></div>`).join('')+'<div class="alert">Use your name and contribution month as the reference. Pay in your banking app; StokvelOS does not receive funds.</div>':'<div class="alert warn">Treasurer has not entered bank details.</div>';
-$('paymentList').innerHTML=empty(payments.filter(p=>p.user_id===session.id||treasurer()).map(p=>`<div class="line"><div class="row"><div><strong>${zar(p.amount)} · ${esc(p.month.slice(0,7))}</strong><small>${esc(p.method)} · ${esc(p.reference||'No reference')} · ${esc(memberName(p.user_id))}</small></div>${badge(p.status)}</div>${p.rejection_reason?`<small>Reason: ${esc(p.rejection_reason)}</small>`:''}</div>`).join(''));$('reviewCard').classList.toggle('hide',!treasurer());$('reviewList').innerHTML=empty(payments.filter(p=>['submitted','verified'].includes(p.status)).map(p=>`<div class="line"><strong>${esc(memberName(p.user_id))} · ${zar(p.amount)}</strong><small>${esc(p.month)} · ${esc(p.reference||'')}</small><div class="actions">${p.proof_path?`<button class="alt" onclick="viewProof('${p.id}')">View proof</button>`:''}${p.status==='submitted'?`<button onclick="review('${p.id}',true)">Verify received</button><button class="danger" onclick="review('${p.id}',false)">Reject</button>`:`<button onclick="reconcile('${p.id}')">Reconcile with bank statement</button>`}</div></div>`).join(''));
-$('memberList').innerHTML=empty(members.map(m=>`<div class="line"><div class="row"><div><strong>${esc(m.name)}</strong><small>${esc(m.role)}</small></div>${badge(m.status)}</div>${officer()&&m.status==='pending'?`<div class="actions"><button onclick="decide('${m.id}',true)">Approve</button><button class="danger" onclick="decide('${m.id}',false)">Reject</button></div>`:''}</div>`).join(''));$('rulesText').textContent=G.constitution;$('inviteDisplay').innerHTML=officer()?`<strong>${esc(G.invite_code)}</strong> <button class="alt" onclick="copyVal('${esc(G.invite_code)}')">Copy</button>`:'Ask your group officer for an invitation code.';
-$('withdrawalList').innerHTML=empty(withdrawals.map(w=>{const votes=(D.votes||[]).filter(v=>v.withdrawal_id===w.id),yes=votes.filter(v=>v.approve).length,no=votes.length-yes;return `<div class="line"><div class="row"><strong>${zar(w.amount)}</strong>${badge(w.status)}</div><small>${esc(memberName(w.requested_by))} · ${esc(w.reason)}</small><small>${yes} approve · ${no} decline · majority ${Math.floor(active.length/2)+1}</small>${w.status==='open'&&!votes.some(v=>v.user_id===session.id)?`<div class="actions"><button onclick="vote('${w.id}',true)">Approve</button><button class="danger" onclick="vote('${w.id}',false)">Decline</button></div>`:''}${treasurer()&&w.status==='approved'?`<button class="wide" onclick="payWithdrawal('${w.id}')">Record completed payout</button>`:''}</div>`}).join(''));
-$('postList').innerHTML=empty((D.posts||[]).map(p=>`<div class="line"><strong>${esc(p.title)}</strong><p style="white-space:pre-wrap">${esc(p.body)}</p><small>${new Date(p.created_at).toLocaleDateString('en-ZA')}</small></div>`).join(''));$('meetingList').innerHTML=empty((D.meetings||[]).map(m=>`<div class="line"><strong>${esc(m.title)}</strong><small>${new Date(m.starts_at).toLocaleString('en-ZA')} · ${esc(m.venue||'')}</small><p>${esc(m.agenda||'')}</p></div>`).join(''));$('postEditor').classList.toggle('hide',!officer());$('meetingEditor').classList.toggle('hide',!officer());$('bankEditor').classList.toggle('hide',!treasurer());[['bankName','bank_name'],['bankHolder','bank_holder'],['bankAccount','bank_account'],['bankBranch','branch_code'],['bankType','account_type']].forEach(([id,key])=>$(id).value=G[key]||($(id).tagName==='SELECT'?'Savings':''));$('settingsInfo').innerHTML=textRow('Group',G.name)+textRow('Type',G.kind)+textRow('Monthly',zar(G.contribution))+textRow('Due day',G.due_day)+textRow('Your role',M.role);$('ledgerList').innerHTML=empty(ledger.map(l=>`<div class="line row"><div><strong>${esc(l.description)}</strong><small>${new Date(l.created_at).toLocaleString('en-ZA')}</small></div><b>${zar(l.amount)}</b></div>`).join(''));$('auditList').innerHTML=empty((D.audit||[]).map(a=>`<div class="line"><strong>${esc(a.action)}</strong><small>${new Date(a.at).toLocaleString('en-ZA')} · ${esc(memberName(a.actor))}</small></div>`).join(''))}
-function memberName(id){return (D.memberships||[]).find(x=>x.user_id===id)?.name||'Member'}async function copyVal(v){try{await navigator.clipboard.writeText(v);toast('Copied')}catch(e){err(e)}}async function action(name,args,msg){try{await rpc(name,args);toast(msg||'Saved');await reload()}catch(e){err(e)}}async function decide(id,ok){if(confirm((ok?'Approve':'Reject')+' this member?'))await action('decide_member',{p_member:id,p_accept:ok},'Membership updated')}async function saveBank(){if(!confirm('Change bank details for all members?'))return;await action('set_bank',{p_group:G.id,p_bank:$('bankName').value,p_holder:$('bankHolder').value,p_account:$('bankAccount').value,p_branch:$('bankBranch').value,p_type:$('bankType').value},'Banking details updated');const g=check(await db.from('groups').select('*').eq('id',G.id).single());G=g;const x=groups.find(x=>x.group_id===G.id);x.group=g;render()}
-async function submitPayment(){let path=null;try{const file=$('payProof').files[0],method=$('payMethod').value;if(method==='eft'&&!file)throw Error('Please attach proof of EFT');if(file){if(file.size>8388608)throw Error('File must be 8 MB or less');if(!['image/jpeg','image/png','image/webp','application/pdf'].includes(file.type))throw Error('Only JPG, PNG, WebP or PDF files allowed');path=session.id+'/'+G.id+'/'+crypto.randomUUID()+'-'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');check(await db.storage.from('stokvelos-proofs').upload(path,file,{contentType:file.type}))}await rpc('submit_payment',{p_group:G.id,p_month:$('payMonth').value+'-01',p_amount:Number($('payAmount').value),p_method:method,p_reference:$('payReference').value,p_proof:path});$('payProof').value='';$('payReference').value='';toast('Submitted for verification');await reload()}catch(e){err(e)}}async function viewProof(id){try{const p=D.payments.find(x=>x.id===id);const d=check(await db.storage.from('stokvelos-proofs').createSignedUrl(p.proof_path,120));window.open(d.signedUrl,'_blank','noopener')}catch(e){err(e)}}async function review(id,ok){const reason=ok?'':prompt('Reason for rejection:');if(!ok&&reason===null)return;if(confirm(ok?'Have you checked receipt of this payment?':'Reject this submission?'))await action('review_payment',{p_id:id,p_accept:ok,p_reason:reason||''},'Review recorded')}async function reconcile(id){if(confirm('Have you matched this payment against your real bank statement? This adds it to the ledger.'))await action('reconcile_payment',{p_id:id},'Payment reconciled')}
-async function requestWithdrawal(){await action('request_withdrawal',{p_group:G.id,p_amount:Number($('withdrawAmount').value),p_reason:$('withdrawReason').value},'Request sent')}async function vote(id,yes){await action('vote_withdrawal',{p_id:id,p_approve:yes},'Vote recorded')}async function payWithdrawal(id){if(confirm('Only continue if this payout has ACTUALLY been sent and the bank confirms it.'))await action('pay_withdrawal',{p_id:id},'Payout recorded')}async function addPost(){await action('add_post',{p_group:G.id,p_title:$('postTitle').value,p_body:$('postBody').value},'Announcement published')}async function addMeeting(){await action('add_meeting',{p_group:G.id,p_title:$('meetingTitle').value,p_when:new Date($('meetingWhen').value).toISOString(),p_venue:$('meetingVenue').value,p_agenda:$('meetingAgenda').value},'Meeting scheduled')}
-function downloadCSV(type){const rows=type==='ledger'?[['Date','Type','Amount','Description'],...(D.ledger||[]).map(x=>[x.created_at,x.type,x.amount,x.description])]:[['Date','Actor','Action','Details'],...(D.audit||[]).map(x=>[x.at,memberName(x.actor),x.action,JSON.stringify(x.detail)])];const content='\ufeff'+rows.map(row=>row.map(x=>'"'+String(x??'').replace(/^[=+\-@]/,"'$&").replace(/"/g,'""')+'"').join(',')).join('\r\n');const u=URL.createObjectURL(new Blob([content],{type:'text/csv'}));const a=document.createElement('a');a.href=u;a.download='stokvelos-'+type+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),2000)}
-(async()=>{if(SUPABASE_URL.startsWith('YOUR_')){toast('Configure Supabase URL and publishable key in index.html');return}db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);db.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')location.reload();if(event==='PASSWORD_RECOVERY'){const pw=prompt('Enter a new password (8+ characters)');if(pw?.length>=8)db.auth.updateUser({password:pw}).then(r=>toast(r.error?.message||'Password updated'))}});try{await start()}catch(e){err(e)}})();
-</script></body></html>
+
+/* SUPABASE CONNECTION */
+
+const SUPABASE_URL =
+"https://nqhclxlwdoeudeeuhnmu.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_9NZQ7ehB-WtQ61Io-neGng_kaAmRV-Y";
+
+const sb = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let currentUser = null;
+let currentGroup = null;
+let currentMember = null;
+
+const $ = id => document.getElementById(id);
+
+function money(value) {
+    return new Intl.NumberFormat("en-ZA", {
+        style: "currency",
+        currency: "ZAR"
+    }).format(Number(value || 0));
+}
+
+function showMessage(message) {
+    alert(message);
+}
+
+function showPage(page) {
+
+    const pages = [
+        "authPage",
+        "homePage",
+        "createPage",
+        "joinPage",
+        "dashboardPage"
+    ];
+
+    pages.forEach(id => {
+        $(id).classList.add("hidden");
+    });
+
+    $(page).classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+
+    if (page === "homePage") {
+        loadGroups();
+    }
+}
+
+function showAuth(type) {
+
+    $("loginBox").classList.toggle(
+        "hidden",
+        type !== "login"
+    );
+
+    $("registerBox").classList.toggle(
+        "hidden",
+        type !== "register"
+    );
+}
+
+/* AUTHENTICATION */
+
+async function register() {
+
+    const email = $("registerEmail").value.trim();
+    const password = $("registerPassword").value;
+
+    if (!email || password.length < 6) {
+        return showMessage(
+            "Enter a valid email and password of at least 6 characters."
+        );
+    }
+
+    const { data, error } = await sb.auth.signUp({
+        email,
+        password
+    });
+
+    if (error) {
+        return showMessage(error.message);
+    }
+
+    if (data.session) {
+        currentUser = data.user;
+        $("logoutBtn").classList.remove("hidden");
+        showPage("homePage");
+    } else {
+        showMessage(
+            "Account created. Check your email for confirmation, then sign in."
+        );
+
+        showAuth("login");
+    }
+}
+
+async function login() {
+
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
+
+    const { data, error } =
+        await sb.auth.signInWithPassword({
+            email,
+            password
+        });
+
+    if (error) {
+        return showMessage(error.message);
+    }
+
+    currentUser = data.user;
+
+    $("logoutBtn").classList.remove("hidden");
+
+    showPage("homePage");
+}
+
+async function logout() {
+
+    await sb.auth.signOut();
+
+    currentUser = null;
+    currentGroup = null;
+    currentMember = null;
+
+    $("logoutBtn").classList.add("hidden");
+
+    showPage("authPage");
+}
+
+/* CREATE STOKVEL */
+
+async function createGroup() {
+
+    const name = $("groupName").value.trim();
+    const fullName = $("creatorName").value.trim();
+
+    const kind = $("groupKind").value;
+
+    const amount = Number($("groupAmount").value);
+    const due = Number($("groupDueDay").value);
+    const goal = Number($("groupGoal").value);
+
+    if (
+        name.length < 3 ||
+        fullName.length < 2 ||
+        amount <= 0 ||
+        goal < 0
+    ) {
+        return showMessage(
+            "Please complete all fields correctly."
+        );
+    }
+
+    const { data, error } = await sb.rpc(
+        "os_create_group",
+        {
+            p_name: name,
+            p_kind: kind,
+            p_amount: amount,
+            p_due: due,
+            p_goal: goal,
+            p_full_name: fullName
+        }
+    );
+
+    if (error) {
+        return showMessage(error.message);
+    }
+
+    showMessage("Your stokvel has been created!");
+
+    await loadGroups();
+
+    if (data) {
+        await openGroup(data);
+    }
+}
+
+/* JOIN STOKVEL */
+
+async function joinGroup() {
+
+    const fullName = $("joinName").value.trim();
+    const code = $("joinCode").value.trim();
+
+    if (fullName.length < 2 || !code) {
+        return showMessage(
+            "Enter your full name and invitation code."
+        );
+    }
+
+    const { error } = await sb.rpc(
+        "os_join_group",
+        {
+            p_code: code,
+            p_full_name: fullName
+        }
+    );
+
+    if (error) {
+        return showMessage(error.message);
+    }
+
+    showMessage(
+        "Membership request submitted. Wait for approval."
+    );
+
+    showPage("homePage");
+}
+
+/* LOAD GROUPS */
+
+async function loadGroups() {
+
+    if (!currentUser) return;
+
+    $("groupList").textContent = "Loading...";
+
+    const { data, error } = await sb
+        .from("os_members")
+        .select(`
+            id,
+            group_id,
+            role,
+            status,
+            os_groups (
+                id,
+                name,
+                kind,
+                monthly_amount
+            )
+        `)
+        .eq("user_id", currentUser.id)
+        .order("joined_at", {
+            ascending: false
+        });
+
+    if (error) {
+        $("groupList").textContent = error.message;
+        return;
+    }
+
+    $("groupList").innerHTML = "";
+
+    if (!data || data.length === 0) {
+        $("groupList").textContent =
+            "You haven't joined any stokvels yet.";
+        return;
+    }
+
+    data.forEach(member => {
+
+        const group = member.os_groups;
+
+        if (!group) return;
+
+        const card = document.createElement("div");
+        card.className = "group-item";
+
+        const title = document.createElement("h3");
+        title.textContent = group.name;
+
+        const details = document.createElement("p");
+        details.textContent =
+            `${group.kind} · ${money(group.monthly_amount)} per month`;
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = member.status.toUpperCase();
+
+        card.append(title, details, badge);
+
+        if (member.status === "approved") {
+
+            const button = document.createElement("button");
+
+            button.className = "btn";
+            button.style.marginTop = "15px";
+            button.textContent = "Open Stokvel";
+
+            button.onclick = () => openGroup(group.id);
+
+            card.append(
+                document.createElement("br"),
+                button
+            );
+        }
+
+        $("groupList").appendChild(card);
+    });
+}
+
+/* OPEN GROUP */
+
+async function openGroup(groupId) {
+
+    const { data: group, error: groupError } =
+        await sb
+            .from("os_groups")
+            .select("*")
+            .eq("id", groupId)
+            .single();
+
+    if (groupError) {
+        return showMessage(groupError.message);
+    }
+
+    const { data: member, error: memberError } =
+        await sb
+            .from("os_members")
+            .select("*")
+            .eq("group_id", groupId)
+            .eq("user_id", currentUser.id)
+            .single();
+
+    if (memberError) {
+        return showMessage(memberError.message);
+    }
+
+    if (member.status !== "approved") {
+        return showMessage(
+            "Your membership has not been approved."
+        );
+    }
+
+    currentGroup = group;
+    currentMember = member;
+
+    $("dashboardName").textContent = group.name;
+
+    $("dashboardDescription").textContent =
+        "Your stokvel financial management dashboard.";
+
+    $("dashboardRole").textContent =
+        member.role.toUpperCase();
+
+    $("statMonthly").textContent =
+        money(group.monthly_amount);
+
+    $("statGoal").textContent =
+        money(group.savings_goal);
+
+    $("inviteCode").textContent =
+        group.invite_code;
+
+    $("dueDay").textContent =
+        group.due_day;
+
+    $("stokvelType").textContent =
+        group.kind;
+
+    $("constitutionText").textContent =
+        group.constitution ||
+        "No constitution has been added yet.";
+
+    showPage("dashboardPage");
+
+    await loadDashboardStats();
+}
+
+/* DASHBOARD STATISTICS */
+
+async function loadDashboardStats() {
+
+    if (!currentGroup) return;
+
+    const groupId = currentGroup.id;
+
+    const [
+        membersResult,
+        contributionsResult,
+        withdrawalsResult
+    ] = await Promise.all([
+
+        sb.from("os_members")
+            .select("id")
+            .eq("group_id", groupId)
+            .eq("status", "approved"),
+
+        sb.from("os_contributions")
+            .select("amount,status")
+            .eq("group_id", groupId),
+
+        sb.from("os_withdrawals")
+            .select("amount,status")
+            .eq("group_id", groupId)
+
+    ]);
+
+    if (
+        membersResult.error ||
+        contributionsResult.error ||
+        withdrawalsResult.error
+    ) {
+        $("financialOverview").textContent =
+            "Unable to load financial information.";
+        return;
+    }
+
+    const members = membersResult.data || [];
+    const contributions = contributionsResult.data || [];
+    const withdrawals = withdrawalsResult.data || [];
+
+    const confirmed = contributions
+        .filter(item =>
+            item.status === "verified" ||
+            item.status === "reconciled"
+        )
+        .reduce(
+            (total, item) =>
+                total + Number(item.amount),
+            0
+        );
+
+    const paidOut = withdrawals
+        .filter(item => item.status === "paid")
+        .reduce(
+            (total, item) =>
+                total + Number(item.amount),
+            0
+        );
+
+    const recordedBalance = confirmed - paidOut;
+
+    $("statMembers").textContent = members.length;
+
+    $("statConfirmed").textContent = money(confirmed);
+
+    $("financialOverview").textContent =
+        "Recorded balance: " +
+        money(recordedBalance) +
+        ". This is not a verified bank balance.";
+}
+
+/* COPY INVITATION CODE */
+
+async function copyInvite() {
+
+    if (!currentGroup) return;
+
+    try {
+
+        await navigator.clipboard.writeText(
+            currentGroup.invite_code
+        );
+
+        showMessage("Invitation code copied!");
+
+    } catch (error) {
+
+        showMessage(
+            "Invitation code: " +
+            currentGroup.invite_code
+        );
+    }
+}
+
+/* INITIALISE */
+
+function setupDueDays() {
+
+    const select = $("groupDueDay");
+
+    for (let day = 1; day <= 28; day++) {
+
+        const option = document.createElement("option");
+
+        option.value = day;
+        option.textContent = `Day ${day}`;
+
+        select.appendChild(option);
+    }
+}
+
+async function initialise() {
+
+    setupDueDays();
+
+    const { data, error } = await sb.auth.getUser();
+
+    if (!error && data.user) {
+
+        currentUser = data.user;
+
+        $("logoutBtn").classList.remove("hidden");
+
+        showPage("homePage");
+
+    } else {
+
+        showPage("authPage");
+    }
+}
+
+initialise();
+
+</script>
+
+</body>
+</html>
