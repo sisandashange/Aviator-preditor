@@ -2,76 +2,62 @@
 <html lang="en-ZA">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>Sisanda'$ Stokvel | Family Finance</title>
+<title>Sisanda'$ Stokvel</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 
 <style>
 :root{
   --bg:#f8f9fa;
-  --white:#ffffff;
-  --black:#111111;
+  --white:#fff;
+  --black:#111;
   --text:#242424;
-  --muted:#777777;
+  --muted:#777;
   --line:#e8e8e8;
   --soft:#f3f4f5;
-  --success:#087443;
-  --warning:#a86400;
-  --danger:#b42318;
-  --radius:16px;
+  --green:#087443;
+  --red:#b42318;
+  --orange:#a86400;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 body{
   margin:0;
   background:var(--bg);
   color:var(--black);
-  font:14px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
+  font:14px/1.5 system-ui,Arial,sans-serif;
 }
 button,input,select,textarea{font:inherit}
 button{
-  border:1px solid var(--black);
-  background:var(--black);
+  border:1px solid #111;
+  background:#111;
   color:white;
   border-radius:10px;
   padding:11px 15px;
   font-weight:650;
   cursor:pointer;
 }
-button:disabled{opacity:.5;cursor:wait}
-button.secondary{
-  background:white;
-  color:var(--black);
-  border-color:#d7d7d7;
-}
-button.danger{
-  background:#fff;
-  color:var(--danger);
-  border-color:#f1c8c4;
-}
+button:disabled{opacity:.5}
+button.secondary{background:white;color:#111;border-color:#ddd}
+button.danger{background:white;color:var(--red);border-color:#f1c8c4}
 button.small{font-size:12px;padding:7px 10px}
 button.full{width:100%;margin-top:12px}
 input,select,textarea{
   width:100%;
   padding:12px;
-  background:white;
-  color:var(--black);
   border:1px solid #d8d8d8;
+  background:white;
+  color:#111;
   border-radius:10px;
   outline:none;
 }
 input:focus,select:focus,textarea:focus{border-color:#111}
-textarea{min-height:95px;resize:vertical}
-label{display:block;font-weight:650;font-size:12px;margin:14px 0 6px}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:12px;font-weight:700;margin:14px 0 6px}
 h1,h2,h3,p{margin-top:0}
 h1{font-size:24px;letter-spacing:-.5px}
-h2{font-size:17px;letter-spacing:-.2px}
+h2{font-size:17px}
 h3{font-size:14px}
 small,.muted{color:var(--muted)}
 small{font-size:12px}
@@ -79,7 +65,7 @@ small{font-size:12px}
 .card{
   background:white;
   border:1px solid var(--line);
-  border-radius:var(--radius);
+  border-radius:16px;
   padding:19px;
   margin-bottom:14px;
 }
@@ -90,20 +76,16 @@ small{font-size:12px}
   gap:12px;
 }
 .row>*{min-width:0}
-.entry{
-  padding:13px 0;
-  border-bottom:1px solid var(--line);
-}
-.entry:last-child{border:0}
+.entry{padding:13px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
 .entry small{display:block;margin-top:4px}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
 .actions button{font-size:12px;padding:8px 11px}
 .pill{
-  display:inline-flex;
-  align-items:center;
-  border-radius:30px;
+  display:inline-block;
   background:#e8f6ed;
-  color:var(--success);
+  color:var(--green);
+  border-radius:30px;
   padding:5px 9px;
   font-size:11px;
   font-weight:750;
@@ -111,7 +93,7 @@ small{font-size:12px}
 }
 .pill.pending,.pill.submitted,.pill.open{
   background:#fff2db;
-  color:var(--warning);
+  color:var(--orange);
 }
 .pill.unpaid,.pill.suspended{
   background:#f0f0f0;
@@ -119,19 +101,22 @@ small{font-size:12px}
 }
 .pill.rejected,.pill.declined{
   background:#ffebe9;
-  color:var(--danger);
+  color:var(--red);
 }
-.pill.approved,.pill.completed{background:#e8f6ed;color:var(--success)}
 .notice{
-  padding:13px;
   background:#f5f5f5;
   border:1px solid #e8e8e8;
+  padding:13px;
   border-radius:12px;
   margin:12px 0;
 }
-.notice.error{background:#fff2f0;border-color:#f5d4d0;color:var(--danger)}
-.empty{padding:20px;text-align:center;color:var(--muted)}
-.divider{height:1px;background:var(--line);margin:18px 0}
+.notice.error{
+  background:#fff2f0;
+  border-color:#f5d4d0;
+  color:var(--red);
+}
+.empty{text-align:center;color:var(--muted);padding:20px}
+.divider{height:1px;background:var(--line);margin:20px 0}
 .grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -147,51 +132,40 @@ small{font-size:12px}
 .stat small{display:block}
 .stat strong{
   display:block;
-  font-size:23px;
-  letter-spacing:-.5px;
+  font-size:22px;
   margin-top:7px;
   overflow-wrap:anywhere;
 }
-.stat .hint{font-size:11px;color:var(--muted);margin-top:6px}
+.stat .hint{font-size:11px;color:#888;margin-top:5px}
 .progress{
   height:10px;
-  background:#ededed;
+  background:#eee;
   border-radius:20px;
   overflow:hidden;
 }
 .progress div{
   height:100%;
-  background:#111;
   width:0;
+  background:#111;
   border-radius:20px;
-  transition:width .4s;
 }
 .avatar{
   width:38px;
   height:38px;
   flex:none;
-  background:#ededed;
+  background:#eee;
   border-radius:12px;
   display:grid;
   place-items:center;
-  font-size:12px;
   font-weight:800;
+  font-size:12px;
 }
 .person{display:flex;align-items:center;gap:11px}
-.person strong{display:block}
-.person small{display:block}
-.tag{
-  display:inline-block;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:4px 8px;
-  font-size:11px;
-  font-weight:700;
-}
+.person strong,.person small{display:block}
 .section-head{
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   gap:10px;
   margin-bottom:15px;
 }
@@ -203,21 +177,120 @@ small{font-size:12px}
   margin-bottom:14px;
 }
 .quick-actions button{
-  text-align:left;
   background:white;
   color:#111;
   border:1px solid var(--line);
+  text-align:left;
   padding:15px;
 }
-.quick-actions button b{display:block;font-size:14px}
-.quick-actions button small{display:block;font-weight:400;margin-top:4px}
-.quick-actions button .symbol{display:block;font-size:22px;margin-bottom:9px}
+.quick-actions b,.quick-actions small{display:block}
+.quick-actions small{font-weight:400;margin-top:4px}
+.quick-actions .symbol{font-size:22px;margin-bottom:9px;display:block}
+.auth{max-width:440px;margin:45px auto;padding:16px}
+.auth-header{text-align:center;margin-bottom:25px}
+.auth-logo{
+  width:62px;height:62px;
+  background:#111;color:white;
+  border-radius:18px;
+  display:grid;place-items:center;
+  margin:0 auto 15px;
+  font-size:28px;font-weight:800;
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:8;
+  background:white;
+  border-bottom:1px solid var(--line);
+  padding:12px 15px;
+}
+.header-inner{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-logo{
+  width:41px;height:41px;
+  background:#111;color:white;
+  border-radius:12px;
+  display:grid;place-items:center;
+  font-size:21px;font-weight:800;
+}
+.brand strong,.brand small{display:block}
+.brand strong{font-size:15px}
+.role{
+  font-size:10px;
+  font-weight:800;
+  border:1px solid #ddd;
+  border-radius:20px;
+  padding:6px 9px;
+}
+main{max-width:1100px;margin:auto;padding:20px 14px 110px}
+.page-heading{margin-bottom:20px}
+.page-heading h1{margin-bottom:5px}
+.hero{
+  background:white;
+  border:1px solid #ddd;
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:14px;
+}
+.hero-label{
+  font-size:11px;
+  font-weight:750;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:#666;
+}
+.hero-amount{
+  font-size:40px;
+  font-weight:800;
+  letter-spacing:-1.5px;
+  margin:9px 0;
+}
+.hero-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+.hero-footer small,.hero-footer strong{display:block}
+.hero-footer strong{margin-top:4px}
+.bank-box{
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:16px;
+  background:#fff;
+}
+.bank-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:13px 0;
+  border-bottom:1px solid #eee;
+}
+.bank-row:last-child{border-bottom:0}
+.bank-row strong{
+  display:block;
+  font-size:15px;
+  overflow-wrap:anywhere;
+}
+.bank-row small{display:block;margin-bottom:3px}
+.bank-row button{flex:none}
 .bar-chart{
   display:flex;
   align-items:flex-end;
   gap:10px;
   height:160px;
-  padding-top:10px;
 }
 .bar-column{flex:1;text-align:center;min-width:0}
 .bar-track{
@@ -233,98 +306,52 @@ small{font-size:12px}
   min-height:3px;
 }
 .bar-column small{display:block;margin-top:6px}
-.tabs-inline{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px}
-.tabs-inline button{white-space:nowrap}
-.auth{
-  max-width:440px;
-  margin:45px auto;
-  padding:16px;
-}
-.auth-header{text-align:center;margin-bottom:25px}
-.auth-logo{
-  width:62px;height:62px;background:#111;color:#fff;
-  border-radius:18px;display:grid;place-items:center;
-  margin:0 auto 15px;font-size:28px;font-weight:800;
-}
-header{
-  position:sticky;top:0;z-index:8;
-  background:white;border-bottom:1px solid var(--line);
-  padding:12px 15px;
-  padding-top:calc(12px + env(safe-area-inset-top));
-}
-.header-inner{
-  max-width:1100px;margin:auto;
-  display:flex;justify-content:space-between;align-items:center;gap:12px;
-}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-logo{
-  width:41px;height:41px;background:#111;color:#fff;
-  border-radius:12px;display:grid;place-items:center;
-  font-size:21px;font-weight:800;
-}
-.brand strong{display:block;font-size:15px}
-.brand small{display:block}
-.header-right{display:flex;align-items:center;gap:9px}
-.role{
-  font-size:10px;font-weight:800;letter-spacing:.5px;
-  border:1px solid #ddd;border-radius:20px;padding:6px 9px;
-}
-main{max-width:1100px;margin:auto;padding:20px 14px 110px}
-.page-heading{margin-bottom:20px}
-.page-heading h1{margin-bottom:5px}
-.hero{
-  background:white;
-  border:1px solid #dedede;
-  border-radius:18px;
-  padding:24px;
-  margin-bottom:14px;
-}
-.hero-label{
-  font-size:11px;font-weight:750;
-  text-transform:uppercase;letter-spacing:1px;color:#666;
-}
-.hero-amount{
-  font-size:40px;
-  font-weight:800;
-  letter-spacing:-1.5px;
-  margin:9px 0;
-}
-.hero-footer{
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:10px;
-  margin-top:16px;padding-top:16px;border-top:1px solid var(--line);
-}
-.hero-footer small{display:block}
-.hero-footer strong{display:block;margin-top:4px}
 nav{
-  position:fixed;bottom:0;left:0;right:0;
-  z-index:12;background:white;border-top:1px solid var(--line);
-  display:flex;padding-bottom:env(safe-area-inset-bottom);
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:12;
+  background:white;
+  border-top:1px solid var(--line);
+  display:flex;
+  padding-bottom:env(safe-area-inset-bottom);
 }
 nav button{
-  flex:1;border:0;border-radius:0;
-  background:white;color:#888;
-  padding:10px 2px;font-size:10px;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
+  flex:1;
+  border:0;
+  border-radius:0;
+  background:white;
+  color:#888;
+  padding:10px 2px;
+  font-size:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
 }
 nav button svg{
   width:21px;height:21px;
-  stroke:currentColor;fill:none;stroke-width:1.8;
-  stroke-linecap:round;stroke-linejoin:round;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
 }
 nav button.active{color:#111;font-weight:800}
 #toast{
-  display:none;position:fixed;bottom:88px;left:50%;
-  transform:translateX(-50%);background:#111;color:white;
-  padding:12px 17px;border-radius:11px;z-index:50;
-  width:max-content;max-width:90%;box-shadow:0 8px 30px #0002;
+  display:none;
+  position:fixed;
+  bottom:88px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111;
+  color:white;
+  padding:12px 17px;
+  border-radius:11px;
+  z-index:50;
+  width:max-content;
+  max-width:90%;
 }
 #toast.show{display:block}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left}
-th{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:.4px}
-td:last-child,th:last-child{text-align:right}
 @media(min-width:700px){
   .grid{grid-template-columns:repeat(4,1fr)}
   .columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -332,15 +359,22 @@ td:last-child,th:last-child{text-align:right}
 }
 @media(min-width:1000px){
   nav{
-    top:0;bottom:0;right:auto;width:235px;
-    flex-direction:column;padding:90px 12px 20px;
-    border-right:1px solid var(--line);border-top:0;
+    top:0;bottom:0;right:auto;
+    width:235px;
+    flex-direction:column;
+    padding:90px 12px 20px;
+    border-right:1px solid var(--line);
+    border-top:0;
     gap:5px;
   }
   nav button{
-    flex:none;flex-direction:row;gap:13px;
-    border-radius:10px;padding:13px;
-    font-size:14px;text-align:left;
+    flex:none;
+    flex-direction:row;
+    gap:13px;
+    border-radius:10px;
+    padding:13px;
+    font-size:14px;
+    text-align:left;
   }
   nav button.active{background:#f3f3f3}
   header{margin-left:235px}
@@ -353,7 +387,7 @@ td:last-child,th:last-child{text-align:right}
 
 <div id="toast"></div>
 
-<!-- AUTHENTICATION -->
+<!-- AUTH -->
 
 <section id="authScreen" class="auth">
   <div class="auth-header">
@@ -366,8 +400,8 @@ td:last-child,th:last-child{text-align:right}
     <div id="authMessage" class="notice hidden"></div>
 
     <div id="loginForm">
-      <h2>Sign in to your account</h2>
-      <p class="muted">Access your contributions and family savings.</p>
+      <h2>Sign in</h2>
+      <p class="muted">Access your family savings account.</p>
 
       <label>Email address</label>
       <input id="loginEmail" type="email" autocomplete="email">
@@ -382,7 +416,7 @@ td:last-child,th:last-child{text-align:right}
 
     <div id="registerForm" class="hidden">
       <h2>Request membership</h2>
-      <p class="muted">New members must be approved by the treasurer.</p>
+      <p class="muted">The treasurer must approve new members.</p>
 
       <label>Full name</label>
       <input id="regName" autocomplete="name">
@@ -393,34 +427,31 @@ td:last-child,th:last-child{text-align:right}
       <label>Email address</label>
       <input id="regEmail" type="email">
 
-      <label>Password (8+ characters)</label>
+      <label>Password</label>
       <input id="regPassword" type="password" minlength="8">
 
       <button class="full" onclick="register()">Create account</button>
       <button class="secondary full" onclick="showLogin()">Back to sign in</button>
     </div>
   </div>
-
-  <p class="muted" style="text-align:center">
-    Private family savings · South Africa
-  </p>
 </section>
 
-<!-- MEMBERSHIP APPROVAL -->
+<!-- APPROVAL -->
 
 <section id="waitingScreen" class="auth hidden">
   <div class="auth-header">
     <div class="auth-logo">S</div>
     <h1>Membership review</h1>
   </div>
+
   <div class="card">
     <h2>Account status</h2>
     <p id="waitingMessage"></p>
-    <button class="full secondary" onclick="logout()">Sign out</button>
+    <button class="secondary full" onclick="logout()">Sign out</button>
   </div>
 </section>
 
-<!-- MAIN APP -->
+<!-- APPLICATION -->
 
 <section id="appScreen" class="hidden">
 
@@ -433,9 +464,7 @@ td:last-child,th:last-child{text-align:right}
         <small>Family Finance</small>
       </div>
     </div>
-    <div class="header-right">
-      <span class="role" id="roleLabel">MEMBER</span>
-    </div>
+    <span class="role" id="roleLabel">MEMBER</span>
   </div>
 </header>
 
@@ -457,12 +486,14 @@ td:last-child,th:last-child{text-align:right}
     <div class="hero-footer">
       <div>
         <small>Monthly contribution</small>
-        <strong id="heroMonthly">R200.00</strong>
+        <strong id="heroMonthly">R0.00</strong>
       </div>
+
       <div>
         <small>Next due date</small>
         <strong id="nextDue">—</strong>
       </div>
+
       <button onclick="navigate('contributionsPage')">Make payment →</button>
     </div>
   </div>
@@ -473,16 +504,19 @@ td:last-child,th:last-child{text-align:right}
       <strong id="dashboardMembers">0</strong>
       <div class="hint">Approved family members</div>
     </div>
+
     <div class="stat">
       <small>Paid this month</small>
       <strong id="dashboardPaid">0/0</strong>
       <div class="hint">Confirmed payments</div>
     </div>
+
     <div class="stat">
       <small>Expected this month</small>
       <strong id="dashboardExpected">R0</strong>
-      <div class="hint">Members × contribution</div>
+      <div class="hint">Expected contributions</div>
     </div>
+
     <div class="stat">
       <small>Collected this month</small>
       <strong id="dashboardCollected">R0</strong>
@@ -490,8 +524,8 @@ td:last-child,th:last-child{text-align:right}
     </div>
   </div>
 
-  <div class="card" id="actionCard">
-    <div class="section-head"><h2>Action centre</h2></div>
+  <div class="card">
+    <h2>Action centre</h2>
     <div id="actionCentre"></div>
   </div>
 
@@ -499,18 +533,21 @@ td:last-child,th:last-child{text-align:right}
     <button onclick="navigate('contributionsPage')">
       <span class="symbol">↗</span>
       <b>Contribute</b>
-      <small>Submit your payment</small>
+      <small>Submit a payment</small>
     </button>
+
     <button onclick="navigate('membersPage')">
       <span class="symbol">♧</span>
       <b>Members</b>
       <small>Family directory</small>
     </button>
+
     <button onclick="navigate('reportsPage')">
       <span class="symbol">▤</span>
       <b>Reports</b>
       <small>Financial records</small>
     </button>
+
     <button onclick="navigate('communityPage')">
       <span class="symbol">☷</span>
       <b>Family hub</b>
@@ -524,13 +561,18 @@ td:last-child,th:last-child{text-align:right}
         <h2>Savings goal</h2>
         <strong id="goalPercentage">0%</strong>
       </div>
-      <div class="progress"><div id="goalProgress"></div></div>
+
+      <div class="progress">
+        <div id="goalProgress"></div>
+      </div>
+
       <p class="muted" id="goalDescription" style="margin-top:13px"></p>
     </div>
 
     <div class="card">
-      <div class="section-head"><h2>My monthly status</h2></div>
+      <h2>My monthly status</h2>
       <div id="dashboardMyPayment"></div>
+
       <button class="secondary full" onclick="navigate('contributionsPage')">
         View payment history
       </button>
@@ -539,21 +581,18 @@ td:last-child,th:last-child{text-align:right}
 
   <div class="columns">
     <div class="card">
-      <div class="section-head"><h2>Member contributions</h2></div>
+      <h2>Member contributions</h2>
       <div id="dashboardMemberStatus"></div>
     </div>
 
     <div class="card">
-      <div class="section-head"><h2>Latest announcements</h2></div>
+      <h2>Latest announcements</h2>
       <div id="dashboardAnnouncements"></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="section-head">
-      <h2>Recent financial activity</h2>
-      <button class="secondary small" onclick="navigate('reportsPage')">View all</button>
-    </div>
+    <h2>Recent financial activity</h2>
     <div id="dashboardActivity"></div>
   </div>
 </section>
@@ -563,31 +602,51 @@ td:last-child,th:last-child{text-align:right}
 <section id="contributionsPage" class="hidden">
   <div class="page-heading">
     <h1>Contributions</h1>
-    <p class="muted">Manage monthly savings payments and confirmations.</p>
+    <p class="muted">Manage your monthly savings payments.</p>
   </div>
 
   <div class="grid">
     <div class="stat">
       <small>Monthly amount</small>
-      <strong id="contributionAmount">R200</strong>
+      <strong id="contributionAmount">R0</strong>
     </div>
+
     <div class="stat">
       <small>Due day</small>
       <strong id="contributionDue">1st</strong>
     </div>
+
     <div class="stat">
       <small>My confirmed total</small>
       <strong id="myConfirmedTotal">R0</strong>
     </div>
+
     <div class="stat">
-      <small>My outstanding months</small>
+      <small>Outstanding months</small>
       <strong id="myOutstandingCount">0</strong>
     </div>
+  </div>
+
+  <!-- EFT BANKING DETAILS -->
+
+  <div class="card">
+    <div class="section-head">
+      <h2>EFT Banking Details</h2>
+      <span class="pill">BANK TRANSFER</span>
+    </div>
+
+    <p class="muted">
+      Transfer your monthly contribution to the account below.
+      Then upload proof of payment.
+    </p>
+
+    <div id="eftBankDetails"></div>
   </div>
 
   <div class="columns">
     <div class="card">
       <h2>Submit contribution</h2>
+
       <p class="muted">
         Contributions count only after the treasurer confirms receipt.
       </p>
@@ -607,12 +666,12 @@ td:last-child,th:last-child{text-align:right}
         <div id="proofSection">
           <label>Proof of payment</label>
           <input id="paymentProof" type="file" accept="image/*,.pdf">
-          <small>Image or PDF · Maximum 8 MB</small>
+          <small>Maximum 8 MB</small>
         </div>
 
-        <label>Payment reference (optional)</label>
+        <label>Payment reference</label>
         <input id="paymentReference" maxlength="120"
-               placeholder="Bank transfer reference">
+               placeholder="Name and contribution month">
 
         <button class="full" id="submitPaymentButton"
                 onclick="submitContribution()">
@@ -624,10 +683,13 @@ td:last-child,th:last-child{text-align:right}
     <div class="card">
       <h2>My contribution summary</h2>
       <div id="myContributionSummary"></div>
+
       <div class="divider"></div>
+
       <button class="secondary full" onclick="exportMyPayments()">
-        Download my payments (CSV)
+        Download payment history
       </button>
+
       <button class="secondary full" onclick="printStatement()">
         Print member statement
       </button>
@@ -635,16 +697,20 @@ td:last-child,th:last-child{text-align:right}
   </div>
 
   <div class="card">
-    <div class="section-head"><h2>My payment history</h2></div>
+    <h2>My payment history</h2>
     <div id="paymentHistory"></div>
   </div>
 
   <div id="treasurerVerificationCard" class="card hidden">
     <div class="section-head">
-      <h2>Payments awaiting verification</h2>
+      <h2>Payment verification</h2>
       <span class="pill pending" id="pendingPaymentBadge">0 pending</span>
     </div>
-    <p class="muted">Confirm only payments actually received.</p>
+
+    <p class="muted">
+      Confirm a payment only after checking that the money was received.
+    </p>
+
     <div id="verificationList"></div>
   </div>
 </section>
@@ -654,7 +720,7 @@ td:last-child,th:last-child{text-align:right}
 <section id="membersPage" class="hidden">
   <div class="page-heading">
     <h1>Family members</h1>
-    <p class="muted">Membership directory and contribution status.</p>
+    <p class="muted">Membership directory and payment status.</p>
   </div>
 
   <div class="grid">
@@ -662,14 +728,17 @@ td:last-child,th:last-child{text-align:right}
       <small>Approved</small>
       <strong id="approvedMemberCount">0</strong>
     </div>
+
     <div class="stat">
-      <small>Pending approval</small>
+      <small>Pending</small>
       <strong id="pendingMemberCount">0</strong>
     </div>
+
     <div class="stat">
       <small>Paid this month</small>
       <strong id="paidMemberCount">0</strong>
     </div>
+
     <div class="stat">
       <small>Not yet paid</small>
       <strong id="unpaidMemberCount">0</strong>
@@ -677,9 +746,11 @@ td:last-child,th:last-child{text-align:right}
   </div>
 
   <div class="card">
-    <div class="section-head"><h2>Member directory</h2></div>
-    <input id="memberSearch" placeholder="Search members..."
+    <h2>Member directory</h2>
+
+    <input id="memberSearch" placeholder="Search family members..."
            oninput="renderMemberDirectory()">
+
     <div id="memberDirectory" style="margin-top:12px"></div>
   </div>
 
@@ -699,38 +770,38 @@ td:last-child,th:last-child{text-align:right}
 <section id="communityPage" class="hidden">
   <div class="page-heading">
     <h1>Family hub</h1>
-    <p class="muted">Meetings, announcements and withdrawal decisions.</p>
+    <p class="muted">Meetings, announcements and family decisions.</p>
   </div>
 
   <div class="card">
     <h2>Withdrawal requests</h2>
     <p class="muted">
-      Requests require majority approval before a treasurer can record a payout.
+      Members vote on withdrawal requests before approved payouts.
     </p>
     <div id="withdrawalRequestList"></div>
   </div>
 
   <div class="card">
     <h2>Request a withdrawal</h2>
+
     <label>Amount (R)</label>
     <input id="withdrawalAmount" type="number" min="0.01" step="0.01">
 
     <label>Reason</label>
-    <textarea id="withdrawalReason" maxlength="250"
-              placeholder="Explain why the funds are needed"></textarea>
+    <textarea id="withdrawalReason" maxlength="250"></textarea>
 
     <button class="full" onclick="submitWithdrawalRequest()">
-      Submit for family vote
+      Submit withdrawal request
     </button>
   </div>
 
   <div class="card">
-    <h2>Upcoming meetings</h2>
+    <h2>Family meetings</h2>
     <div id="meetingList"></div>
   </div>
 
   <div id="meetingEditor" class="card hidden">
-    <h2>Schedule a meeting</h2>
+    <h2>Schedule meeting</h2>
 
     <label>Meeting title</label>
     <input id="meetingTitle" maxlength="100">
@@ -748,7 +819,7 @@ td:last-child,th:last-child{text-align:right}
   </div>
 
   <div class="card">
-    <h2>Family announcements</h2>
+    <h2>Announcements</h2>
     <div id="announcementList"></div>
   </div>
 
@@ -772,13 +843,13 @@ td:last-child,th:last-child{text-align:right}
 <section id="reportsPage" class="hidden">
   <div class="page-heading">
     <h1>Financial reports</h1>
-    <p class="muted">Transparent savings records and contribution reporting.</p>
+    <p class="muted">Savings records and contribution reporting.</p>
   </div>
 
   <div class="card">
-    <div class="section-head"><h2>Monthly contribution report</h2></div>
+    <h2>Monthly contribution report</h2>
 
-    <label>Select reporting month</label>
+    <label>Select month</label>
     <input id="reportMonth" type="month" onchange="loadReport()">
 
     <div class="grid" style="margin-top:15px">
@@ -786,14 +857,17 @@ td:last-child,th:last-child{text-align:right}
         <small>Paid</small>
         <strong id="reportPaid">0</strong>
       </div>
+
       <div class="stat">
-        <small>Pending check</small>
+        <small>Pending</small>
         <strong id="reportPending">0</strong>
       </div>
+
       <div class="stat">
         <small>Outstanding</small>
         <strong id="reportUnpaid">0</strong>
       </div>
+
       <div class="stat">
         <small>Confirmed amount</small>
         <strong id="reportAmount">R0</strong>
@@ -813,8 +887,9 @@ td:last-child,th:last-child{text-align:right}
   </div>
 
   <div class="card">
-    <div class="section-head"><h2>Transaction ledger</h2></div>
+    <h2>Transaction ledger</h2>
     <div id="transactionLedger"></div>
+
     <button class="secondary full" onclick="exportLedger()">
       Download ledger (CSV)
     </button>
@@ -826,7 +901,7 @@ td:last-child,th:last-child{text-align:right}
 <section id="accountPage" class="hidden">
   <div class="page-heading">
     <h1>Account & settings</h1>
-    <p class="muted">Manage your personal details and savings preferences.</p>
+    <p class="muted">Manage your profile and stokvel preferences.</p>
   </div>
 
   <div class="columns">
@@ -842,7 +917,7 @@ td:last-child,th:last-child{text-align:right}
       <label>Phone number</label>
       <input id="profilePhone" type="tel" maxlength="30">
 
-      <button class="full" onclick="saveProfile()">Save changes</button>
+      <button class="full" onclick="saveProfile()">Save profile</button>
     </div>
 
     <div class="card">
@@ -850,9 +925,12 @@ td:last-child,th:last-child{text-align:right}
 
       <label>New password</label>
       <input id="newPassword" type="password"
-             autocomplete="new-password" placeholder="At least 8 characters">
+             autocomplete="new-password"
+             placeholder="At least 8 characters">
 
-      <button class="full" onclick="changePassword()">Change password</button>
+      <button class="full" onclick="changePassword()">
+        Change password
+      </button>
 
       <div class="divider"></div>
 
@@ -860,9 +938,11 @@ td:last-child,th:last-child{text-align:right}
     </div>
   </div>
 
+  <!-- TREASURER ADMINISTRATION -->
+
   <div id="stokvelSettingsCard" class="card hidden">
     <h2>Stokvel administration</h2>
-    <p class="muted">These settings affect the whole family.</p>
+    <p class="muted">Only the treasurer can change these settings.</p>
 
     <label>Monthly contribution (R)</label>
     <input id="settingMonthly" type="number" min="1" step="0.01">
@@ -873,24 +953,62 @@ td:last-child,th:last-child{text-align:right}
     <label>Savings goal (R)</label>
     <input id="settingGoal" type="number" min="1" step="0.01">
 
-    <button class="full" onclick="saveSettings()">Save stokvel settings</button>
-  </div>
+    <button class="full" onclick="saveSettings()">
+      Save stokvel settings
+    </button>
 
-  <div class="card">
-    <h2>Family reminders</h2>
-    <p class="muted">Share a monthly payment reminder using WhatsApp or another app.</p>
-    <button class="secondary full" onclick="shareReminder()">
-      Share contribution reminder
+    <div class="divider"></div>
+
+    <h2>EFT Banking Administration</h2>
+
+    <p class="muted">
+      These details will be displayed to approved members on the Payments page.
+    </p>
+
+    <label>Bank name</label>
+    <input id="bankName" placeholder="e.g. FNB">
+
+    <label>Account holder</label>
+    <input id="bankHolder" placeholder="Name registered with the bank">
+
+    <label>Account number</label>
+    <input id="bankNumber" inputmode="numeric"
+           autocomplete="off" placeholder="Account number">
+
+    <label>Account type</label>
+    <select id="bankType">
+      <option value="">Select account type</option>
+      <option value="Savings">Savings</option>
+      <option value="Cheque">Cheque / Current</option>
+      <option value="Transmission">Transmission</option>
+    </select>
+
+    <label>Branch code</label>
+    <input id="bankBranch" inputmode="numeric"
+           autocomplete="off" placeholder="Six-digit branch code">
+
+    <button class="full" onclick="saveBankDetails()">
+      Save EFT Banking Details
     </button>
   </div>
 
   <div class="card">
-    <h2>Privacy and financial records</h2>
+    <h2>Contribution reminders</h2>
     <p class="muted">
-      This application records contributions and withdrawals. It does not
-      receive, hold or transfer money. Proof of payment should be visible
-      only to the contributor and authorised treasurer through Supabase
-      storage policies.
+      Share a payment reminder with family members.
+    </p>
+
+    <button class="secondary full" onclick="shareReminder()">
+      Share reminder
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>About this stokvel</h2>
+    <p class="muted">
+      Sisanda'$ Stokvel helps family members track savings,
+      contributions, withdrawal requests and financial records.
+      The application does not hold or transfer money.
     </p>
   </div>
 </section>
@@ -900,32 +1018,55 @@ td:last-child,th:last-child{text-align:right}
 <nav>
   <button class="active" data-page="dashboardPage"
           onclick="navigate('dashboardPage')">
-    <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/><path d="M9 21v-7h6v7"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path d="M3 11l9-8 9 8v10H3z"/>
+      <path d="M9 21v-7h6v7"/>
+    </svg>
     Home
   </button>
+
   <button data-page="contributionsPage"
           onclick="navigate('contributionsPage')">
-    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M7 15h4"/></svg>
+    <svg viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="15" rx="2"/>
+      <path d="M3 10h18M7 15h4"/>
+    </svg>
     Payments
   </button>
+
   <button data-page="membersPage"
           onclick="navigate('membersPage')">
-    <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M17 5a3 3 0 0 1 0 6M18 15c3 0 4 3 4 6"/></svg>
+    <svg viewBox="0 0 24 24">
+      <circle cx="9" cy="8" r="3"/>
+      <path d="M2 21c0-4 3-6 7-6s7 2 7 6"/>
+      <path d="M17 5a3 3 0 0 1 0 6"/>
+    </svg>
     Members
   </button>
+
   <button data-page="communityPage"
           onclick="navigate('communityPage')">
-    <svg viewBox="0 0 24 24"><path d="M4 5h16v12H8l-4 4z"/><path d="M8 9h8M8 13h5"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path d="M4 5h16v12H8l-4 4z"/>
+      <path d="M8 9h8M8 13h5"/>
+    </svg>
     Family
   </button>
+
   <button data-page="reportsPage"
           onclick="navigate('reportsPage')">
-    <svg viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-9M22 20H2"/></svg>
+    <svg viewBox="0 0 24 24">
+      <path d="M4 20V11M10 20V5M16 20v-9M22 20H2"/>
+    </svg>
     Reports
   </button>
+
   <button data-page="accountPage"
           onclick="navigate('accountPage')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3-6 8-6s8 2 8 6"/></svg>
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21c0-4 3-6 8-6s8 2 8 6"/>
+    </svg>
     Account
   </button>
 </nav>
@@ -944,7 +1085,11 @@ const S={
   user:null,
   member:null,
   treasurer:false,
-  settings:{monthly_contribution:200,due_day:1,savings_goal:10000},
+  settings:{
+    monthly_contribution:200,
+    due_day:1,
+    savings_goal:10000
+  },
   summary:{},
   members:[],
   contributions:[],
@@ -959,8 +1104,11 @@ const S={
 
 function esc(value){
   return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   })[c]);
 }
 
@@ -1006,13 +1154,17 @@ function pill(status){
     declined:"Declined",
     completed:"Completed"
   };
-  return `<span class="pill ${esc(status)}">${labels[status]||esc(status)}</span>`;
+
+  return `<span class="pill ${esc(status)}">
+    ${labels[status]||esc(status)}
+  </span>`;
 }
 
 function toast(message){
   const el=$("toast");
   el.textContent=message;
   el.classList.add("show");
+
   clearTimeout(toast.timer);
   toast.timer=setTimeout(()=>el.classList.remove("show"),3500);
 }
@@ -1039,20 +1191,28 @@ function navigate(page){
   document.querySelectorAll("#appScreen main > section").forEach(el=>{
     el.classList.toggle("hidden",el.id!==page);
   });
+
   document.querySelectorAll("nav button").forEach(btn=>{
     btn.classList.toggle("active",btn.dataset.page===page);
   });
+
   window.scrollTo(0,0);
+
   if(page==="reportsPage")loadReport();
 }
 
 async function login(){
   const email=$("loginEmail").value.trim();
   const password=$("loginPassword").value;
-  if(!email||!password)return authMessage("Enter your email and password.",true);
+
+  if(!email||!password){
+    return authMessage("Enter your email and password.",true);
+  }
 
   const {data,error}=await sb.auth.signInWithPassword({email,password});
+
   if(error)return authMessage(error.message,true);
+
   await routeUser(data.user);
 }
 
@@ -1063,31 +1223,41 @@ async function register(){
   const password=$("regPassword").value;
 
   if(!full_name||!email||password.length<8){
-    return authMessage("Enter your name, email and a password of 8+ characters.",true);
+    return authMessage(
+      "Enter your name, email and a password of at least 8 characters.",
+      true
+    );
   }
 
   const {data,error}=await sb.auth.signUp({
-    email,password,options:{data:{full_name,phone}}
+    email,
+    password,
+    options:{data:{full_name,phone}}
   });
 
   if(error)return authMessage(error.message,true);
 
-  if(data.session)await routeUser(data.user);
-  else{
+  if(data.session){
+    await routeUser(data.user);
+  }else{
     showLogin();
-    authMessage("Confirm your email, then sign in. The treasurer will review your membership.");
+    authMessage("Confirm your email, then sign in.");
   }
 }
 
 async function forgotPassword(){
   const email=$("loginEmail").value.trim();
+
   if(!email)return authMessage("Enter your email first.",true);
 
   const {error}=await sb.auth.resetPasswordForEmail(email,{
     redirectTo:location.origin+location.pathname
   });
 
-  authMessage(error?error.message:"Check your email for password reset instructions.",!!error);
+  authMessage(
+    error?error.message:"Check your email for password reset instructions.",
+    !!error
+  );
 }
 
 async function logout(){
@@ -1100,7 +1270,9 @@ async function routeUser(user){
 
   try{
     let {data,error}=await sb.from("members")
-      .select("*").eq("user_id",user.id).maybeSingle();
+      .select("*")
+      .eq("user_id",user.id)
+      .maybeSingle();
 
     if(error)throw error;
 
@@ -1125,10 +1297,12 @@ async function routeUser(user){
     if(data.status!=="approved"){
       $("waitingScreen").classList.remove("hidden");
       $("appScreen").classList.add("hidden");
+
       $("waitingMessage").textContent=
         data.status==="pending"
         ?"Your registration is awaiting treasurer approval."
-        :"Your membership status is "+data.status+". Contact the treasurer.";
+        :"Your membership status is "+data.status+".";
+
       return;
     }
 
@@ -1136,7 +1310,9 @@ async function routeUser(user){
     $("appScreen").classList.remove("hidden");
 
     $("roleLabel").textContent=S.treasurer?"TREASURER":"MEMBER";
-    $("greeting").textContent="Hello, "+data.full_name.split(" ")[0]+" 👋";
+
+    $("greeting").textContent=
+      "Hello, "+data.full_name.split(" ")[0]+" 👋";
 
     [
       "treasurerVerificationCard",
@@ -1145,7 +1321,9 @@ async function routeUser(user){
       "meetingEditor",
       "announcementEditor",
       "stokvelSettingsCard"
-    ].forEach(id=>$(id).classList.toggle("hidden",!S.treasurer));
+    ].forEach(id=>{
+      $(id).classList.toggle("hidden",!S.treasurer);
+    });
 
     $("profileName").value=data.full_name;
     $("profilePhone").value=data.phone||"";
@@ -1156,7 +1334,7 @@ async function routeUser(user){
   }catch(error){
     $("authScreen").classList.remove("hidden");
     $("appScreen").classList.add("hidden");
-    authMessage("Could not load your account: "+error.message,true);
+    authMessage(error.message,true);
   }
 }
 
@@ -1180,11 +1358,19 @@ async function refresh(){
   renderAccount();
 }
 
+/* SETTINGS */
+
 async function loadSettings(){
   const {data,error}=await sb.from("stokvel_settings")
-    .select("*").limit(1).maybeSingle();
+    .select("*")
+    .limit(1)
+    .maybeSingle();
 
-  if(error){toast(error.message);return;}
+  if(error){
+    toast(error.message);
+    return;
+  }
+
   if(data)S.settings=data;
 
   const c=S.settings;
@@ -1197,41 +1383,193 @@ async function loadSettings(){
   $("settingDue").value=c.due_day;
   $("settingGoal").value=c.savings_goal;
 
+  $("bankName").value=c.bank_name||"";
+  $("bankHolder").value=c.account_holder||"";
+  $("bankNumber").value=c.account_number||"";
+  $("bankType").value=c.account_type||"";
+  $("bankBranch").value=c.branch_code||"";
+
+  renderBankDetails();
+
   const now=new Date();
-  let due=new Date(now.getFullYear(),now.getMonth(),c.due_day);
+
+  let due=new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    Number(c.due_day)
+  );
 
   if(ymd(due)<ymd(now)){
-    due=new Date(now.getFullYear(),now.getMonth()+1,c.due_day);
+    due=new Date(
+      now.getFullYear(),
+      now.getMonth()+1,
+      Number(c.due_day)
+    );
   }
 
   $("nextDue").textContent=due.toLocaleDateString("en-ZA",{
-    day:"numeric",month:"short",year:"numeric"
+    day:"numeric",
+    month:"short",
+    year:"numeric"
   });
 }
+
+/* EFT BANKING DETAILS */
+
+function renderBankDetails(){
+  const c=S.settings;
+
+  if(!c.bank_name||!c.account_number){
+    $("eftBankDetails").innerHTML=`
+      <div class="notice">
+        Banking details have not been added yet.
+        Please contact the treasurer.
+      </div>
+    `;
+    return;
+  }
+
+  const fields=[
+    ["Bank name",c.bank_name],
+    ["Account holder",c.account_holder],
+    ["Account number",c.account_number],
+    ["Account type",c.account_type],
+    ["Branch code",c.branch_code]
+  ];
+
+  $("eftBankDetails").innerHTML=`
+    <div class="bank-box">
+      ${fields.map(([label,value])=>`
+        <div class="bank-row">
+          <div>
+            <small>${esc(label)}</small>
+            <strong>${esc(value||"—")}</strong>
+          </div>
+
+          ${value?`
+            <button class="secondary small"
+                    onclick="copyBankValue('${label}')">
+              Copy
+            </button>
+          `:""}
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="notice">
+      <strong>Payment instructions</strong>
+      <p style="margin:7px 0 0">
+        Use your full name and contribution month as the payment reference.
+        After transferring the money, upload your proof of payment below.
+      </p>
+    </div>
+  `;
+}
+
+async function copyBankValue(label){
+  const values={
+    "Bank name":S.settings.bank_name,
+    "Account holder":S.settings.account_holder,
+    "Account number":S.settings.account_number,
+    "Account type":S.settings.account_type,
+    "Branch code":S.settings.branch_code
+  };
+
+  try{
+    await navigator.clipboard.writeText(values[label]||"");
+    toast(label+" copied");
+  }catch(error){
+    toast("Unable to copy. Please copy the details manually.");
+  }
+}
+
+async function saveBankDetails(){
+  if(!S.treasurer){
+    return toast("Only the treasurer can edit banking details.");
+  }
+
+  const details={
+    bank_name:$("bankName").value.trim(),
+    account_holder:$("bankHolder").value.trim(),
+    account_number:$("bankNumber").value.trim(),
+    account_type:$("bankType").value,
+    branch_code:$("bankBranch").value.trim()
+  };
+
+  if(Object.values(details).some(v=>!v)){
+    return toast("Complete all banking fields.");
+  }
+
+  if(!/^\d{5,20}$/.test(details.account_number)){
+    return toast("Enter a valid account number.");
+  }
+
+  if(!/^\d{6}$/.test(details.branch_code)){
+    return toast("Branch code must contain six digits.");
+  }
+
+  if(!confirm(
+    "Save these banking details? All approved members will see them."
+  )){
+    return;
+  }
+
+  const {data,error}=await sb.from("stokvel_settings")
+    .update(details)
+    .eq("id",S.settings.id)
+    .select()
+    .single();
+
+  if(error)return toast(error.message);
+
+  S.settings=data;
+
+  renderBankDetails();
+
+  toast("EFT banking details saved successfully.");
+}
+
+/* SAVINGS SUMMARY */
 
 async function loadSummary(){
   const {data,error}=await sb.rpc("get_stokvel_summary");
 
-  if(error){toast(error.message);return;}
+  if(error){
+    toast(error.message);
+    return;
+  }
 
   S.summary=data||{};
+
   const balance=Number(S.summary.balance||0);
-  const goal=Number(S.summary.savings_goal||S.settings.savings_goal||1);
-  const pct=Math.min(100,Math.max(0,balance/goal*100));
+  const goal=Number(
+    S.summary.savings_goal||S.settings.savings_goal||1
+  );
+
+  const percentage=Math.min(
+    100,
+    Math.max(0,balance/goal*100)
+  );
 
   $("totalBalance").textContent=money(balance);
-  $("goalPercentage").textContent=Math.round(pct)+"%";
-  $("goalProgress").style.width=pct+"%";
+  $("goalPercentage").textContent=Math.round(percentage)+"%";
+  $("goalProgress").style.width=percentage+"%";
+
   $("goalDescription").textContent=
     money(balance)+" saved towards "+money(goal);
 }
+
+/* MEMBERS */
 
 async function loadMembers(){
   const {data,error}=await sb.from("members")
     .select("user_id,full_name,status,role,created_at,approved_at")
     .order("full_name");
 
-  if(error){toast(error.message);return;}
+  if(error){
+    toast(error.message);
+    return;
+  }
 
   S.members=data||[];
 
@@ -1240,22 +1578,24 @@ async function loadMembers(){
     .eq("contribution_month",thisMonth());
 
   S.statusMap=new Map(
-    (statuses||[]).map(x=>[x.member_id,x.payment_status])
+    (statuses||[]).map(s=>[s.member_id,s.payment_status])
   );
-
-  renderMemberDirectory();
 
   const approved=S.members.filter(m=>m.status==="approved");
   const pending=S.members.filter(m=>m.status==="pending");
 
   $("approvedMemberCount").textContent=approved.length;
   $("pendingMemberCount").textContent=pending.length;
+
   $("paidMemberCount").textContent=approved.filter(m=>
     S.statusMap.get(m.user_id)==="paid"
   ).length;
+
   $("unpaidMemberCount").textContent=approved.filter(m=>
     S.statusMap.get(m.user_id)!=="paid"
   ).length;
+
+  renderMemberDirectory();
 
   if(S.treasurer){
     $("membershipApplications").innerHTML=pending.map(m=>`
@@ -1264,12 +1604,19 @@ async function loadMembers(){
           <div class="avatar">${initials(m.full_name)}</div>
           <div>
             <strong>${esc(m.full_name)}</strong>
-            <small>Applied ${new Date(m.created_at).toLocaleDateString("en-ZA")}</small>
+            <small>Membership application</small>
           </div>
         </div>
+
         <div class="actions">
-          <button onclick="setMember('${m.user_id}','approved')">Approve</button>
-          <button class="danger" onclick="setMember('${m.user_id}','rejected')">Reject</button>
+          <button onclick="setMember('${m.user_id}','approved')">
+            Approve
+          </button>
+
+          <button class="danger"
+                  onclick="setMember('${m.user_id}','rejected')">
+            Reject
+          </button>
         </div>
       </div>
     `).join("")||'<div class="empty">No pending applications.</div>';
@@ -1282,8 +1629,10 @@ async function loadMembers(){
             <strong>${esc(m.full_name)}</strong>
             ${pill(m.status)}
           </div>
+
           <div class="actions">
-            <button class="secondary" onclick="setMember('${m.user_id}','approved')">
+            <button class="secondary"
+                    onclick="setMember('${m.user_id}','approved')">
               Reinstate
             </button>
           </div>
@@ -1294,45 +1643,49 @@ async function loadMembers(){
 
 function renderMemberDirectory(){
   const search=($("memberSearch").value||"").toLowerCase();
+
   const approved=S.members.filter(m=>
-    m.status==="approved"&&m.full_name.toLowerCase().includes(search)
+    m.status==="approved"&&
+    m.full_name.toLowerCase().includes(search)
   );
 
-  $("memberDirectory").innerHTML=approved.map(m=>{
-    const status=S.statusMap.get(m.user_id)||"unpaid";
-
-    return `
-      <div class="entry">
-        <div class="row">
-          <div class="person">
-            <div class="avatar">${initials(m.full_name)}</div>
-            <div>
-              <strong>${esc(m.full_name)}</strong>
-              <small>${m.role==="treasurer"?"Treasurer":"Member"}</small>
-            </div>
+  $("memberDirectory").innerHTML=approved.map(m=>`
+    <div class="entry">
+      <div class="row">
+        <div class="person">
+          <div class="avatar">${initials(m.full_name)}</div>
+          <div>
+            <strong>${esc(m.full_name)}</strong>
+            <small>${m.role==="treasurer"?"Treasurer":"Member"}</small>
           </div>
-          ${pill(status)}
         </div>
-        ${S.treasurer&&m.user_id!==S.user.id?`
-          <div class="actions">
-            <button class="danger small" onclick="setMember('${m.user_id}','suspended')">
-              Suspend
-            </button>
-          </div>
-        `:""}
+
+        ${pill(S.statusMap.get(m.user_id)||"unpaid")}
       </div>
-    `;
-  }).join("")||'<div class="empty">No matching members.</div>';
+
+      ${S.treasurer&&m.user_id!==S.user.id?`
+        <div class="actions">
+          <button class="danger small"
+                  onclick="setMember('${m.user_id}','suspended')">
+            Suspend
+          </button>
+        </div>
+      `:""}
+    </div>
+  `).join("")||'<div class="empty">No matching members.</div>';
 }
 
 async function setMember(id,status){
   if(!S.treasurer)return;
-  if(!confirm("Set membership status to "+status+"?"))return;
+
+  if(!confirm("Change membership status to "+status+"?"))return;
 
   const {error}=await sb.from("members").update({
     status,
     approved_by:S.user.id,
-    approved_at:status==="approved"?new Date().toISOString():null
+    approved_at:status==="approved"
+      ?new Date().toISOString()
+      :null
   }).eq("user_id",id);
 
   if(error)return toast(error.message);
@@ -1341,23 +1694,51 @@ async function setMember(id,status){
   await refresh();
 }
 
+/* CONTRIBUTIONS */
+
 function getMyMonths(){
-  const mine=S.contributions.filter(c=>c.member_id===S.user.id);
-  const start=new Date(S.member.approved_at||S.member.created_at);
+  const mine=S.contributions.filter(c=>
+    c.member_id===S.user.id
+  );
+
+  const start=new Date(
+    S.member.approved_at||S.member.created_at||Date.now()
+  );
+
   const now=new Date();
 
-  let d=new Date(start.getFullYear(),start.getMonth(),1);
-  const end=new Date(now.getFullYear(),now.getMonth(),1);
+  let date=new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    1
+  );
+
+  const end=new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    1
+  );
+
   const months=[];
 
-  while(d<=end&&months.length<48){
-    months.push(ymd(d));
-    d=new Date(d.getFullYear(),d.getMonth()+1,1);
+  while(date<=end&&months.length<48){
+    months.push(ymd(date));
+
+    date=new Date(
+      date.getFullYear(),
+      date.getMonth()+1,
+      1
+    );
   }
 
-  const get=m=>mine.find(c=>c.contribution_month===m);
-  const outstanding=months.filter(m=>
-    !["paid","submitted","pending"].includes(get(m)?.payment_status)
+  const get=month=>mine.find(c=>
+    c.contribution_month===month
+  );
+
+  const outstanding=months.filter(month=>
+    !["paid","submitted","pending"].includes(
+      get(month)?.payment_status
+    )
   );
 
   return {mine,months,get,outstanding};
@@ -1365,13 +1746,19 @@ function getMyMonths(){
 
 async function loadContributions(){
   let query=sb.from("contributions")
-    .select("id,member_id,contribution_month,amount,payment_method,payment_status,proof_path,reference,created_at")
+    .select("*")
     .order("created_at",{ascending:false});
 
-  if(!S.treasurer)query=query.eq("member_id",S.user.id);
+  if(!S.treasurer){
+    query=query.eq("member_id",S.user.id);
+  }
 
   const {data,error}=await query;
-  if(error){toast(error.message);return;}
+
+  if(error){
+    toast(error.message);
+    return;
+  }
 
   S.contributions=data||[];
 
@@ -1379,7 +1766,7 @@ async function loadContributions(){
 
   $("myConfirmedTotal").textContent=money(
     mine.filter(c=>c.payment_status==="paid")
-      .reduce((a,c)=>a+Number(c.amount),0)
+      .reduce((sum,c)=>sum+Number(c.amount),0)
   );
 
   $("myOutstandingCount").textContent=outstanding.length;
@@ -1387,53 +1774,66 @@ async function loadContributions(){
   const select=$("paymentMonth");
   const previous=select.value;
 
-  select.innerHTML=months.slice().reverse().map(m=>{
-    const record=mine.find(c=>c.contribution_month===m);
-    const label=new Date(m+"T12:00:00").toLocaleDateString("en-ZA",{
-      month:"long",year:"numeric"
-    });
+  select.innerHTML=months.slice().reverse().map(month=>{
+    const record=mine.find(c=>
+      c.contribution_month===month
+    );
 
-    return `<option value="${m}">
-      ${label}${record&&record.payment_status!=="rejected"
-        ?" — "+record.payment_status:""}
-    </option>`;
+    const label=new Date(month+"T12:00:00")
+      .toLocaleDateString("en-ZA",{
+        month:"long",
+        year:"numeric"
+      });
+
+    return `
+      <option value="${month}">
+        ${label}${record?" — "+record.payment_status:""}
+      </option>
+    `;
   }).join("");
 
-  select.value=months.includes(previous)?previous:thisMonth();
+  select.value=months.includes(previous)
+    ?previous
+    :thisMonth();
 
   renderPaymentForm();
 
   $("paymentHistory").innerHTML=mine.map(c=>`
-    <div class="entry">
-      <div class="row">
-        <div>
-          <strong>${money(c.amount)}</strong>
-          <small>${esc(c.contribution_month.slice(0,7))}
-            · ${esc(c.payment_method.toUpperCase())}
-            · ${new Date(c.created_at).toLocaleDateString("en-ZA")}
-          </small>
-        </div>
-        ${pill(c.payment_status)}
+    <div class="entry row">
+      <div>
+        <strong>${money(c.amount)}</strong>
+        <small>${esc(c.contribution_month.slice(0,7))}
+          · ${esc(c.payment_method)}
+        </small>
       </div>
+
+      ${pill(c.payment_status)}
     </div>
-  `).join("")||'<div class="empty">No payment history yet.</div>';
+  `).join("")||'<div class="empty">No payments yet.</div>';
 
   $("myContributionSummary").innerHTML=`
     <div class="entry row">
       <span>Confirmed contributions</span>
       <strong>${mine.filter(c=>c.payment_status==="paid").length}</strong>
     </div>
+
     <div class="entry row">
       <span>Awaiting verification</span>
-      <strong>${mine.filter(c=>["submitted","pending"].includes(c.payment_status)).length}</strong>
+      <strong>${mine.filter(c=>
+        ["submitted","pending"].includes(c.payment_status)
+      ).length}</strong>
     </div>
+
     <div class="entry row">
       <span>Outstanding months</span>
       <strong>${outstanding.length}</strong>
     </div>
+
     <div class="entry row">
       <span>Estimated outstanding</span>
-      <strong>${money(outstanding.length*S.settings.monthly_contribution)}</strong>
+      <strong>${money(
+        outstanding.length*S.settings.monthly_contribution
+      )}</strong>
     </div>
   `;
 
@@ -1442,35 +1842,48 @@ async function loadContributions(){
       ["submitted","pending"].includes(c.payment_status)
     );
 
-    $("pendingPaymentBadge").textContent=pending.length+" pending";
+    $("pendingPaymentBadge").textContent=
+      pending.length+" pending";
 
     $("verificationList").innerHTML=pending.map(c=>{
-      const member=S.members.find(m=>m.user_id===c.member_id);
+      const member=S.members.find(m=>
+        m.user_id===c.member_id
+      );
 
       return `
         <div class="entry">
           <strong>${esc(member?.full_name||"Member")}</strong>
+
           <small>
-            ${money(c.amount)} · ${esc(c.contribution_month.slice(0,7))}
+            ${money(c.amount)}
+            · ${esc(c.contribution_month)}
             · ${esc(c.payment_method)}
           </small>
-          ${c.reference?`<small>Reference: ${esc(c.reference)}</small>`:""}
+
+          ${c.reference?`
+            <small>Reference: ${esc(c.reference)}</small>
+          `:""}
+
           <div class="actions">
             ${c.proof_path?`
-              <button class="secondary" onclick="viewProof('${esc(c.proof_path)}')">
+              <button class="secondary"
+                      onclick="viewProof('${esc(c.proof_path)}')">
                 View proof
               </button>
             `:""}
+
             <button onclick="verifyContribution('${c.id}','paid')">
               Confirm received
             </button>
-            <button class="danger" onclick="verifyContribution('${c.id}','rejected')">
+
+            <button class="danger"
+                    onclick="verifyContribution('${c.id}','rejected')">
               Reject
             </button>
           </div>
         </div>
       `;
-    }).join("")||'<div class="empty">No payments awaiting verification.</div>';
+    }).join("")||'<div class="empty">No pending payments.</div>';
   }
 }
 
@@ -1478,33 +1891,39 @@ function renderPaymentForm(){
   if(!S.user)return;
 
   const month=$("paymentMonth").value;
+
   const record=S.contributions.find(c=>
-    c.member_id===S.user.id&&c.contribution_month===month
+    c.member_id===S.user.id&&
+    c.contribution_month===month
   );
 
   const locked=record&&record.payment_status!=="rejected";
 
   $("paymentFields").classList.toggle("hidden",!!locked);
 
-  $("selectedPaymentStatus").innerHTML=locked
-    ?`<div class="notice">
-        ${pill(record.payment_status)}
-        <p style="margin:9px 0 0">
-          ${record.payment_status==="paid"
-            ?"Your contribution has been confirmed."
-            :"Your payment is awaiting treasurer verification."}
-        </p>
-      </div>`
-    :record
-      ?'<div class="notice error">Your previous submission was rejected. You may submit again.</div>'
-      :'';
+  $("selectedPaymentStatus").innerHTML=locked?`
+    <div class="notice">
+      ${pill(record.payment_status)}
+      <p style="margin:9px 0 0">
+        ${record.payment_status==="paid"
+          ?"Your contribution has been confirmed."
+          :"Your payment is awaiting verification."}
+      </p>
+    </div>
+  `:record?`
+    <div class="notice error">
+      Your previous payment was rejected.
+      You may submit another proof of payment.
+    </div>
+  `:"";
 
   toggleProof();
 }
 
 function toggleProof(){
   $("proofSection").classList.toggle(
-    "hidden",$("paymentMethod").value!=="eft"
+    "hidden",
+    $("paymentMethod").value!=="eft"
   );
 }
 
@@ -1520,11 +1939,18 @@ async function submitContribution(){
     const file=$("paymentProof").files[0];
 
     if(!month)throw Error("Choose a contribution month.");
-    if(method==="eft"&&!file)throw Error("Upload proof of EFT payment.");
-    if(file&&file.size>8*1024*1024)throw Error("Maximum file size is 8 MB.");
+
+    if(method==="eft"&&!file){
+      throw Error("Upload your EFT proof of payment.");
+    }
+
+    if(file&&file.size>8*1024*1024){
+      throw Error("Maximum file size is 8 MB.");
+    }
 
     const existing=S.contributions.find(c=>
-      c.member_id===S.user.id&&c.contribution_month===month
+      c.member_id===S.user.id&&
+      c.contribution_month===month
     );
 
     if(existing&&existing.payment_status!=="rejected"){
@@ -1535,7 +1961,8 @@ async function submitContribution(){
       uploadedPath=S.user.id+"/"+Date.now()+"-"+
         file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
 
-      const {error}=await sb.storage.from("payment-proofs")
+      const {error}=await sb.storage
+        .from("payment-proofs")
         .upload(uploadedPath,file);
 
       if(error)throw error;
@@ -1555,8 +1982,11 @@ async function submitContribution(){
     };
 
     const result=existing
-      ?await sb.from("contributions").update(record).eq("id",existing.id)
-      :await sb.from("contributions").insert(record);
+      ?await sb.from("contributions")
+        .update(record)
+        .eq("id",existing.id)
+      :await sb.from("contributions")
+        .insert(record);
 
     if(result.error)throw result.error;
 
@@ -1564,99 +1994,124 @@ async function submitContribution(){
     $("paymentReference").value="";
 
     toast("Contribution submitted for verification");
+
     await refresh();
 
   }catch(error){
     if(uploadedPath){
-      await sb.storage.from("payment-proofs").remove([uploadedPath]);
+      await sb.storage.from("payment-proofs")
+        .remove([uploadedPath]);
     }
+
     toast(error.message);
+
   }finally{
     button.disabled=false;
   }
 }
 
 async function viewProof(path){
-  const {data,error}=await sb.storage.from("payment-proofs")
+  const {data,error}=await sb.storage
+    .from("payment-proofs")
     .createSignedUrl(path,120);
 
   if(error)return toast(error.message);
+
   window.open(data.signedUrl,"_blank","noopener");
 }
 
 async function verifyContribution(id,status){
   if(!S.treasurer)return;
 
-  const message=status==="paid"
-    ?"Confirm this money has actually been received?"
-    :"Reject this payment submission?";
-
-  if(!confirm(message))return;
+  if(!confirm(
+    status==="paid"
+    ?"Confirm that the money has been received?"
+    :"Reject this payment?"
+  ))return;
 
   const {error}=await sb.from("contributions").update({
     payment_status:status,
     verified_by:S.user.id,
     recorded_by:S.user.id,
-    paid_at:status==="paid"?new Date().toISOString():null
+    paid_at:status==="paid"
+      ?new Date().toISOString()
+      :null
   }).eq("id",id);
 
   if(error)return toast(error.message);
 
-  toast(status==="paid"?"Payment confirmed":"Payment rejected");
+  toast("Payment updated");
   await refresh();
 }
 
+/* TRANSACTIONS */
+
 async function loadTransactions(){
   const {data,error}=await sb.from("stokvel_transactions")
-    .select("id,transaction_type,amount,transaction_date,description,created_at")
+    .select("*")
     .order("created_at",{ascending:false})
     .limit(500);
 
-  if(error){toast(error.message);return;}
+  if(error){
+    toast(error.message);
+    return;
+  }
 
   S.transactions=data||[];
 
-  const render=t=>`
-    <div class="entry row">
-      <div>
-        <strong>${esc(t.description||t.transaction_type)}</strong>
-        <small>${esc(t.transaction_date)} · ${esc(t.transaction_type)}</small>
-      </div>
-      <strong>${t.transaction_type==="withdrawal"?"−":"+"}${money(t.amount)}</strong>
-    </div>
-  `;
+  $("transactionLedger").innerHTML=S.transactions
+    .slice(0,100).map(t=>`
+      <div class="entry row">
+        <div>
+          <strong>${esc(t.description||t.transaction_type)}</strong>
+          <small>${esc(t.transaction_date)}</small>
+        </div>
 
-  $("transactionLedger").innerHTML=S.transactions.slice(0,100)
-    .map(render).join("")||'<div class="empty">No transactions recorded.</div>';
+        <strong>
+          ${t.transaction_type==="withdrawal"?"−":"+"}
+          ${money(t.amount)}
+        </strong>
+      </div>
+    `).join("")||'<div class="empty">No transactions.</div>';
 }
+
+/* ANNOUNCEMENTS */
 
 async function loadAnnouncements(){
   const {data,error}=await sb.from("announcements")
-    .select("id,title,message,created_at")
+    .select("*")
     .order("created_at",{ascending:false})
     .limit(50);
 
-  if(error){toast(error.message);return;}
+  if(error){
+    toast(error.message);
+    return;
+  }
 
   S.announcements=data||[];
 
-  const render=a=>`
+  $("announcementList").innerHTML=S.announcements.map(a=>`
     <div class="entry">
       <div class="row">
         <strong>${esc(a.title)}</strong>
+
         ${S.treasurer?`
-          <button class="secondary small" onclick="deleteAnnouncement('${a.id}')">
+          <button class="secondary small"
+                  onclick="deleteAnnouncement('${a.id}')">
             Delete
           </button>
         `:""}
       </div>
-      <p style="margin:8px 0">${esc(a.message).replace(/\n/g,"<br>")}</p>
-      <small>${new Date(a.created_at).toLocaleString("en-ZA")}</small>
-    </div>
-  `;
 
-  $("announcementList").innerHTML=S.announcements.map(render).join("")||
-    '<div class="empty">No announcements yet.</div>';
+      <p style="margin:8px 0">
+        ${esc(a.message).replace(/\n/g,"<br>")}
+      </p>
+
+      <small>
+        ${new Date(a.created_at).toLocaleString("en-ZA")}
+      </small>
+    </div>
+  `).join("")||'<div class="empty">No announcements.</div>';
 }
 
 async function publishAnnouncement(){
@@ -1665,38 +2120,50 @@ async function publishAnnouncement(){
   const title=$("announcementTitle").value.trim();
   const message=$("announcementMessage").value.trim();
 
-  if(!title||!message)return toast("Enter a title and message.");
+  if(!title||!message){
+    return toast("Enter a title and message.");
+  }
 
   const {error}=await sb.from("announcements").insert({
-    title,message,created_by:S.user.id
+    title,
+    message,
+    created_by:S.user.id
   });
 
   if(error)return toast(error.message);
 
   $("announcementTitle").value="";
   $("announcementMessage").value="";
+
   toast("Announcement published");
+
   await loadAnnouncements();
   renderDashboard();
 }
 
 async function deleteAnnouncement(id){
-  if(!S.treasurer||!confirm("Delete this announcement?"))return;
+  if(!S.treasurer||!confirm("Delete announcement?"))return;
 
-  const {error}=await sb.from("announcements").delete().eq("id",id);
+  const {error}=await sb.from("announcements")
+    .delete()
+    .eq("id",id);
+
   if(error)return toast(error.message);
 
   await loadAnnouncements();
   renderDashboard();
 }
 
+/* MEETINGS */
+
 async function loadMeetings(){
   const {data,error}=await sb.from("meetings")
-    .select("*").order("meeting_at");
+    .select("*")
+    .order("meeting_at");
 
   if(error){
     $("meetingList").innerHTML=
-      '<div class="notice">Meeting records are not available. Check the database configuration.</div>';
+      '<div class="notice">Meetings are currently unavailable.</div>';
     return;
   }
 
@@ -1708,15 +2175,20 @@ async function loadMeetings(){
         <div>
           <strong>${esc(m.title)}</strong>
           <small>${new Date(m.meeting_at).toLocaleString("en-ZA")}</small>
-          ${m.venue?`<small>Venue: ${esc(m.venue)}</small>`:""}
+          <small>${esc(m.venue||"")}</small>
         </div>
+
         ${S.treasurer?`
-          <button class="danger small" onclick="deleteMeeting('${m.id}')">
+          <button class="danger small"
+                  onclick="deleteMeeting('${m.id}')">
             Delete
           </button>
         `:""}
       </div>
-      ${m.agenda?`<p class="muted">${esc(m.agenda)}</p>`:""}
+
+      ${m.agenda?`
+        <p class="muted">${esc(m.agenda)}</p>
+      `:""}
     </div>
   `).join("")||'<div class="empty">No meetings scheduled.</div>';
 }
@@ -1727,7 +2199,9 @@ async function scheduleMeeting(){
   const title=$("meetingTitle").value.trim();
   const when=$("meetingDate").value;
 
-  if(!title||!when)return toast("Enter a title and meeting date.");
+  if(!title||!when){
+    return toast("Enter a meeting title and date.");
+  }
 
   const {error}=await sb.from("meetings").insert({
     title,
@@ -1739,64 +2213,101 @@ async function scheduleMeeting(){
 
   if(error)return toast(error.message);
 
-  ["meetingTitle","meetingDate","meetingVenue","meetingAgenda"]
-    .forEach(id=>$(id).value="");
+  [
+    "meetingTitle",
+    "meetingDate",
+    "meetingVenue",
+    "meetingAgenda"
+  ].forEach(id=>$(id).value="");
 
   toast("Meeting scheduled");
   await loadMeetings();
 }
 
 async function deleteMeeting(id){
-  if(!S.treasurer||!confirm("Delete this meeting?"))return;
+  if(!S.treasurer||!confirm("Delete meeting?"))return;
 
-  const {error}=await sb.from("meetings").delete().eq("id",id);
+  const {error}=await sb.from("meetings")
+    .delete()
+    .eq("id",id);
+
   if(error)return toast(error.message);
 
   await loadMeetings();
 }
 
+/* WITHDRAWALS */
+
 async function loadWithdrawals(){
   const [requests,votes]=await Promise.all([
     sb.from("withdrawal_requests")
-      .select("*").order("created_at",{ascending:false}),
+      .select("*")
+      .order("created_at",{ascending:false}),
+
     sb.from("withdrawal_votes")
       .select("request_id,member_id,vote")
   ]);
 
   if(requests.error||votes.error){
-    $("withdrawalRequestList").innerHTML=
-      '<div class="notice">Withdrawal voting is unavailable. Check the database configuration.</div>';
+    $("withdrawalRequestList").innerHTML=`
+      <div class="notice">
+        Withdrawal voting is currently unavailable.
+      </div>
+    `;
     return;
   }
 
   S.requests=requests.data||[];
   S.votes=votes.data||[];
 
-  const count=S.members.filter(m=>m.status==="approved").length;
-  const majority=Math.floor(count/2)+1;
+  const approvedCount=S.members.filter(m=>
+    m.status==="approved"
+  ).length;
+
+  const majority=Math.floor(approvedCount/2)+1;
 
   $("withdrawalRequestList").innerHTML=S.requests.map(r=>{
-    const votes=S.votes.filter(v=>v.request_id===r.id);
-    const yes=votes.filter(v=>v.vote==="yes").length;
-    const no=votes.filter(v=>v.vote==="no").length;
-    const member=S.members.find(m=>m.user_id===r.requested_by);
+    const requestVotes=S.votes.filter(v=>
+      v.request_id===r.id
+    );
+
+    const yes=requestVotes.filter(v=>v.vote==="yes").length;
+    const no=requestVotes.filter(v=>v.vote==="no").length;
+
+    const member=S.members.find(m=>
+      m.user_id===r.requested_by
+    );
 
     return `
       <div class="entry">
         <div class="row">
           <div>
             <strong>${money(r.amount)}</strong>
-            <small>Requested by ${esc(member?.full_name||"Member")}</small>
+            <small>
+              Requested by ${esc(member?.full_name||"Member")}
+            </small>
           </div>
+
           ${pill(r.status)}
         </div>
+
         <p style="margin:9px 0">${esc(r.reason)}</p>
-        <small>${yes} approve · ${no} decline · ${majority} approvals required</small>
+
+        <small>
+          ${yes} approve · ${no} decline
+          · ${majority} approvals required
+        </small>
 
         ${r.status==="open"?`
           <div class="actions">
-            <button onclick="voteWithdrawal('${r.id}','yes')">Approve</button>
-            <button class="danger" onclick="voteWithdrawal('${r.id}','no')">Decline</button>
+            <button onclick="voteWithdrawal('${r.id}','yes')">
+              Approve
+            </button>
+
+            <button class="danger"
+                    onclick="voteWithdrawal('${r.id}','no')">
+              Decline
+            </button>
           </div>
         `:""}
 
@@ -1817,7 +2328,7 @@ async function submitWithdrawalRequest(){
   const reason=$("withdrawalReason").value.trim();
 
   if(!(amount>0)||reason.length<3){
-    return toast("Enter a valid amount and reason.");
+    return toast("Enter an amount and reason.");
   }
 
   const {error}=await sb.from("withdrawal_requests").insert({
@@ -1830,7 +2341,9 @@ async function submitWithdrawalRequest(){
 
   $("withdrawalAmount").value="";
   $("withdrawalReason").value="";
-  toast("Withdrawal request submitted for voting");
+
+  toast("Withdrawal request submitted");
+
   await loadWithdrawals();
 }
 
@@ -1839,94 +2352,106 @@ async function voteWithdrawal(id,vote){
     request_id:id,
     member_id:S.user.id,
     vote
-  },{onConflict:"request_id,member_id"});
+  },{
+    onConflict:"request_id,member_id"
+  });
 
   if(error)return toast(error.message);
 
   toast("Vote recorded");
+
   await loadWithdrawals();
 }
 
 async function completeWithdrawal(id){
   if(!S.treasurer)return;
 
-  if(!confirm("Only continue if this approved withdrawal has actually been paid.")){
-    return;
-  }
+  if(!confirm(
+    "Confirm this approved withdrawal has actually been paid?"
+  ))return;
 
-  const {error}=await sb.rpc("complete_withdrawal",{p_request:id});
+  const {error}=await sb.rpc("complete_withdrawal",{
+    p_request:id
+  });
+
   if(error)return toast(error.message);
 
-  toast("Payout recorded");
+  toast("Withdrawal recorded");
   await refresh();
 }
 
+/* DASHBOARD */
+
 function renderDashboard(){
   const approved=S.members.filter(m=>m.status==="approved");
-  const paid=approved.filter(m=>S.statusMap.get(m.user_id)==="paid");
 
-  const expected=approved.length*Number(S.settings.monthly_contribution);
+  const paid=approved.filter(m=>
+    S.statusMap.get(m.user_id)==="paid"
+  );
 
-  const currentPaid=S.treasurer
-    ?S.contributions.filter(c=>
-      c.contribution_month===thisMonth()&&c.payment_status==="paid"
-    )
-    :[];
+  const expected=
+    approved.length*Number(S.settings.monthly_contribution);
 
   $("dashboardMembers").textContent=approved.length;
   $("dashboardPaid").textContent=paid.length+"/"+approved.length;
   $("dashboardExpected").textContent=money(expected);
-  $("dashboardCollected").textContent=S.treasurer
-    ?money(currentPaid.reduce((a,c)=>a+Number(c.amount),0))
-    :money(paid.length*Number(S.settings.monthly_contribution));
+
+  $("dashboardCollected").textContent=money(
+    paid.length*Number(S.settings.monthly_contribution)
+  );
 
   const {mine,outstanding}=getMyMonths();
-  const current=mine.find(c=>c.contribution_month===thisMonth());
+
+  const current=mine.find(c=>
+    c.contribution_month===thisMonth()
+  );
 
   $("dashboardMyPayment").innerHTML=`
     <div class="row">
       <div>
         <strong>${money(S.settings.monthly_contribution)}</strong>
-        <small>${new Date().toLocaleDateString("en-ZA",{
-          month:"long",year:"numeric"
-        })}</small>
+        <small>
+          ${new Date().toLocaleDateString("en-ZA",{
+            month:"long",
+            year:"numeric"
+          })}
+        </small>
       </div>
+
       ${pill(current?.payment_status||"unpaid")}
     </div>
-    ${outstanding.length?`
-      <p class="muted" style="margin-top:13px">
-        ${outstanding.length} outstanding month(s).
-      </p>
-    `:""}
   `;
 
   $("dashboardMemberStatus").innerHTML=approved.map(m=>`
     <div class="entry row">
       <div class="person">
         <div class="avatar">${initials(m.full_name)}</div>
-        <div><strong>${esc(m.full_name)}</strong></div>
+        <strong>${esc(m.full_name)}</strong>
       </div>
+
       ${pill(S.statusMap.get(m.user_id)||"unpaid")}
     </div>
   `).join("")||'<div class="empty">No members.</div>';
 
-  $("dashboardAnnouncements").innerHTML=S.announcements.slice(0,3).map(a=>`
-    <div class="entry">
-      <strong>${esc(a.title)}</strong>
-      <p style="margin:7px 0">${esc(a.message)}</p>
-      <small>${new Date(a.created_at).toLocaleDateString("en-ZA")}</small>
-    </div>
-  `).join("")||'<div class="empty">No announcements.</div>';
-
-  $("dashboardActivity").innerHTML=S.transactions.slice(0,5).map(t=>`
-    <div class="entry row">
-      <div>
-        <strong>${esc(t.description||t.transaction_type)}</strong>
-        <small>${esc(t.transaction_date)}</small>
+  $("dashboardAnnouncements").innerHTML=
+    S.announcements.slice(0,3).map(a=>`
+      <div class="entry">
+        <strong>${esc(a.title)}</strong>
+        <p style="margin:7px 0">${esc(a.message)}</p>
       </div>
-      <strong>${t.transaction_type==="withdrawal"?"−":"+"}${money(t.amount)}</strong>
-    </div>
-  `).join("")||'<div class="empty">No recent activity.</div>';
+    `).join("")||'<div class="empty">No announcements.</div>';
+
+  $("dashboardActivity").innerHTML=
+    S.transactions.slice(0,5).map(t=>`
+      <div class="entry row">
+        <div>
+          <strong>${esc(t.description||t.transaction_type)}</strong>
+          <small>${esc(t.transaction_date)}</small>
+        </div>
+
+        <strong>${money(t.amount)}</strong>
+      </div>
+    `).join("")||'<div class="empty">No recent activity.</div>';
 
   let actions="";
 
@@ -1934,10 +2459,18 @@ function renderDashboard(){
     actions+=`
       <div class="entry row">
         <div>
-          <strong>${outstanding.length} contribution month(s) outstanding</strong>
-          <small>${money(outstanding.length*S.settings.monthly_contribution)} estimated</small>
+          <strong>${outstanding.length} outstanding month(s)</strong>
+          <small>
+            ${money(
+              outstanding.length*S.settings.monthly_contribution
+            )}
+          </small>
         </div>
-        <button class="small" onclick="navigate('contributionsPage')">Pay</button>
+
+        <button class="small"
+                onclick="navigate('contributionsPage')">
+          Pay
+        </button>
       </div>
     `;
   }
@@ -1947,13 +2480,18 @@ function renderDashboard(){
       ["submitted","pending"].includes(c.payment_status)
     ).length;
 
-    const pendingMembers=S.members.filter(m=>m.status==="pending").length;
+    const pendingMembers=S.members.filter(m=>
+      m.status==="pending"
+    ).length;
 
     if(pendingPayments){
       actions+=`
         <div class="entry row">
-          <strong>${pendingPayments} payment(s) need verification</strong>
-          <button class="small" onclick="navigate('contributionsPage')">Review</button>
+          <strong>${pendingPayments} payments need verification</strong>
+          <button class="small"
+                  onclick="navigate('contributionsPage')">
+            Review
+          </button>
         </div>
       `;
     }
@@ -1961,8 +2499,11 @@ function renderDashboard(){
     if(pendingMembers){
       actions+=`
         <div class="entry row">
-          <strong>${pendingMembers} membership application(s)</strong>
-          <button class="small" onclick="navigate('membersPage')">Review</button>
+          <strong>${pendingMembers} membership applications</strong>
+          <button class="small"
+                  onclick="navigate('membersPage')">
+            Review
+          </button>
         </div>
       `;
     }
@@ -1972,28 +2513,37 @@ function renderDashboard(){
     '<div class="empty">No urgent actions right now.</div>';
 }
 
+/* REPORTS */
+
 async function loadReport(){
   if(!S.user||S.member?.status!=="approved")return;
 
-  const month=($("reportMonth").value||thisMonth().slice(0,7))+"-01";
+  const month=(
+    $("reportMonth").value||thisMonth().slice(0,7)
+  )+"-01";
 
   const [members,statuses]=await Promise.all([
     sb.from("members")
       .select("user_id,full_name")
       .eq("status","approved")
       .order("full_name"),
+
     sb.from("member_contribution_status")
       .select("member_id,payment_status")
       .eq("contribution_month",month)
   ]);
 
   if(members.error||statuses.error){
-    toast(members.error?.message||statuses.error?.message);
-    return;
+    return toast(
+      members.error?.message||statuses.error?.message
+    );
   }
 
   const map=new Map(
-    (statuses.data||[]).map(s=>[s.member_id,s.payment_status])
+    (statuses.data||[]).map(s=>[
+      s.member_id,
+      s.payment_status
+    ])
   );
 
   S.report=(members.data||[]).map(m=>({
@@ -2001,14 +2551,18 @@ async function loadReport(){
     status:map.get(m.user_id)||"unpaid"
   }));
 
-  const paid=S.report.filter(r=>r.status==="paid").length;
+  const paid=S.report.filter(r=>
+    r.status==="paid"
+  ).length;
+
   const pending=S.report.filter(r=>
     ["submitted","pending"].includes(r.status)
   ).length;
 
   $("reportPaid").textContent=paid;
   $("reportPending").textContent=pending;
-  $("reportUnpaid").textContent=S.report.length-paid-pending;
+  $("reportUnpaid").textContent=
+    S.report.length-paid-pending;
 
   $("reportAmount").textContent=money(
     paid*Number(S.settings.monthly_contribution)
@@ -2027,48 +2581,67 @@ async function loadParticipationChart(){
   const months=[];
 
   for(let i=5;i>=0;i--){
-    months.push(ymd(new Date(now.getFullYear(),now.getMonth()-i,1)));
+    months.push(
+      ymd(new Date(
+        now.getFullYear(),
+        now.getMonth()-i,
+        1
+      ))
+    );
   }
 
-  const {data,error}=await sb.from("member_contribution_status")
+  const {data,error}=await sb
+    .from("member_contribution_status")
     .select("contribution_month,payment_status")
     .eq("payment_status","paid")
     .gte("contribution_month",months[0]);
 
   if(error)return;
 
-  const memberCount=Math.max(1,S.members.filter(m=>m.status==="approved").length);
+  const memberCount=Math.max(
+    1,
+    S.members.filter(m=>m.status==="approved").length
+  );
+
   const counts={};
 
   (data||[]).forEach(r=>{
-    counts[r.contribution_month]=(counts[r.contribution_month]||0)+1;
+    counts[r.contribution_month]=
+      (counts[r.contribution_month]||0)+1;
   });
 
   $("participationChart").innerHTML=`
     <div class="bar-chart">
-      ${months.map(m=>{
-        const pct=Math.min(100,Math.round(
-          100*(counts[m]||0)/memberCount
-        ));
+      ${months.map(month=>{
+        const percentage=Math.min(
+          100,
+          Math.round(
+            100*(counts[month]||0)/memberCount
+          )
+        );
 
         return `
           <div class="bar-column">
-            <small>${pct}%</small>
+            <small>${percentage}%</small>
+
             <div class="bar-track">
-              <div class="bar-fill" style="height:${Math.max(3,pct)}%"></div>
+              <div class="bar-fill"
+                   style="height:${Math.max(3,percentage)}%">
+              </div>
             </div>
-            <small>${new Date(m+"T12:00:00").toLocaleDateString("en-ZA",{
-              month:"short"
-            })}</small>
+
+            <small>
+              ${new Date(month+"T12:00:00")
+                .toLocaleDateString("en-ZA",{month:"short"})}
+            </small>
           </div>
         `;
       }).join("")}
     </div>
-    <p class="muted" style="margin-top:12px">
-      Percentage of currently approved members with confirmed contributions.
-    </p>
   `;
 }
+
+/* ACCOUNT */
 
 function renderAccount(){
   $("accountDetails").innerHTML=`
@@ -2076,16 +2649,19 @@ function renderAccount(){
       <small>Full name</small>
       <strong>${esc(S.member.full_name)}</strong>
     </div>
+
     <div class="entry">
       <small>Email address</small>
       <strong>${esc(S.user.email)}</strong>
     </div>
+
     <div class="entry">
       <small>Membership</small>
       <strong>${esc(S.member.status)}</strong>
     </div>
+
     <div class="entry">
-      <small>Account role</small>
+      <small>Role</small>
       <strong>${S.treasurer?"Treasurer":"Member"}</strong>
     </div>
   `;
@@ -2095,7 +2671,7 @@ async function saveProfile(){
   const name=$("profileName").value.trim();
   const phone=$("profilePhone").value.trim();
 
-  if(!name)return toast("Enter your full name.");
+  if(!name)return toast("Enter your name.");
 
   const {error}=await sb.rpc("update_my_profile",{
     p_name:name,
@@ -2106,19 +2682,24 @@ async function saveProfile(){
 
   S.member.full_name=name;
   S.member.phone=phone;
-  $("greeting").textContent="Hello, "+name.split(" ")[0]+" 👋";
+
+  $("greeting").textContent=
+    "Hello, "+name.split(" ")[0]+" 👋";
+
+  renderAccount();
 
   toast("Profile updated");
-  renderAccount();
-  await loadMembers();
 }
 
 async function changePassword(){
   const password=$("newPassword").value;
 
-  if(password.length<8)return toast("Password must have at least 8 characters.");
+  if(password.length<8){
+    return toast("Password must have at least 8 characters.");
+  }
 
   const {error}=await sb.auth.updateUser({password});
+
   if(error)return toast(error.message);
 
   $("newPassword").value="";
@@ -2133,7 +2714,7 @@ async function saveSettings(){
   const goal=Number($("settingGoal").value);
 
   if(!(monthly>0)||!(due>=1&&due<=28)||!(goal>0)){
-    return toast("Enter valid settings. Due day must be 1–28.");
+    return toast("Enter valid stokvel settings.");
   }
 
   const {error}=await sb.from("stokvel_settings").update({
@@ -2145,19 +2726,24 @@ async function saveSettings(){
   if(error)return toast(error.message);
 
   toast("Stokvel settings updated");
+
   await refresh();
 }
+
+/* REMINDERS */
 
 async function shareReminder(){
   const text=
     "Sisanda'$ Stokvel reminder: Your "+
     money(S.settings.monthly_contribution)+
-    " contribution is due on the "+
+    " monthly contribution is due on the "+
     ordinal(S.settings.due_day)+
-    ". Please submit your payment for treasurer verification.";
+    ". Please submit proof of payment.";
 
   if(navigator.share){
-    try{await navigator.share({text})}catch(e){}
+    try{
+      await navigator.share({text});
+    }catch(error){}
   }else if(navigator.clipboard){
     await navigator.clipboard.writeText(text);
     toast("Reminder copied");
@@ -2166,21 +2752,28 @@ async function shareReminder(){
   }
 }
 
+/* EXPORTS */
+
 function csv(filename,rows){
   const content="\uFEFF"+rows.map(row=>
     row.map(value=>{
-      const safe=String(value??"").replace(/^[=+\-@]/,"'$&");
+      const safe=String(value??"")
+        .replace(/^[=+\-@]/,"'$&");
+
       return '"'+safe.replace(/"/g,'""')+'"';
     }).join(",")
   ).join("\r\n");
 
-  const url=URL.createObjectURL(new Blob([content],{
+  const blob=new Blob([content],{
     type:"text/csv;charset=utf-8"
-  }));
+  });
 
+  const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
+
   a.href=url;
   a.download=filename;
+
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -2191,7 +2784,11 @@ function csv(filename,rows){
 function exportMonthlyReport(){
   csv("stokvel-report-"+$("reportMonth").value+".csv",[
     ["Member","Status","Month"],
-    ...S.report.map(r=>[r.name,r.status,$("reportMonth").value])
+    ...S.report.map(r=>[
+      r.name,
+      r.status,
+      $("reportMonth").value
+    ])
   ]);
 }
 
@@ -2199,50 +2796,70 @@ function exportLedger(){
   csv("stokvel-ledger.csv",[
     ["Date","Type","Amount ZAR","Description"],
     ...S.transactions.map(t=>[
-      t.transaction_date,t.transaction_type,t.amount,t.description
+      t.transaction_date,
+      t.transaction_type,
+      t.amount,
+      t.description
     ])
   ]);
 }
 
 function exportMyPayments(){
   csv("my-stokvel-payments.csv",[
-    ["Month","Amount ZAR","Method","Status","Reference"],
+    ["Month","Amount","Method","Status","Reference"],
     ...S.contributions
       .filter(c=>c.member_id===S.user.id)
       .map(c=>[
-        c.contribution_month,c.amount,c.payment_method,
-        c.payment_status,c.reference
+        c.contribution_month,
+        c.amount,
+        c.payment_method,
+        c.payment_status,
+        c.reference
       ])
   ]);
 }
 
 function printStatement(){
-  const mine=S.contributions.filter(c=>c.member_id===S.user.id);
-  const confirmed=mine.filter(c=>c.payment_status==="paid")
-    .reduce((a,c)=>a+Number(c.amount),0);
+  const mine=S.contributions.filter(c=>
+    c.member_id===S.user.id
+  );
+
+  const confirmed=mine
+    .filter(c=>c.payment_status==="paid")
+    .reduce((sum,c)=>sum+Number(c.amount),0);
 
   const win=window.open("","_blank");
 
-  if(!win)return toast("Allow pop-ups to print your statement.");
+  if(!win){
+    return toast("Allow pop-ups to print your statement.");
+  }
 
   win.document.write(`
     <!doctype html>
-    <html><head><title>Stokvel statement</title></head>
+    <html>
+    <head>
+      <title>Member statement</title>
+    </head>
+
     <body style="font:14px Arial;padding:30px;color:#111">
       <h2>Sisanda'$ Stokvel</h2>
-      <h3>Member contribution statement</h3>
+      <h3>Member Contribution Statement</h3>
+
       <p>
         ${esc(S.member.full_name)}<br>
         ${esc(S.user.email)}<br>
         Issued ${new Date().toLocaleDateString("en-ZA")}
       </p>
+
       <hr>
+
       <table width="100%" cellpadding="10">
         <tr>
           <th align="left">Month</th>
           <th align="left">Status</th>
           <th align="right">Amount</th>
         </tr>
+
         ${mine.map(c=>`
           <tr>
             <td>${esc(c.contribution_month)}</td>
@@ -2251,10 +2868,13 @@ function printStatement(){
           </tr>
         `).join("")}
       </table>
+
       <hr>
+
       <h3>Total confirmed: ${money(confirmed)}</h3>
-      <p>Only treasurer-confirmed contributions count as paid.</p>
-    </body></html>
+      <p>Only verified contributions count as paid.</p>
+    </body>
+    </html>
   `);
 
   win.document.close();
@@ -2262,13 +2882,20 @@ function printStatement(){
   win.print();
 }
 
+/* INITIALISE */
+
 async function init(){
   sb.auth.onAuthStateChange(async(event)=>{
     if(event==="PASSWORD_RECOVERY"){
-      const password=prompt("Enter your new password (8+ characters):");
+      const password=prompt(
+        "Enter your new password (at least 8 characters):"
+      );
 
       if(password&&password.length>=8){
-        const {error}=await sb.auth.updateUser({password});
+        const {error}=await sb.auth.updateUser({
+          password
+        });
+
         toast(error?error.message:"Password updated");
       }
     }
@@ -2287,5 +2914,6 @@ async function init(){
 
 init();
 </script>
+
 </body>
 </html>
